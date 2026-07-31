@@ -76,42 +76,52 @@ export const Navbar: React.FC<NavbarProps> = ({
             onClick={() => onNavigate({ type: 'home' })}
             className="cursor-pointer flex items-center space-x-3 group"
           >
-            {/* Mobile Logo */}
-            {siteSettings?.mobileLogoUrl && (
-              <img 
-                src={siteSettings.mobileLogoUrl} 
-                alt="Mobile Logo" 
-                className="block md:hidden h-8 max-w-[150px] object-contain"
-              />
-            )}
+            {/* Mobile View */}
+            <div className="block md:hidden flex items-center space-x-2">
+              {siteSettings?.mobileLogoUrl ? (
+                <img 
+                  src={siteSettings.mobileLogoUrl} 
+                  alt="Mobile Logo" 
+                  className="h-8 max-w-[150px] object-contain"
+                />
+              ) : (
+                <>
+                  <div className="w-8 h-8 bg-gradient-to-br from-red-600 to-red-700 rounded-lg flex items-center justify-center text-white font-black text-lg shadow-md shadow-red-200">
+                    ২৪
+                  </div>
+                  <div>
+                    <h1 className="text-lg font-black text-gray-900 tracking-tight">
+                      {language === 'bn' ? (siteSettings?.siteNameBn || t.siteTitle) : (siteSettings?.siteNameEn || t.siteTitle)}
+                    </h1>
+                  </div>
+                </>
+              )}
+            </div>
 
-            {/* Desktop Logo */}
-            {siteSettings?.desktopLogoUrl && (
-              <img 
-                src={siteSettings.desktopLogoUrl} 
-                alt="Desktop Logo" 
-                className="hidden md:block h-10 max-w-[240px] object-contain"
-              />
-            )}
-
-            {/* Default Monogram + Title if custom logos are missing */}
-            {(!siteSettings?.mobileLogoUrl || !siteSettings?.desktopLogoUrl) && (
-              <div className="flex items-center space-x-3">
-                {(!siteSettings?.mobileLogoUrl && !siteSettings?.desktopLogoUrl) && (
+            {/* Desktop View */}
+            <div className="hidden md:flex items-center space-x-3">
+              {siteSettings?.desktopLogoUrl ? (
+                <img 
+                  src={siteSettings.desktopLogoUrl} 
+                  alt="Desktop Logo" 
+                  className="h-10 max-w-[240px] object-contain"
+                />
+              ) : (
+                <div className="flex items-center space-x-3">
                   <div className="w-10 h-10 bg-gradient-to-br from-red-600 to-red-700 rounded-xl flex items-center justify-center text-white font-black text-xl shadow-lg shadow-red-200 group-hover:scale-105 transition-transform">
                     ২৪
                   </div>
-                )}
-                <div className={siteSettings?.mobileLogoUrl ? 'hidden md:block' : ''}>
-                  <h1 className="text-xl md:text-3xl font-black text-gray-900 tracking-tight group-hover:text-red-600 transition-colors">
-                    {language === 'bn' ? (siteSettings?.siteNameBn || t.siteTitle) : (siteSettings?.siteNameEn || t.siteTitle)}
-                  </h1>
-                  <p className="text-[10px] md:text-[11px] text-gray-500 tracking-wide font-semibold">
-                    {language === 'bn' ? (siteSettings?.taglineBn || t.tagline) : (siteSettings?.taglineEn || t.tagline)}
-                  </p>
+                  <div>
+                    <h1 className="text-3xl font-black text-gray-900 tracking-tight group-hover:text-red-600 transition-colors">
+                      {language === 'bn' ? (siteSettings?.siteNameBn || t.siteTitle) : (siteSettings?.siteNameEn || t.siteTitle)}
+                    </h1>
+                    <p className="text-[11px] text-gray-500 tracking-wide font-semibold">
+                      {language === 'bn' ? (siteSettings?.taglineBn || t.tagline) : (siteSettings?.taglineEn || t.tagline)}
+                    </p>
+                  </div>
                 </div>
-              </div>
-            )}
+              )}
+            </div>
           </div>
 
           {/* Right Actions: Search, Bookmarks, Language Switch, Hamburger Menu */}
