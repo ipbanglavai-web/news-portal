@@ -157,7 +157,9 @@ export default function App() {
       hamburgerLogoUrl: '',
       defaultLogoMonogram: '২৪',
       copyrightText: 'All rights reserved.',
-      developerCredit: 'Bangla Media Group'
+      developerCredit: 'Bangla Media Group',
+      developerWebsiteUrl: '',
+      developerPrefixText: 'Designed & Developed with Professional Standards for'
     };
   });
 

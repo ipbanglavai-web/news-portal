@@ -82,15 +82,15 @@ export const Navbar: React.FC<NavbarProps> = ({
                 <img 
                   src={siteSettings.mobileLogoUrl} 
                   alt="Mobile Logo" 
-                  className="w-auto h-auto max-h-9 max-w-[160px] object-contain"
+                  className="w-auto h-auto max-h-12 max-w-[220px] object-contain drop-shadow-sm"
                 />
               ) : (
                 <>
-                  <div className="w-8 h-8 bg-gradient-to-br from-red-600 to-red-700 rounded-lg flex items-center justify-center text-white font-black text-base shadow-md shadow-red-200">
+                  <div className="w-10 h-10 bg-gradient-to-br from-red-600 to-red-700 rounded-xl flex items-center justify-center text-white font-black text-lg shadow-md shadow-red-200">
                     {siteSettings?.defaultLogoMonogram || '২৪'}
                   </div>
                   <div>
-                    <h1 className="text-lg font-black text-gray-900 tracking-tight">
+                    <h1 className="text-xl font-black text-gray-900 tracking-tight">
                       {language === 'bn' ? (siteSettings?.siteNameBn || t.siteTitle) : (siteSettings?.siteNameEn || t.siteTitle)}
                     </h1>
                   </div>
@@ -104,18 +104,18 @@ export const Navbar: React.FC<NavbarProps> = ({
                 <img 
                   src={siteSettings.desktopLogoUrl} 
                   alt="Desktop Logo" 
-                  className="w-auto h-auto max-h-12 max-w-[260px] object-contain"
+                  className="w-auto h-auto max-h-16 max-w-[320px] object-contain drop-shadow-sm"
                 />
               ) : (
                 <div className="flex items-center space-x-3">
-                  <div className="w-10 h-10 bg-gradient-to-br from-red-600 to-red-700 rounded-xl flex items-center justify-center text-white font-black text-xl shadow-lg shadow-red-200 group-hover:scale-105 transition-transform">
+                  <div className="w-12 h-12 bg-gradient-to-br from-red-600 to-red-700 rounded-xl flex items-center justify-center text-white font-black text-2xl shadow-lg shadow-red-200 group-hover:scale-105 transition-transform">
                     {siteSettings?.defaultLogoMonogram || '২৪'}
                   </div>
                   <div>
-                    <h1 className="text-3xl font-black text-gray-900 tracking-tight group-hover:text-red-600 transition-colors">
+                    <h1 className="text-3xl md:text-4xl font-black text-gray-900 tracking-tight group-hover:text-red-600 transition-colors">
                       {language === 'bn' ? (siteSettings?.siteNameBn || t.siteTitle) : (siteSettings?.siteNameEn || t.siteTitle)}
                     </h1>
-                    <p className="text-[11px] text-gray-500 tracking-wide font-semibold">
+                    <p className="text-xs text-gray-500 tracking-wide font-semibold">
                       {language === 'bn' ? (siteSettings?.taglineBn || t.tagline) : (siteSettings?.taglineEn || t.tagline)}
                     </p>
                   </div>

@@ -131,6 +131,8 @@ export interface SiteSettings {
   defaultLogoMonogram?: string;
   copyrightText?: string;
   developerCredit?: string;
+  developerWebsiteUrl?: string;
+  developerPrefixText?: string;
 }
 
 export type ViewState = 

@@ -120,6 +120,8 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   const [taglineEnInput, setTaglineEnInput] = useState(siteSettings.taglineEn);
   const [copyrightTextInput, setCopyrightTextInput] = useState(siteSettings.copyrightText || 'All rights reserved.');
   const [developerCreditInput, setDeveloperCreditInput] = useState(siteSettings.developerCredit || 'Bangla Media Group');
+  const [developerWebsiteUrlInput, setDeveloperWebsiteUrlInput] = useState(siteSettings.developerWebsiteUrl || '');
+  const [developerPrefixTextInput, setDeveloperPrefixTextInput] = useState(siteSettings.developerPrefixText || 'Designed & Developed with Professional Standards for');
   const [settingsSuccess, setSettingsSuccess] = useState(false);
 
   const handleLogoFileUpload = (e: React.ChangeEvent<HTMLInputElement>, target: 'navDesktop' | 'navMobile' | 'footerDesktop' | 'footerMobile' | 'hamburger') => {
@@ -155,6 +157,8 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
       taglineEn: taglineEnInput,
       copyrightText: copyrightTextInput,
       developerCredit: developerCreditInput,
+      developerWebsiteUrl: developerWebsiteUrlInput,
+      developerPrefixText: developerPrefixTextInput,
     });
     setSettingsSuccess(true);
     setTimeout(() => setSettingsSuccess(false), 3000);
@@ -839,13 +843,37 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                 </div>
                 <div>
                   <label className="block text-sm font-bold text-gray-700 mb-1">
-                    {language === 'bn' ? 'ডেভেলপার ক্রেডিট / ফুটার টেক্সট' : 'Developer Credit / Footer Text'}
+                    {language === 'bn' ? 'ডেভেলপার ক্রেডিট প্রিফিক্স টেক্সট' : 'Developer Credit Prefix Text'}
+                  </label>
+                  <input
+                    type="text"
+                    value={developerPrefixTextInput}
+                    onChange={(e) => setDeveloperPrefixTextInput(e.target.value)}
+                    placeholder="Designed & Developed with Professional Standards for"
+                    className="w-full bg-gray-50 border border-gray-300 rounded-xl px-4 py-2.5 text-sm font-medium focus:outline-none focus:border-red-600"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-bold text-gray-700 mb-1">
+                    {language === 'bn' ? 'ডেভেলপার নাম / ব্র্যান্ড ক্রেডিট' : 'Developer Name / Brand Credit'}
                   </label>
                   <input
                     type="text"
                     value={developerCreditInput}
                     onChange={(e) => setDeveloperCreditInput(e.target.value)}
                     placeholder="Bangla Media Group"
+                    className="w-full bg-gray-50 border border-gray-300 rounded-xl px-4 py-2.5 text-sm font-medium focus:outline-none focus:border-red-600"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-bold text-gray-700 mb-1">
+                    {language === 'bn' ? 'ডেভেলপার ওয়েবসাইট লিংক' : 'Developer Website URL'}
+                  </label>
+                  <input
+                    type="url"
+                    value={developerWebsiteUrlInput}
+                    onChange={(e) => setDeveloperWebsiteUrlInput(e.target.value)}
+                    placeholder="https://example.com"
                     className="w-full bg-gray-50 border border-gray-300 rounded-xl px-4 py-2.5 text-sm font-medium focus:outline-none focus:border-red-600"
                   />
                 </div>

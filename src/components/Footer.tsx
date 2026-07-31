@@ -89,7 +89,7 @@ export const Footer: React.FC<FooterProps> = ({ language, onNavigate, bannerAds 
                   <img 
                     src={siteSettings.footerMobileLogoUrl} 
                     alt="Footer Mobile Logo" 
-                    className="w-auto h-auto max-h-10 max-w-[190px] object-contain"
+                    className="w-auto h-auto max-h-16 max-w-[280px] object-contain drop-shadow-sm"
                   />
                 </div>
               )}
@@ -100,7 +100,7 @@ export const Footer: React.FC<FooterProps> = ({ language, onNavigate, bannerAds 
                   <img 
                     src={siteSettings.footerDesktopLogoUrl} 
                     alt="Footer Desktop Logo" 
-                    className="w-auto h-auto max-h-12 max-w-[260px] object-contain"
+                    className="w-auto h-auto max-h-20 max-w-[360px] object-contain drop-shadow-sm"
                   />
                 </div>
               )}
@@ -108,10 +108,10 @@ export const Footer: React.FC<FooterProps> = ({ language, onNavigate, bannerAds 
               {/* Default Monogram & Title if custom footer logos missing */}
               {(!siteSettings?.footerMobileLogoUrl && !siteSettings?.footerDesktopLogoUrl) && (
                 <div className="flex items-center space-x-3">
-                  <div className="w-10 h-10 bg-red-600 rounded-lg flex items-center justify-center text-white font-black text-xl shadow-md">
+                  <div className="w-12 h-12 bg-red-600 rounded-xl flex items-center justify-center text-white font-black text-2xl shadow-lg shadow-red-900/50">
                     {siteSettings?.defaultLogoMonogram || '২৪'}
                   </div>
-                  <span className="text-2xl font-extrabold text-white tracking-tight">
+                  <span className="text-3xl font-black text-white tracking-tight">
                     {language === 'bn' ? (siteSettings?.siteNameBn || t.siteTitle) : (siteSettings?.siteNameEn || t.siteTitle)}
                   </span>
                 </div>
@@ -218,9 +218,20 @@ export const Footer: React.FC<FooterProps> = ({ language, onNavigate, bannerAds 
         {/* Bottom Bar */}
         <div className="pt-8 border-t border-gray-800 flex flex-col md:flex-row items-center justify-between text-xs text-gray-500 gap-4">
           <p>© {new Date().getFullYear()} {language === 'bn' ? (siteSettings?.siteNameBn || t.siteTitle) : (siteSettings?.siteNameEn || t.siteTitle)}. {siteSettings?.copyrightText || 'All rights reserved.'}</p>
-          <p className="flex items-center space-x-1">
-            <span>Designed & Developed with Professional Standards for</span>
-            <span className="text-red-500 font-bold">{siteSettings?.developerCredit || 'Bangla Media Group'}</span>
+          <p className="flex flex-wrap items-center gap-x-1 gap-y-1">
+            <span>{siteSettings?.developerPrefixText ?? 'Designed & Developed with Professional Standards for'}</span>
+            {siteSettings?.developerWebsiteUrl ? (
+              <a
+                href={siteSettings.developerWebsiteUrl.startsWith('http') ? siteSettings.developerWebsiteUrl : `https://${siteSettings.developerWebsiteUrl}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-red-500 font-bold hover:underline hover:text-red-400 transition"
+              >
+                {siteSettings?.developerCredit || 'Bangla Media Group'}
+              </a>
+            ) : (
+              <span className="text-red-500 font-bold">{siteSettings?.developerCredit || 'Bangla Media Group'}</span>
+            )}
           </p>
         </div>
       </div>
