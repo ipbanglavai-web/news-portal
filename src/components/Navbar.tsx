@@ -182,10 +182,22 @@ export const Navbar: React.FC<NavbarProps> = ({
           <div className="relative w-80 max-w-full bg-white h-full shadow-2xl flex flex-col z-10 transform transition-transform animate-in slide-in-from-left duration-300">
             <div className="p-4 bg-red-600 text-white flex items-center justify-between">
               <div className="flex items-center space-x-2">
-                <div className="w-8 h-8 bg-white text-red-600 rounded flex items-center justify-center font-black">
-                  ২৪
-                </div>
-                <span className="font-bold text-lg">{t.siteTitle}</span>
+                {siteSettings?.mobileLogoUrl || siteSettings?.desktopLogoUrl ? (
+                  <img 
+                    src={siteSettings?.mobileLogoUrl || siteSettings?.desktopLogoUrl} 
+                    alt="Logo" 
+                    className="h-8 max-w-[150px] object-contain bg-white/10 rounded p-1"
+                  />
+                ) : (
+                  <>
+                    <div className="w-8 h-8 bg-white text-red-600 rounded flex items-center justify-center font-black">
+                      {siteSettings?.defaultLogoMonogram || '২৪'}
+                    </div>
+                    <span className="font-bold text-lg">
+                      {language === 'bn' ? (siteSettings?.siteNameBn || t.siteTitle) : (siteSettings?.siteNameEn || t.siteTitle)}
+                    </span>
+                  </>
+                )}
               </div>
               <button 
                 onClick={() => setMobileMenuOpen(false)}
