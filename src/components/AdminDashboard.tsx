@@ -1057,18 +1057,22 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                         <td className="p-4 text-gray-600">{art.reporterName}</td>
                         <td className="p-4 text-gray-600">
                           <div className="flex items-center space-x-2">
-                            <span className="font-medium">{art.viewsCount.toLocaleString(language === 'bn' ? 'bn-BD' : 'en-US')}</span>
+                            <div className="inline-flex items-center space-x-1.5 bg-blue-50 border border-blue-200 text-blue-900 px-2.5 py-1 rounded-lg">
+                              <Eye className="w-3.5 h-3.5 text-blue-600" />
+                              <span className="font-bold text-sm">{art.viewsCount.toLocaleString(language === 'bn' ? 'bn-BD' : 'en-US')}</span>
+                              <span className="text-[11px] font-semibold text-blue-600">({language === 'bn' ? 'আসল ভিউ' : 'Original Views'})</span>
+                            </div>
                             {onUpdateArticleViews && (
                               <div className="flex items-center space-x-1">
                                 <button
                                   onClick={() => {
-                                    const val = prompt(language === 'bn' ? 'আসল পাঠক সংখ্যা (Views Count) লিখুন:' : 'Enter original views count:', String(art.viewsCount));
+                                    const val = prompt(language === 'bn' ? 'আসল পাঠক সংখ্যা (Original Views Count) লিখুন:' : 'Enter original views count:', String(art.viewsCount));
                                     if (val !== null && !isNaN(Number(val))) {
-                                      onUpdateArticleViews(art.id, Number(val));
+                                      onUpdateArticleViews(art.id, Math.max(0, Number(val)));
                                     }
                                   }}
                                   className="text-xs bg-gray-100 hover:bg-gray-200 text-gray-700 p-1.5 rounded-lg transition"
-                                  title={language === 'bn' ? 'পাঠক সংখ্যা সম্পাদনা করুন' : 'Edit Views Count'}
+                                  title={language === 'bn' ? 'আসল পাঠক সংখ্যা সম্পাদনা করুন' : 'Edit Original Views'}
                                 >
                                   <Edit className="w-3.5 h-3.5 text-red-600" />
                                 </button>

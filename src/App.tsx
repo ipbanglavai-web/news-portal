@@ -399,6 +399,22 @@ export default function App() {
     }
   }, [currentView]);
 
+  // Ensure direct article views increment original views count once per unique session
+  useEffect(() => {
+    if (currentView.type === 'article' && currentView.articleId) {
+      const id = currentView.articleId;
+      const sessionKey = `viewed_article_${id}`;
+      if (!sessionStorage.getItem(sessionKey)) {
+        sessionStorage.setItem(sessionKey, 'true');
+        setArticles(prev => {
+          const updated = prev.map(a => a.id === id ? { ...a, viewsCount: (a.viewsCount || 0) + 1 } : a);
+          articlesFirebase.save(updated);
+          return updated;
+        });
+      }
+    }
+  }, [currentView]);
+
   // Handle browser back / forward navigation
   useEffect(() => {
     const handlePopState = () => {
@@ -429,12 +445,16 @@ export default function App() {
   };
 
   const handleSelectArticle = (id: string) => {
-    // Increment view count
-    setArticles(prev => {
-      const updated = prev.map(a => a.id === id ? { ...a, viewsCount: a.viewsCount + 1 } : a);
-      articlesFirebase.save(updated);
-      return updated;
-    });
+    // Only increment view count once per unique browser session to count real/original viewers
+    const sessionKey = `viewed_article_${id}`;
+    if (!sessionStorage.getItem(sessionKey)) {
+      sessionStorage.setItem(sessionKey, 'true');
+      setArticles(prev => {
+        const updated = prev.map(a => a.id === id ? { ...a, viewsCount: (a.viewsCount || 0) + 1 } : a);
+        articlesFirebase.save(updated);
+        return updated;
+      });
+    }
     setCurrentView({ type: 'article', articleId: id });
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
