@@ -1,0 +1,35 @@
+{
+  "entities": {
+    "Moderator": {
+      "title": "Moderator",
+      "description": "Moderators created and managed by Admin with granular permission flags",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "designation": { "type": "string" },
+        "number": { "type": "string" },
+        "nid": { "type": "string" },
+        "dateOfBirth": { "type": "string" },
+        "gmail": { "type": "string" },
+        "password": { "type": "string" },
+        "newPassword": { "type": "string" },
+        "permissions": {
+          "type": "object",
+          "properties": {
+            "fullControl": { "type": "boolean" },
+            "newsManagement": { "type": "boolean" },
+            "categoryManagement": { "type": "boolean" },
+            "adRequests": { "type": "boolean" },
+            "userSubmissions": { "type": "boolean" }
+          },
+          "required": ["fullControl", "newsManagement", "categoryManagement", "adRequests", "userSubmissions"]
+        },
+        "isBanned": { "type": "boolean" },
+        "createdAt": { "type": "string" },
+        "createdBy": { "type": "string" }
+      },
+      "required": ["name", "designation", "number", "nid", "dateOfBirth", "gmail", "password", "permissions", "isBanned"]
+    }
+  }
+}
