@@ -82,12 +82,12 @@ export const Navbar: React.FC<NavbarProps> = ({
                 <img 
                   src={siteSettings.mobileLogoUrl} 
                   alt="Mobile Logo" 
-                  className="h-8 max-w-[150px] object-contain"
+                  className="w-auto h-auto max-h-9 max-w-[160px] object-contain"
                 />
               ) : (
                 <>
-                  <div className="w-8 h-8 bg-gradient-to-br from-red-600 to-red-700 rounded-lg flex items-center justify-center text-white font-black text-lg shadow-md shadow-red-200">
-                    ২৪
+                  <div className="w-8 h-8 bg-gradient-to-br from-red-600 to-red-700 rounded-lg flex items-center justify-center text-white font-black text-base shadow-md shadow-red-200">
+                    {siteSettings?.defaultLogoMonogram || '২৪'}
                   </div>
                   <div>
                     <h1 className="text-lg font-black text-gray-900 tracking-tight">
@@ -104,12 +104,12 @@ export const Navbar: React.FC<NavbarProps> = ({
                 <img 
                   src={siteSettings.desktopLogoUrl} 
                   alt="Desktop Logo" 
-                  className="h-10 max-w-[240px] object-contain"
+                  className="w-auto h-auto max-h-12 max-w-[260px] object-contain"
                 />
               ) : (
                 <div className="flex items-center space-x-3">
                   <div className="w-10 h-10 bg-gradient-to-br from-red-600 to-red-700 rounded-xl flex items-center justify-center text-white font-black text-xl shadow-lg shadow-red-200 group-hover:scale-105 transition-transform">
-                    ২৪
+                    {siteSettings?.defaultLogoMonogram || '২৪'}
                   </div>
                   <div>
                     <h1 className="text-3xl font-black text-gray-900 tracking-tight group-hover:text-red-600 transition-colors">

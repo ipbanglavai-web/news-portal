@@ -110,6 +110,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   const [mobileLogoInput, setMobileLogoInput] = useState(siteSettings.mobileLogoUrl || '');
   const [footerDesktopLogoInput, setFooterDesktopLogoInput] = useState(siteSettings.footerDesktopLogoUrl || '');
   const [footerMobileLogoInput, setFooterMobileLogoInput] = useState(siteSettings.footerMobileLogoUrl || '');
+  const [defaultLogoMonogramInput, setDefaultLogoMonogramInput] = useState(siteSettings.defaultLogoMonogram || '২৪');
   const [siteNameBnInput, setSiteNameBnInput] = useState(siteSettings.siteNameBn);
   const [siteNameEnInput, setSiteNameEnInput] = useState(siteSettings.siteNameEn);
   const [taglineBnInput, setTaglineBnInput] = useState(siteSettings.taglineBn);
@@ -140,6 +141,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
       mobileLogoUrl: mobileLogoInput,
       footerDesktopLogoUrl: footerDesktopLogoInput,
       footerMobileLogoUrl: footerMobileLogoInput,
+      defaultLogoMonogram: defaultLogoMonogramInput,
       siteNameBn: siteNameBnInput,
       siteNameEn: siteNameEnInput,
       taglineBn: taglineBnInput,
@@ -375,7 +377,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
         <div>
           <div className="p-6 border-b border-gray-800 flex items-center space-x-3">
             <div className="w-10 h-10 bg-red-600 rounded-xl flex items-center justify-center text-white font-black text-lg shadow-md shadow-red-900/50">
-              ২৪
+              {siteSettings?.defaultLogoMonogram || '২৪'}
             </div>
             <div>
               <h3 className="text-white font-bold text-base flex items-center space-x-1">
@@ -695,6 +697,23 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                     </div>
                   )}
                 </div>
+              </div>
+
+              {/* Default Monogram / Badge Symbol */}
+              <div className="pt-2">
+                <label className="block text-sm font-bold text-gray-700 mb-1">
+                  {language === 'bn' ? 'ডিফল্ট মনোগ্রাম / ব্যাজ চিহ্ন (যেমন: ২৪)' : 'Default Monogram / Badge Symbol (e.g. ২৪)'}
+                </label>
+                <input
+                  type="text"
+                  value={defaultLogoMonogramInput}
+                  onChange={(e) => setDefaultLogoMonogramInput(e.target.value)}
+                  placeholder="২৪"
+                  className="w-full md:w-1/2 bg-gray-50 border border-gray-300 rounded-xl px-4 py-2.5 text-sm font-medium focus:outline-none focus:border-red-600"
+                />
+                <p className="text-xs text-gray-500 mt-1">
+                  {language === 'bn' ? 'যখন কোনো ছবি লোগো হিসেবে আপলোড করা না থাকে, তখন হেডার ও ফুটারে এই ব্যাজটি প্রদর্শিত হবে।' : 'Shown in header and footer as the fallback badge when no custom image logo is uploaded.'}
+                </p>
               </div>
 
               {/* Site Name Inputs */}

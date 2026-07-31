@@ -150,7 +150,8 @@ export default function App() {
       desktopLogoUrl: '',
       mobileLogoUrl: '',
       footerDesktopLogoUrl: '',
-      footerMobileLogoUrl: ''
+      footerMobileLogoUrl: '',
+      defaultLogoMonogram: '২৪'
     };
   });
 

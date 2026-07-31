@@ -89,7 +89,7 @@ export const Footer: React.FC<FooterProps> = ({ language, onNavigate, bannerAds 
                   <img 
                     src={siteSettings.footerMobileLogoUrl || siteSettings.mobileLogoUrl} 
                     alt="Footer Mobile Logo" 
-                    className="h-9 max-w-[180px] object-contain"
+                    className="w-auto h-auto max-h-10 max-w-[190px] object-contain"
                   />
                 </div>
               )}
@@ -100,7 +100,7 @@ export const Footer: React.FC<FooterProps> = ({ language, onNavigate, bannerAds 
                   <img 
                     src={siteSettings.footerDesktopLogoUrl || siteSettings.desktopLogoUrl} 
                     alt="Footer Desktop Logo" 
-                    className="h-10 max-w-[240px] object-contain"
+                    className="w-auto h-auto max-h-12 max-w-[260px] object-contain"
                   />
                 </div>
               )}
@@ -108,8 +108,8 @@ export const Footer: React.FC<FooterProps> = ({ language, onNavigate, bannerAds 
               {/* Default Monogram & Title if custom logos missing */}
               {(!siteSettings?.footerMobileLogoUrl && !siteSettings?.mobileLogoUrl && !siteSettings?.footerDesktopLogoUrl && !siteSettings?.desktopLogoUrl) && (
                 <div className="flex items-center space-x-3">
-                  <div className="w-10 h-10 bg-red-600 rounded-lg flex items-center justify-center text-white font-black text-xl">
-                    ২৪
+                  <div className="w-10 h-10 bg-red-600 rounded-lg flex items-center justify-center text-white font-black text-xl shadow-md">
+                    {siteSettings?.defaultLogoMonogram || '২৪'}
                   </div>
                   <span className="text-2xl font-extrabold text-white tracking-tight">
                     {language === 'bn' ? (siteSettings?.siteNameBn || t.siteTitle) : (siteSettings?.siteNameEn || t.siteTitle)}
