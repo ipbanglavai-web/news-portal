@@ -6,7 +6,10 @@ import {
   addModeratorToFirebase, 
   updateModeratorInFirebase, 
   toggleBanModeratorInFirebase, 
-  deleteModeratorFromFirebase 
+  deleteModeratorFromFirebase,
+  fetchSiteSettingsFromFirebase,
+  saveSiteSettingsToFirebase,
+  subscribeToSiteSettings
 } from './lib/firebase';
 import { Navbar } from './components/Navbar';
 import { BreakingNewsMarquee } from './components/BreakingNewsMarquee';
@@ -151,7 +154,10 @@ export default function App() {
       mobileLogoUrl: '',
       footerDesktopLogoUrl: '',
       footerMobileLogoUrl: '',
-      defaultLogoMonogram: '২৪'
+      hamburgerLogoUrl: '',
+      defaultLogoMonogram: '২৪',
+      copyrightText: 'All rights reserved.',
+      developerCredit: 'Bangla Media Group'
     };
   });
 
@@ -160,7 +166,28 @@ export default function App() {
 
   useEffect(() => {
     localStorage.setItem('bn_news_settings', JSON.stringify(siteSettings));
+    saveSiteSettingsToFirebase(siteSettings).catch(err => console.error('Failed to save site settings to Firebase:', err));
   }, [siteSettings]);
+
+  useEffect(() => {
+    // Fetch initial site settings from Firebase
+    fetchSiteSettingsFromFirebase().then(remoteSettings => {
+      if (remoteSettings && remoteSettings.siteNameBn) {
+        setSiteSettings(remoteSettings);
+        localStorage.setItem('bn_news_settings', JSON.stringify(remoteSettings));
+      }
+    }).catch(err => console.error('Failed to fetch site settings from Firebase:', err));
+
+    // Subscribe to real-time site settings updates
+    const unsubscribeSettings = subscribeToSiteSettings((remoteSettings) => {
+      if (remoteSettings && remoteSettings.siteNameBn) {
+        setSiteSettings(remoteSettings);
+        localStorage.setItem('bn_news_settings', JSON.stringify(remoteSettings));
+      }
+    });
+
+    return () => unsubscribeSettings();
+  }, []);
 
   useEffect(() => {
     localStorage.setItem('bn_news_lang', language);
@@ -502,11 +529,14 @@ export default function App() {
                 const articleWithId: Article = {
                   ...newArt,
                   id: `art-${Date.now()}`,
-                  viewsCount: 1,
+                  viewsCount: newArt.viewsCount ?? 150,
                   likesCount: 0,
                   commentsCount: 0
                 };
                 setArticles(prev => [articleWithId, ...prev]);
+              }}
+              onUpdateArticleViews={(id, viewsCount) => {
+                setArticles(prev => prev.map(a => a.id === id ? { ...a, viewsCount } : a));
               }}
               onDeleteArticle={(id) => {
                 setArticles(prev => prev.filter(a => a.id !== id));

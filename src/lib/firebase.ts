@@ -9,10 +9,12 @@ import {
   doc, 
   query, 
   where,
-  onSnapshot
+  onSnapshot,
+  setDoc,
+  getDoc
 } from 'firebase/firestore';
 import firebaseConfig from '../../firebase-applet-config.json';
-import { Moderator } from '../types';
+import { Moderator, SiteSettings } from '../types';
 
 // Initialize Firebase App
 const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
@@ -206,3 +208,43 @@ export const authenticateModeratorWithFirebase = async (gmailInput: string, pass
     return { success: false, errorMsg: 'network_error' };
   }
 };
+
+// Site Settings Firebase Helpers
+const SETTINGS_DOC_REF = doc(db, 'settings', 'site_config');
+
+export const fetchSiteSettingsFromFirebase = async (): Promise<SiteSettings | null> => {
+  try {
+    const snap = await getDoc(SETTINGS_DOC_REF);
+    if (snap.exists()) {
+      return snap.data() as SiteSettings;
+    }
+    return null;
+  } catch (err) {
+    console.error('Error fetching site settings from Firebase:', err);
+    return null;
+  }
+};
+
+export const saveSiteSettingsToFirebase = async (settings: SiteSettings): Promise<void> => {
+  try {
+    await setDoc(SETTINGS_DOC_REF, settings, { merge: true });
+  } catch (err) {
+    console.error('Error saving site settings to Firebase:', err);
+  }
+};
+
+export const subscribeToSiteSettings = (onUpdate: (settings: SiteSettings) => void) => {
+  try {
+    return onSnapshot(SETTINGS_DOC_REF, (docSnap) => {
+      if (docSnap.exists()) {
+        onUpdate(docSnap.data() as SiteSettings);
+      }
+    }, (error) => {
+      console.error('Error in site settings snapshot listener:', error);
+    });
+  } catch (error) {
+    console.error('Failed to subscribe to site settings:', error);
+    return () => {};
+  }
+};
+

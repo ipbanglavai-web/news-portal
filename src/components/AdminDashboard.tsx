@@ -4,7 +4,7 @@ import { translations } from '../data/mockNews';
 import { 
   LayoutDashboard, FileText, Globe, Megaphone, Send, Plus, Trash2, Edit, CheckCircle, XCircle, 
   LogOut, Eye, Sparkles, Image, Upload, Check, Info, Monitor, Smartphone, Link as LinkIcon,
-  Users, UserPlus, ShieldCheck, ShieldAlert, UserX, Key, Phone, Calendar, BadgeCheck, AlertTriangle, Shield
+  Users, UserPlus, ShieldCheck, ShieldAlert, UserX, Key, Phone, Calendar, BadgeCheck, AlertTriangle, Shield, RotateCcw
 } from 'lucide-react';
 
 interface AdminDashboardProps {
@@ -32,6 +32,7 @@ interface AdminDashboardProps {
   onUpdateModerator?: (id: string, updates: Partial<Moderator>) => Promise<void>;
   onToggleBanModerator?: (id: string, currentBanStatus: boolean) => Promise<void>;
   onDeleteModerator?: (id: string) => Promise<void>;
+  onUpdateArticleViews?: (id: string, viewsCount: number) => void;
 }
 
 export const AdminDashboard: React.FC<AdminDashboardProps> = ({
@@ -58,7 +59,8 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   onAddModerator,
   onUpdateModerator,
   onToggleBanModerator,
-  onDeleteModerator
+  onDeleteModerator,
+  onUpdateArticleViews
 }) => {
   const [activeTab, setActiveTab] = useState<'overview' | 'news' | 'categories' | 'ads' | 'submissions' | 'moderators' | 'settings'>('overview');
   const [adFilter, setAdFilter] = useState<'all' | 'pending' | 'approved' | 'rejected'>('all');
@@ -110,14 +112,17 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   const [mobileLogoInput, setMobileLogoInput] = useState(siteSettings.mobileLogoUrl || '');
   const [footerDesktopLogoInput, setFooterDesktopLogoInput] = useState(siteSettings.footerDesktopLogoUrl || '');
   const [footerMobileLogoInput, setFooterMobileLogoInput] = useState(siteSettings.footerMobileLogoUrl || '');
+  const [hamburgerLogoInput, setHamburgerLogoInput] = useState(siteSettings.hamburgerLogoUrl || '');
   const [defaultLogoMonogramInput, setDefaultLogoMonogramInput] = useState(siteSettings.defaultLogoMonogram || '২৪');
   const [siteNameBnInput, setSiteNameBnInput] = useState(siteSettings.siteNameBn);
   const [siteNameEnInput, setSiteNameEnInput] = useState(siteSettings.siteNameEn);
   const [taglineBnInput, setTaglineBnInput] = useState(siteSettings.taglineBn);
   const [taglineEnInput, setTaglineEnInput] = useState(siteSettings.taglineEn);
+  const [copyrightTextInput, setCopyrightTextInput] = useState(siteSettings.copyrightText || 'All rights reserved.');
+  const [developerCreditInput, setDeveloperCreditInput] = useState(siteSettings.developerCredit || 'Bangla Media Group');
   const [settingsSuccess, setSettingsSuccess] = useState(false);
 
-  const handleLogoFileUpload = (e: React.ChangeEvent<HTMLInputElement>, target: 'navDesktop' | 'navMobile' | 'footerDesktop' | 'footerMobile') => {
+  const handleLogoFileUpload = (e: React.ChangeEvent<HTMLInputElement>, target: 'navDesktop' | 'navMobile' | 'footerDesktop' | 'footerMobile' | 'hamburger') => {
     const file = e.target.files?.[0];
     if (file) {
       const reader = new FileReader();
@@ -127,6 +132,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
           if (target === 'navMobile') setMobileLogoInput(reader.result);
           if (target === 'footerDesktop') setFooterDesktopLogoInput(reader.result);
           if (target === 'footerMobile') setFooterMobileLogoInput(reader.result);
+          if (target === 'hamburger') setHamburgerLogoInput(reader.result);
         }
       };
       reader.readAsDataURL(file);
@@ -141,11 +147,14 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
       mobileLogoUrl: mobileLogoInput,
       footerDesktopLogoUrl: footerDesktopLogoInput,
       footerMobileLogoUrl: footerMobileLogoInput,
+      hamburgerLogoUrl: hamburgerLogoInput,
       defaultLogoMonogram: defaultLogoMonogramInput,
       siteNameBn: siteNameBnInput,
       siteNameEn: siteNameEnInput,
       taglineBn: taglineBnInput,
       taglineEn: taglineEnInput,
+      copyrightText: copyrightTextInput,
+      developerCredit: developerCreditInput,
     });
     setSettingsSuccess(true);
     setTimeout(() => setSettingsSuccess(false), 3000);
@@ -293,6 +302,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   // Add Category state
   const [newCatBn, setNewCatBn] = useState('');
   const [newCatEn, setNewCatEn] = useState('');
+  const [initialViewsInput, setInitialViewsInput] = useState<number>(150);
 
   const totalViews = articles.reduce((acc, curr) => acc + curr.viewsCount, 0);
 
@@ -310,6 +320,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
       reporterName,
       publishedAt: new Date().toISOString(),
       imageUrl,
+      viewsCount: initialViewsInput,
       isFeatured,
       isBreaking,
       isTrending,
@@ -605,6 +616,48 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                     </div>
                   )}
                 </div>
+
+                {/* Hamburger Menu / Drawer Logo */}
+                <div className="space-y-2 pt-2">
+                  <div className="flex items-center justify-between">
+                    <label className="block text-sm font-bold text-gray-700">
+                      {language === 'bn' ? 'ড্রয়ার / হ্যামবার্গার মেনু লোগো (Hamburger Menu Logo)' : 'Hamburger Menu / Drawer Logo'}
+                    </label>
+                    <span className="text-[11px] font-semibold text-gray-500 bg-gray-100 px-2 py-0.5 rounded-md">
+                      {language === 'bn' ? 'প্রস্তাবিত সাইজ: ১৬০px × ৪০px' : 'Recommended: 160px × 40px'}
+                    </span>
+                  </div>
+                  <div className="flex flex-col sm:flex-row gap-2">
+                    <input
+                      type="text"
+                      value={hamburgerLogoInput}
+                      onChange={(e) => setHamburgerLogoInput(e.target.value)}
+                      placeholder="https://... image URL or upload local file"
+                      className="flex-1 bg-gray-50 border border-gray-300 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-red-600 font-medium"
+                    />
+                    <label className="bg-gray-100 hover:bg-gray-200 text-gray-800 font-bold text-xs px-4 py-2.5 rounded-xl border border-gray-300 cursor-pointer flex items-center justify-center space-x-1.5 transition shrink-0">
+                      <Upload className="w-4 h-4 text-red-600" />
+                      <span>{language === 'bn' ? 'ফাইল আপলোড' : 'Upload File'}</span>
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) => handleLogoFileUpload(e, 'hamburger')}
+                        className="hidden"
+                      />
+                    </label>
+                  </div>
+                  <p className="text-xs text-gray-500">
+                    {language === 'bn' 
+                      ? 'হ্যামবার্গার মেনু ড্রয়ারের শীর্ষ অংশের জন্য লোগো (খালি রাখলে হেডার লোগো বা ডিফল্ট ব্যাজ দেখাবে)।' 
+                      : 'Logo shown at the top of the mobile navigation drawer (leave blank to fallback to header logo or default badge).'}
+                  </p>
+                  {hamburgerLogoInput && (
+                    <div className="p-3 bg-red-900 border border-red-800 rounded-xl flex items-center space-x-3">
+                      <span className="text-xs font-semibold text-red-200">Hamburger Drawer Preview (Red BG):</span>
+                      <img src={hamburgerLogoInput} alt="Hamburger Logo Preview" className="h-8 object-contain max-w-[150px] bg-white/10 rounded p-1" onError={(e) => {(e.target as HTMLElement).style.display = 'none';}} />
+                    </div>
+                  )}
+                </div>
               </div>
 
               {/* --- FOOTER LOGOS --- */}
@@ -770,6 +823,34 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                 </div>
               </div>
 
+              {/* Footer Copyright & Developer Credit Inputs */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
+                <div>
+                  <label className="block text-sm font-bold text-gray-700 mb-1">
+                    {language === 'bn' ? 'কপিরাইট টেক্সট' : 'Copyright Text'}
+                  </label>
+                  <input
+                    type="text"
+                    value={copyrightTextInput}
+                    onChange={(e) => setCopyrightTextInput(e.target.value)}
+                    placeholder="All rights reserved."
+                    className="w-full bg-gray-50 border border-gray-300 rounded-xl px-4 py-2.5 text-sm font-medium focus:outline-none focus:border-red-600"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-bold text-gray-700 mb-1">
+                    {language === 'bn' ? 'ডেভেলপার ক্রেডিট / ফুটার টেক্সট' : 'Developer Credit / Footer Text'}
+                  </label>
+                  <input
+                    type="text"
+                    value={developerCreditInput}
+                    onChange={(e) => setDeveloperCreditInput(e.target.value)}
+                    placeholder="Bangla Media Group"
+                    className="w-full bg-gray-50 border border-gray-300 rounded-xl px-4 py-2.5 text-sm font-medium focus:outline-none focus:border-red-600"
+                  />
+                </div>
+              </div>
+
               <div className="pt-4 border-t border-gray-100">
                 <button
                   type="submit"
@@ -863,7 +944,38 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                           {categories.find(c => c.id === art.categoryId)?.nameBn || art.categoryId}
                         </td>
                         <td className="p-4 text-gray-600">{art.reporterName}</td>
-                        <td className="p-4 text-gray-600">{art.viewsCount}</td>
+                        <td className="p-4 text-gray-600">
+                          <div className="flex items-center space-x-2">
+                            <span className="font-medium">{art.viewsCount.toLocaleString(language === 'bn' ? 'bn-BD' : 'en-US')}</span>
+                            {onUpdateArticleViews && (
+                              <div className="flex items-center space-x-1">
+                                <button
+                                  onClick={() => {
+                                    const val = prompt(language === 'bn' ? 'আসল পাঠক সংখ্যা (Views Count) লিখুন:' : 'Enter original views count:', String(art.viewsCount));
+                                    if (val !== null && !isNaN(Number(val))) {
+                                      onUpdateArticleViews(art.id, Number(val));
+                                    }
+                                  }}
+                                  className="text-xs bg-gray-100 hover:bg-gray-200 text-gray-700 p-1.5 rounded-lg transition"
+                                  title={language === 'bn' ? 'পাঠক সংখ্যা সম্পাদনা করুন' : 'Edit Views Count'}
+                                >
+                                  <Edit className="w-3.5 h-3.5 text-red-600" />
+                                </button>
+                                <button
+                                  onClick={() => {
+                                    if (window.confirm(language === 'bn' ? 'আপনি কি এই সংবাদের পাঠক সংখ্যা শূন্য (0) এ রিসেট করতে চান?' : 'Are you sure you want to reset views count to 0?')) {
+                                      onUpdateArticleViews(art.id, 0);
+                                    }
+                                  }}
+                                  className="text-xs bg-gray-100 hover:bg-gray-200 text-gray-700 p-1.5 rounded-lg transition"
+                                  title={language === 'bn' ? 'পাঠক সংখ্যা রিসেট করুন (0)' : 'Reset Views Count (0)'}
+                                >
+                                  <RotateCcw className="w-3.5 h-3.5 text-amber-600" />
+                                </button>
+                              </div>
+                            )}
+                          </div>
+                        </td>
                         <td className="p-4 text-right">
                           <button
                             onClick={() => onDeleteArticle(art.id)}
@@ -2074,6 +2186,19 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                   value={imageUrl}
                   onChange={(e) => setImageUrl(e.target.value)}
                   className="w-full bg-gray-50 border border-gray-300 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-red-600"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-gray-700 uppercase mb-1">
+                  {language === 'bn' ? 'প্রাথমিক পাঠক সংখ্যা (Views Count / Original Views)' : 'Initial Views Count (Original Views)'}
+                </label>
+                <input
+                  type="number"
+                  min="0"
+                  value={initialViewsInput}
+                  onChange={(e) => setInitialViewsInput(Number(e.target.value))}
+                  className="w-full bg-gray-50 border border-gray-300 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-red-600 font-medium"
                 />
               </div>
 

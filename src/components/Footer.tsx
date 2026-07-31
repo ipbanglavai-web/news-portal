@@ -84,10 +84,10 @@ export const Footer: React.FC<FooterProps> = ({ language, onNavigate, bannerAds 
           <div>
             <div className="mb-4">
               {/* Footer Mobile Logo */}
-              {(siteSettings?.footerMobileLogoUrl || siteSettings?.mobileLogoUrl) && (
+              {siteSettings?.footerMobileLogoUrl && (
                 <div className="block md:hidden">
                   <img 
-                    src={siteSettings.footerMobileLogoUrl || siteSettings.mobileLogoUrl} 
+                    src={siteSettings.footerMobileLogoUrl} 
                     alt="Footer Mobile Logo" 
                     className="w-auto h-auto max-h-10 max-w-[190px] object-contain"
                   />
@@ -95,18 +95,18 @@ export const Footer: React.FC<FooterProps> = ({ language, onNavigate, bannerAds 
               )}
 
               {/* Footer Desktop Logo */}
-              {(siteSettings?.footerDesktopLogoUrl || siteSettings?.desktopLogoUrl) && (
+              {siteSettings?.footerDesktopLogoUrl && (
                 <div className="hidden md:block">
                   <img 
-                    src={siteSettings.footerDesktopLogoUrl || siteSettings.desktopLogoUrl} 
+                    src={siteSettings.footerDesktopLogoUrl} 
                     alt="Footer Desktop Logo" 
                     className="w-auto h-auto max-h-12 max-w-[260px] object-contain"
                   />
                 </div>
               )}
 
-              {/* Default Monogram & Title if custom logos missing */}
-              {(!siteSettings?.footerMobileLogoUrl && !siteSettings?.mobileLogoUrl && !siteSettings?.footerDesktopLogoUrl && !siteSettings?.desktopLogoUrl) && (
+              {/* Default Monogram & Title if custom footer logos missing */}
+              {(!siteSettings?.footerMobileLogoUrl && !siteSettings?.footerDesktopLogoUrl) && (
                 <div className="flex items-center space-x-3">
                   <div className="w-10 h-10 bg-red-600 rounded-lg flex items-center justify-center text-white font-black text-xl shadow-md">
                     {siteSettings?.defaultLogoMonogram || '২৪'}
@@ -217,10 +217,10 @@ export const Footer: React.FC<FooterProps> = ({ language, onNavigate, bannerAds 
 
         {/* Bottom Bar */}
         <div className="pt-8 border-t border-gray-800 flex flex-col md:flex-row items-center justify-between text-xs text-gray-500 gap-4">
-          <p>© {new Date().getFullYear()} {t.siteTitle}. All rights reserved.</p>
+          <p>© {new Date().getFullYear()} {language === 'bn' ? (siteSettings?.siteNameBn || t.siteTitle) : (siteSettings?.siteNameEn || t.siteTitle)}. {siteSettings?.copyrightText || 'All rights reserved.'}</p>
           <p className="flex items-center space-x-1">
             <span>Designed & Developed with Professional Standards for</span>
-            <span className="text-red-500 font-bold">Bangla Media Group</span>
+            <span className="text-red-500 font-bold">{siteSettings?.developerCredit || 'Bangla Media Group'}</span>
           </p>
         </div>
       </div>

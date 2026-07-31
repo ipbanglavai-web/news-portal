@@ -182,9 +182,15 @@ export const Navbar: React.FC<NavbarProps> = ({
           <div className="relative w-80 max-w-full bg-white h-full shadow-2xl flex flex-col z-10 transform transition-transform animate-in slide-in-from-left duration-300">
             <div className="p-4 bg-red-600 text-white flex items-center justify-between">
               <div className="flex items-center space-x-2">
-                {siteSettings?.mobileLogoUrl || siteSettings?.desktopLogoUrl ? (
+                {siteSettings?.hamburgerLogoUrl ? (
                   <img 
-                    src={siteSettings?.mobileLogoUrl || siteSettings?.desktopLogoUrl} 
+                    src={siteSettings.hamburgerLogoUrl} 
+                    alt="Hamburger Logo" 
+                    className="h-8 max-w-[160px] object-contain bg-white/10 rounded p-1"
+                  />
+                ) : (siteSettings?.mobileLogoUrl || siteSettings?.desktopLogoUrl) ? (
+                  <img 
+                    src={siteSettings.mobileLogoUrl || siteSettings.desktopLogoUrl} 
                     alt="Logo" 
                     className="h-8 max-w-[150px] object-contain bg-white/10 rounded p-1"
                   />

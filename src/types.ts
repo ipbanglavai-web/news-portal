@@ -127,7 +127,10 @@ export interface SiteSettings {
   mobileLogoUrl: string;
   footerDesktopLogoUrl?: string;
   footerMobileLogoUrl?: string;
+  hamburgerLogoUrl?: string;
   defaultLogoMonogram?: string;
+  copyrightText?: string;
+  developerCredit?: string;
 }
 
 export type ViewState = 
