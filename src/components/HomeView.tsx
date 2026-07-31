@@ -32,13 +32,13 @@ export const HomeView: React.FC<HomeViewProps> = ({
 
   const [dismissedFeatured, setDismissedFeatured] = useState(false);
 
-  // Get 3 Featured Articles (fill up if less than 3)
+  // Get 5 Featured Articles (fill up if less than 5)
   let rawFeatured = articles.filter(a => a.isFeatured);
-  if (rawFeatured.length < 3) {
-    const extra = articles.filter(a => !rawFeatured.some(f => f.id === a.id)).slice(0, 3 - rawFeatured.length);
+  if (rawFeatured.length < 5) {
+    const extra = articles.filter(a => !rawFeatured.some(f => f.id === a.id)).slice(0, 5 - rawFeatured.length);
     rawFeatured = [...rawFeatured, ...extra];
   }
-  const featuredArticles = !dismissedFeatured ? rawFeatured.slice(0, 3) : [];
+  const featuredArticles = !dismissedFeatured ? rawFeatured.slice(0, 5) : [];
 
   const trendingArticles = articles.filter(a => a.isTrending).slice(0, 5);
   const remainingArticles = articles.filter(a => !featuredArticles.some(f => f.id === a.id));
@@ -105,10 +105,10 @@ export const HomeView: React.FC<HomeViewProps> = ({
                 />
               )}
 
-              {/* 2nd & 3rd Featured Stories (2 Column Grid) */}
+              {/* 2nd to 5th Featured Stories (Grid Layout) */}
               {featuredArticles.length > 1 && (
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6">
-                  {featuredArticles.slice(1, 3).map((art) => (
+                  {featuredArticles.slice(1, 5).map((art) => (
                     <NewsCard
                       key={art.id}
                       article={art}
