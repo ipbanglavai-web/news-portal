@@ -106,13 +106,31 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   const [adSuccessMsg, setAdSuccessMsg] = useState(false);
   
   // Settings / Logo state
-  const [desktopLogoInput, setDesktopLogoInput] = useState(siteSettings.desktopLogoUrl);
-  const [mobileLogoInput, setMobileLogoInput] = useState(siteSettings.mobileLogoUrl);
+  const [desktopLogoInput, setDesktopLogoInput] = useState(siteSettings.desktopLogoUrl || '');
+  const [mobileLogoInput, setMobileLogoInput] = useState(siteSettings.mobileLogoUrl || '');
+  const [footerDesktopLogoInput, setFooterDesktopLogoInput] = useState(siteSettings.footerDesktopLogoUrl || '');
+  const [footerMobileLogoInput, setFooterMobileLogoInput] = useState(siteSettings.footerMobileLogoUrl || '');
   const [siteNameBnInput, setSiteNameBnInput] = useState(siteSettings.siteNameBn);
   const [siteNameEnInput, setSiteNameEnInput] = useState(siteSettings.siteNameEn);
   const [taglineBnInput, setTaglineBnInput] = useState(siteSettings.taglineBn);
   const [taglineEnInput, setTaglineEnInput] = useState(siteSettings.taglineEn);
   const [settingsSuccess, setSettingsSuccess] = useState(false);
+
+  const handleLogoFileUpload = (e: React.ChangeEvent<HTMLInputElement>, target: 'navDesktop' | 'navMobile' | 'footerDesktop' | 'footerMobile') => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        if (typeof reader.result === 'string') {
+          if (target === 'navDesktop') setDesktopLogoInput(reader.result);
+          if (target === 'navMobile') setMobileLogoInput(reader.result);
+          if (target === 'footerDesktop') setFooterDesktopLogoInput(reader.result);
+          if (target === 'footerMobile') setFooterMobileLogoInput(reader.result);
+        }
+      };
+      reader.readAsDataURL(file);
+    }
+  };
 
   const handleSaveSettings = (e: React.FormEvent) => {
     e.preventDefault();
@@ -120,6 +138,8 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
       ...siteSettings,
       desktopLogoUrl: desktopLogoInput,
       mobileLogoUrl: mobileLogoInput,
+      footerDesktopLogoUrl: footerDesktopLogoInput,
+      footerMobileLogoUrl: footerMobileLogoInput,
       siteNameBn: siteNameBnInput,
       siteNameEn: siteNameEnInput,
       taglineBn: taglineBnInput,
@@ -492,71 +512,241 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
             )}
 
             <form onSubmit={handleSaveSettings} className="bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-gray-200 space-y-6">
-              <div>
-                <label className="block text-sm font-bold text-gray-700 mb-1">
-                  {language === 'bn' ? 'ডেস্কটপ লোগো ইমেজ ইউআরএল (Desktop Logo URL)' : 'Desktop Logo Image URL'}
-                </label>
-                <input
-                  type="url"
-                  value={desktopLogoInput}
-                  onChange={(e) => setDesktopLogoInput(e.target.value)}
-                  placeholder="https://images.unsplash.com/... or image URL"
-                  className="w-full bg-gray-50 border border-gray-300 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-red-600 font-medium"
-                />
-                <p className="text-xs text-gray-500 mt-1">
-                  {language === 'bn' 
-                    ? 'প্রস্তাবিত আকার: প্রায় ২২০px × ৫০px (স্বচ্ছ ব্যাকগ্রাউন্ড সহ PNG)' 
-                    : 'Recommended size: ~220px × 50px (Transparent PNG format)'}
-                </p>
-                {desktopLogoInput && (
-                  <div className="mt-3 p-3 bg-gray-50 border border-gray-200 rounded-xl flex items-center space-x-3">
-                    <span className="text-xs font-semibold text-gray-500">Desktop Preview:</span>
-                    <img src={desktopLogoInput} alt="Desktop Preview" className="h-10 object-contain max-w-[200px]" onError={(e) => {(e.target as HTMLElement).style.display = 'none';}} />
+              
+              {/* --- NAVBAR / HEADER LOGOS --- */}
+              <div className="border-b border-gray-100 pb-6 space-y-4">
+                <h3 className="text-base font-extrabold text-gray-900 flex items-center space-x-2">
+                  <span className="w-2 h-2 rounded-full bg-red-600"></span>
+                  <span>{language === 'bn' ? 'নেভিগেশন বার (হেডার) লোগো' : 'Navbar / Header Logos'}</span>
+                </h3>
+
+                {/* Nav Desktop Logo */}
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between">
+                    <label className="block text-sm font-bold text-gray-700">
+                      {language === 'bn' ? 'হেডার ডেস্কটপ লোগো (Navbar Desktop Logo)' : 'Navbar Desktop Logo'}
+                    </label>
+                    <span className="text-[11px] font-semibold text-gray-500 bg-gray-100 px-2 py-0.5 rounded-md">
+                      {language === 'bn' ? 'প্রস্তাবিত সাইজ: ২২০px × ৫০px' : 'Recommended: 220px × 50px'}
+                    </span>
                   </div>
-                )}
+                  <div className="flex flex-col sm:flex-row gap-2">
+                    <input
+                      type="text"
+                      value={desktopLogoInput}
+                      onChange={(e) => setDesktopLogoInput(e.target.value)}
+                      placeholder="https://... image URL or upload local file"
+                      className="flex-1 bg-gray-50 border border-gray-300 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-red-600 font-medium"
+                    />
+                    <label className="bg-gray-100 hover:bg-gray-200 text-gray-800 font-bold text-xs px-4 py-2.5 rounded-xl border border-gray-300 cursor-pointer flex items-center justify-center space-x-1.5 transition shrink-0">
+                      <Upload className="w-4 h-4 text-red-600" />
+                      <span>{language === 'bn' ? 'ফাইল আপলোড' : 'Upload File'}</span>
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) => handleLogoFileUpload(e, 'navDesktop')}
+                        className="hidden"
+                      />
+                    </label>
+                  </div>
+                  <p className="text-xs text-gray-500">
+                    {language === 'bn' 
+                      ? 'ডেস্কটপ নেভিগেশন বারের জন্য সর্বোচ্চ সাইজ ২২০px × ৫০px (স্বচ্ছ PNG পছন্দনীয়)।' 
+                      : 'Recommended size: 220px × 50px for desktop header (Transparent PNG preferred).'}
+                  </p>
+                  {desktopLogoInput && (
+                    <div className="p-3 bg-gray-50 border border-gray-200 rounded-xl flex items-center space-x-3">
+                      <span className="text-xs font-semibold text-gray-500">Preview:</span>
+                      <img src={desktopLogoInput} alt="Navbar Desktop Preview" className="h-9 object-contain max-w-[200px]" onError={(e) => {(e.target as HTMLElement).style.display = 'none';}} />
+                    </div>
+                  )}
+                </div>
+
+                {/* Nav Mobile Logo */}
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between">
+                    <label className="block text-sm font-bold text-gray-700">
+                      {language === 'bn' ? 'হেডার মোবাইল লোগো (Navbar Mobile Logo)' : 'Navbar Mobile Logo'}
+                    </label>
+                    <span className="text-[11px] font-semibold text-gray-500 bg-gray-100 px-2 py-0.5 rounded-md">
+                      {language === 'bn' ? 'প্রস্তাবিত সাইজ: ১৫০px × ৪০px' : 'Recommended: 150px × 40px'}
+                    </span>
+                  </div>
+                  <div className="flex flex-col sm:flex-row gap-2">
+                    <input
+                      type="text"
+                      value={mobileLogoInput}
+                      onChange={(e) => setMobileLogoInput(e.target.value)}
+                      placeholder="https://... image URL or upload local file"
+                      className="flex-1 bg-gray-50 border border-gray-300 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-red-600 font-medium"
+                    />
+                    <label className="bg-gray-100 hover:bg-gray-200 text-gray-800 font-bold text-xs px-4 py-2.5 rounded-xl border border-gray-300 cursor-pointer flex items-center justify-center space-x-1.5 transition shrink-0">
+                      <Upload className="w-4 h-4 text-red-600" />
+                      <span>{language === 'bn' ? 'ফাইল আপলোড' : 'Upload File'}</span>
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) => handleLogoFileUpload(e, 'navMobile')}
+                        className="hidden"
+                      />
+                    </label>
+                  </div>
+                  <p className="text-xs text-gray-500">
+                    {language === 'bn' 
+                      ? 'মোবাইল নেভিগেশন বারের জন্য সর্বোচ্চ সাইজ ১৫০px × ৪০px (স্বচ্ছ PNG পছন্দনীয়)।' 
+                      : 'Recommended size: 150px × 40px for mobile header (Transparent PNG preferred).'}
+                  </p>
+                  {mobileLogoInput && (
+                    <div className="p-3 bg-gray-50 border border-gray-200 rounded-xl flex items-center space-x-3">
+                      <span className="text-xs font-semibold text-gray-500">Preview:</span>
+                      <img src={mobileLogoInput} alt="Navbar Mobile Preview" className="h-8 object-contain max-w-[150px]" onError={(e) => {(e.target as HTMLElement).style.display = 'none';}} />
+                    </div>
+                  )}
+                </div>
               </div>
 
-              <div>
-                <label className="block text-sm font-bold text-gray-700 mb-1">
-                  {language === 'bn' ? 'মোবাইল লোগো ইমেজ ইউআরএল (Mobile Logo URL)' : 'Mobile Logo Image URL'}
-                </label>
-                <input
-                  type="url"
-                  value={mobileLogoInput}
-                  onChange={(e) => setMobileLogoInput(e.target.value)}
-                  placeholder="https://images.unsplash.com/... or image URL"
-                  className="w-full bg-gray-50 border border-gray-300 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-red-600 font-medium"
-                />
-                <p className="text-xs text-gray-500 mt-1">
-                  {language === 'bn' 
-                    ? 'প্রস্তাবিত আকার: প্রায় ১৫০px × ৪০px (স্বচ্ছ ব্যাকগ্রাউন্ড সহ PNG)' 
-                    : 'Recommended size: ~150px × 40px (Transparent PNG format)'}
-                </p>
-                {mobileLogoInput && (
-                  <div className="mt-3 p-3 bg-gray-50 border border-gray-200 rounded-xl flex items-center space-x-3">
-                    <span className="text-xs font-semibold text-gray-500">Mobile Preview:</span>
-                    <img src={mobileLogoInput} alt="Mobile Preview" className="h-8 object-contain max-w-[140px]" onError={(e) => {(e.target as HTMLElement).style.display = 'none';}} />
+              {/* --- FOOTER LOGOS --- */}
+              <div className="border-b border-gray-100 pb-6 space-y-4">
+                <h3 className="text-base font-extrabold text-gray-900 flex items-center space-x-2">
+                  <span className="w-2 h-2 rounded-full bg-red-600"></span>
+                  <span>{language === 'bn' ? 'ফুটার লোগো' : 'Footer Logos'}</span>
+                </h3>
+
+                {/* Footer Desktop Logo */}
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between">
+                    <label className="block text-sm font-bold text-gray-700">
+                      {language === 'bn' ? 'ফুটার ডেস্কটপ লোগো (Footer Desktop Logo)' : 'Footer Desktop Logo'}
+                    </label>
+                    <span className="text-[11px] font-semibold text-gray-500 bg-gray-100 px-2 py-0.5 rounded-md">
+                      {language === 'bn' ? 'প্রস্তাবিত সাইজ: ২৪০px × ৫০px' : 'Recommended: 240px × 50px'}
+                    </span>
                   </div>
-                )}
+                  <div className="flex flex-col sm:flex-row gap-2">
+                    <input
+                      type="text"
+                      value={footerDesktopLogoInput}
+                      onChange={(e) => setFooterDesktopLogoInput(e.target.value)}
+                      placeholder="https://... image URL or upload local file (blank uses Header logo)"
+                      className="flex-1 bg-gray-50 border border-gray-300 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-red-600 font-medium"
+                    />
+                    <label className="bg-gray-100 hover:bg-gray-200 text-gray-800 font-bold text-xs px-4 py-2.5 rounded-xl border border-gray-300 cursor-pointer flex items-center justify-center space-x-1.5 transition shrink-0">
+                      <Upload className="w-4 h-4 text-red-600" />
+                      <span>{language === 'bn' ? 'ফাইল আপলোড' : 'Upload File'}</span>
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) => handleLogoFileUpload(e, 'footerDesktop')}
+                        className="hidden"
+                      />
+                    </label>
+                  </div>
+                  <p className="text-xs text-gray-500">
+                    {language === 'bn' 
+                      ? 'ডেস্কটপ ফুটারের জন্য সর্বোচ্চ সাইজ ২৪০px × ৫০px (গাঢ় ব্যাকগ্রাউন্ডের জন্য লাইট/সাদা লোগো)।' 
+                      : 'Recommended size: 240px × 50px for desktop footer (Light/white logo for dark background).'}
+                  </p>
+                  {footerDesktopLogoInput && (
+                    <div className="p-3 bg-gray-900 border border-gray-800 rounded-xl flex items-center space-x-3">
+                      <span className="text-xs font-semibold text-gray-400">Footer Desktop Preview (Dark BG):</span>
+                      <img src={footerDesktopLogoInput} alt="Footer Desktop Preview" className="h-9 object-contain max-w-[200px]" onError={(e) => {(e.target as HTMLElement).style.display = 'none';}} />
+                    </div>
+                  )}
+                </div>
+
+                {/* Footer Mobile Logo */}
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between">
+                    <label className="block text-sm font-bold text-gray-700">
+                      {language === 'bn' ? 'ফুটার মোবাইল লোগো (Footer Mobile Logo)' : 'Footer Mobile Logo'}
+                    </label>
+                    <span className="text-[11px] font-semibold text-gray-500 bg-gray-100 px-2 py-0.5 rounded-md">
+                      {language === 'bn' ? 'প্রস্তাবিত সাইজ: ১৮০px × ৪০px' : 'Recommended: 180px × 40px'}
+                    </span>
+                  </div>
+                  <div className="flex flex-col sm:flex-row gap-2">
+                    <input
+                      type="text"
+                      value={footerMobileLogoInput}
+                      onChange={(e) => setFooterMobileLogoInput(e.target.value)}
+                      placeholder="https://... image URL or upload local file (blank uses Header logo)"
+                      className="flex-1 bg-gray-50 border border-gray-300 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-red-600 font-medium"
+                    />
+                    <label className="bg-gray-100 hover:bg-gray-200 text-gray-800 font-bold text-xs px-4 py-2.5 rounded-xl border border-gray-300 cursor-pointer flex items-center justify-center space-x-1.5 transition shrink-0">
+                      <Upload className="w-4 h-4 text-red-600" />
+                      <span>{language === 'bn' ? 'ফাইল আপলোড' : 'Upload File'}</span>
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) => handleLogoFileUpload(e, 'footerMobile')}
+                        className="hidden"
+                      />
+                    </label>
+                  </div>
+                  <p className="text-xs text-gray-500">
+                    {language === 'bn' 
+                      ? 'মোবাইল ফুটারের জন্য সর্বোচ্চ সাইজ ১৮০px × ৪০px (গাঢ় ব্যাকগ্রাউন্ডের জন্য লাইট/সাদা লোগো)।' 
+                      : 'Recommended size: 180px × 40px for mobile footer (Light/white logo for dark background).'}
+                  </p>
+                  {footerMobileLogoInput && (
+                    <div className="p-3 bg-gray-900 border border-gray-800 rounded-xl flex items-center space-x-3">
+                      <span className="text-xs font-semibold text-gray-400">Footer Mobile Preview (Dark BG):</span>
+                      <img src={footerMobileLogoInput} alt="Footer Mobile Preview" className="h-8 object-contain max-w-[150px]" onError={(e) => {(e.target as HTMLElement).style.display = 'none';}} />
+                    </div>
+                  )}
+                </div>
               </div>
 
+              {/* Site Name Inputs */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
                 <div>
-                  <label className="block text-sm font-bold text-gray-700 mb-1">Site Name (Bangla)</label>
+                  <label className="block text-sm font-bold text-gray-700 mb-1">
+                    {language === 'bn' ? 'সাইটের নাম (বাংলা)' : 'Site Name (Bangla)'}
+                  </label>
                   <input
                     type="text"
                     value={siteNameBnInput}
                     onChange={(e) => setSiteNameBnInput(e.target.value)}
-                    className="w-full bg-gray-50 border border-gray-300 rounded-xl px-4 py-2.5 text-sm font-medium"
+                    className="w-full bg-gray-50 border border-gray-300 rounded-xl px-4 py-2.5 text-sm font-medium focus:outline-none focus:border-red-600"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-bold text-gray-700 mb-1">Site Name (English)</label>
+                  <label className="block text-sm font-bold text-gray-700 mb-1">
+                    {language === 'bn' ? 'সাইটের নাম (ইংরেজি)' : 'Site Name (English)'}
+                  </label>
                   <input
                     type="text"
                     value={siteNameEnInput}
                     onChange={(e) => setSiteNameEnInput(e.target.value)}
-                    className="w-full bg-gray-50 border border-gray-300 rounded-xl px-4 py-2.5 text-sm font-medium"
+                    className="w-full bg-gray-50 border border-gray-300 rounded-xl px-4 py-2.5 text-sm font-medium focus:outline-none focus:border-red-600"
+                  />
+                </div>
+              </div>
+
+              {/* Tagline / Subtitle Inputs */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
+                <div>
+                  <label className="block text-sm font-bold text-gray-700 mb-1">
+                    {language === 'bn' ? 'ট্যাগলাইন / হেডার সাবটাইটেল (বাংলা)' : 'Tagline / Header Subtitle (Bangla)'}
+                  </label>
+                  <input
+                    type="text"
+                    value={taglineBnInput}
+                    onChange={(e) => setTaglineBnInput(e.target.value)}
+                    placeholder="যেমন: অনলাইন সংবাদের প্রধান ঠিকানা"
+                    className="w-full bg-gray-50 border border-gray-300 rounded-xl px-4 py-2.5 text-sm font-medium focus:outline-none focus:border-red-600"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-bold text-gray-700 mb-1">
+                    {language === 'bn' ? 'ট্যাগলাইন / হেডার সাবটাইটেল (ইংরেজি)' : 'Tagline / Header Subtitle (English)'}
+                  </label>
+                  <input
+                    type="text"
+                    value={taglineEnInput}
+                    onChange={(e) => setTaglineEnInput(e.target.value)}
+                    placeholder="e.g. The Premier Online News Source"
+                    className="w-full bg-gray-50 border border-gray-300 rounded-xl px-4 py-2.5 text-sm font-medium focus:outline-none focus:border-red-600"
                   />
                 </div>
               </div>

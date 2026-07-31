@@ -24,16 +24,71 @@ import { AdminLogin } from './components/AdminLogin';
 import { AdminDashboard } from './components/AdminDashboard';
 import { Search } from 'lucide-react';
 
+const getViewStateFromUrl = (): ViewState => {
+  if (typeof window === 'undefined') return { type: 'home' };
+
+  const searchParams = new URLSearchParams(window.location.search);
+  const articleId = searchParams.get('article');
+  if (articleId) return { type: 'article', articleId };
+
+  const categoryId = searchParams.get('category');
+  if (categoryId) return { type: 'category', categoryId };
+
+  const searchQuery = searchParams.get('search');
+  if (searchQuery) return { type: 'search', query: searchQuery };
+
+  const view = searchParams.get('view');
+  if (view === 'bookmarks') return { type: 'bookmarks' };
+  if (view === 'submit-news') return { type: 'submit-news' };
+  if (view === 'advertise') return { type: 'advertise' };
+  if (view === 'admin-login') return { type: 'admin-login' };
+  if (view === 'admin-dashboard') return { type: 'admin-dashboard' };
+
+  const hash = window.location.hash.replace('#', '');
+  if (hash.startsWith('article=')) {
+    return { type: 'article', articleId: hash.replace('article=', '') };
+  }
+  if (hash.startsWith('category=')) {
+    return { type: 'category', categoryId: hash.replace('category=', '') };
+  }
+
+  // Restore saved view from localStorage if available
+  const savedView = localStorage.getItem('bn_news_current_view');
+  if (savedView) {
+    try {
+      const parsed = JSON.parse(savedView);
+      if (parsed && parsed.type) return parsed;
+    } catch (e) {
+      // ignore
+    }
+  }
+
+  return { type: 'home' };
+};
+
 export default function App() {
   const [language, setLanguage] = useState<Language>(() => {
     const saved = localStorage.getItem('bn_news_lang');
     return (saved === 'en' || saved === 'bn') ? saved : 'bn';
   });
 
-  const [currentView, setCurrentView] = useState<ViewState>({ type: 'home' });
-  const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(null);
+  const [currentView, setCurrentView] = useState<ViewState>(getViewStateFromUrl);
+  const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(() => {
+    const initialView = getViewStateFromUrl();
+    return initialView.type === 'category' ? initialView.categoryId : null;
+  });
 
-  const [adminSession, setAdminSession] = useState<AdminSession | null>(null);
+  const [adminSession, setAdminSession] = useState<AdminSession | null>(() => {
+    const saved = localStorage.getItem('bn_news_admin_session');
+    if (saved) {
+      try {
+        return JSON.parse(saved);
+      } catch (e) {
+        return null;
+      }
+    }
+    return null;
+  });
   const [moderators, setModerators] = useState<Moderator[]>([]);
 
   const [articles, setArticles] = useState<Article[]>(() => {
@@ -93,7 +148,9 @@ export default function App() {
       twitterUrl: 'https://twitter.com',
       maintenanceMode: false,
       desktopLogoUrl: '',
-      mobileLogoUrl: ''
+      mobileLogoUrl: '',
+      footerDesktopLogoUrl: '',
+      footerMobileLogoUrl: ''
     };
   });
 
@@ -145,7 +202,79 @@ export default function App() {
 
   useEffect(() => {
     localStorage.setItem('bn_news_admin_auth', isAdminAuthenticated ? 'true' : 'false');
-  }, [isAdminAuthenticated]);
+    if (adminSession && isAdminAuthenticated) {
+      localStorage.setItem('bn_news_admin_session', JSON.stringify(adminSession));
+    } else {
+      localStorage.removeItem('bn_news_admin_session');
+    }
+  }, [isAdminAuthenticated, adminSession]);
+
+  useEffect(() => {
+    if (currentView) {
+      localStorage.setItem('bn_news_current_view', JSON.stringify(currentView));
+    }
+  }, [currentView]);
+
+  // Keep moderator session in sync or logout if banned
+  useEffect(() => {
+    if (isAdminAuthenticated && adminSession?.role === 'moderator' && adminSession.moderatorInfo) {
+      const currentMod = moderators.find(
+        m => m.id === adminSession.moderatorInfo?.id || m.gmail === adminSession.moderatorInfo?.gmail
+      );
+      if (currentMod) {
+        if (currentMod.isBanned) {
+          setIsAdminAuthenticated(false);
+          setAdminSession(null);
+          localStorage.removeItem('bn_news_admin_auth');
+          localStorage.removeItem('bn_news_admin_session');
+          setCurrentView({ type: 'home' });
+        } else {
+          setAdminSession(prev => prev ? { ...prev, moderatorInfo: currentMod } : null);
+        }
+      }
+    }
+  }, [moderators]);
+
+  // Sync state to URL address bar
+  useEffect(() => {
+    const url = new URL(window.location.href);
+    url.searchParams.delete('article');
+    url.searchParams.delete('category');
+    url.searchParams.delete('search');
+    url.searchParams.delete('view');
+
+    if (currentView.type === 'article') {
+      url.searchParams.set('article', currentView.articleId);
+    } else if (currentView.type === 'category') {
+      url.searchParams.set('category', currentView.categoryId);
+    } else if (currentView.type === 'search') {
+      url.searchParams.set('search', currentView.query);
+    } else if (currentView.type !== 'home') {
+      url.searchParams.set('view', currentView.type);
+    }
+
+    const newUrl = url.pathname + url.search;
+    const currentUrl = window.location.pathname + window.location.search;
+    if (currentUrl !== newUrl) {
+      window.history.pushState({ view: currentView }, '', newUrl);
+    }
+  }, [currentView]);
+
+  // Handle browser back / forward navigation
+  useEffect(() => {
+    const handlePopState = () => {
+      const view = getViewStateFromUrl();
+      setCurrentView(view);
+      if (view.type === 'category') {
+        setSelectedCategoryId(view.categoryId);
+      } else {
+        setSelectedCategoryId(null);
+      }
+    };
+
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
 
   const toggleLanguage = () => {
     setLanguage(prev => prev === 'bn' ? 'en' : 'bn');
@@ -362,7 +491,11 @@ export default function App() {
               onLogout={() => {
                 setIsAdminAuthenticated(false);
                 setAdminSession(null);
-                setCurrentView({ type: 'home' });
+                localStorage.removeItem('bn_news_admin_auth');
+                localStorage.removeItem('bn_news_admin_session');
+                const homeView: ViewState = { type: 'home' };
+                localStorage.setItem('bn_news_current_view', JSON.stringify(homeView));
+                setCurrentView(homeView);
               }}
               onAddArticle={(newArt) => {
                 const articleWithId: Article = {
@@ -474,6 +607,7 @@ export default function App() {
       {currentView.type !== 'admin-dashboard' && currentView.type !== 'admin-login' && (
         <Footer
           language={language}
+          siteSettings={siteSettings}
           onNavigate={(view) => {
             setCurrentView(view);
             window.scrollTo({ top: 0, behavior: 'smooth' });

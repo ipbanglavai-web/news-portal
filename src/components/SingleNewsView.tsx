@@ -63,8 +63,18 @@ export const SingleNewsView: React.FC<SingleNewsViewProps> = ({
   const articleComments = comments.filter(c => c.articleId === article.id && c.isApproved);
   const relatedArticles = articles.filter(a => a.categoryId === article.categoryId && a.id !== article.id).slice(0, 3);
 
+  const getArticleShareUrl = () => {
+    if (typeof window === 'undefined') return '';
+    const url = new URL(window.location.origin + window.location.pathname);
+    url.searchParams.set('article', article.id);
+    return url.toString();
+  };
+
+  const articleShareUrl = getArticleShareUrl();
+  const articleTitle = language === 'bn' ? article.titleBn : article.titleEn;
+
   const handleCopyLink = () => {
-    navigator.clipboard.writeText(window.location.href);
+    navigator.clipboard.writeText(articleShareUrl);
     setCopied(true);
     setTimeout(() => setCopied(false), 3000);
   };
@@ -212,55 +222,85 @@ export const SingleNewsView: React.FC<SingleNewsViewProps> = ({
 
           {/* Action Toolbar (Share, Bookmark, Print) */}
           <div className="bg-gray-50 rounded-xl p-4 flex flex-wrap items-center justify-between gap-4 border border-gray-200">
-            <div className="flex items-center space-x-2">
+            <div className="flex flex-wrap items-center gap-2.5">
               <button
                 onClick={(e) => onToggleBookmark(article, e)}
-                className={`flex items-center space-x-1.5 px-4 py-2 rounded-xl text-xs font-bold transition ${
+                className={`flex items-center space-x-2 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all duration-200 active:scale-[0.97] cursor-pointer ${
                   isBookmarked 
-                    ? 'bg-red-600 text-white shadow-md' 
-                    : 'bg-white border border-gray-200 text-gray-700 hover:bg-gray-100'
+                    ? 'bg-gradient-to-r from-red-600 to-red-700 text-white shadow-md shadow-red-200 hover:from-red-700 hover:to-red-800 hover:shadow-lg' 
+                    : 'bg-white border border-gray-200/90 text-gray-700 hover:text-red-600 hover:border-red-200 hover:bg-red-50/60 shadow-xs hover:shadow-sm'
                 }`}
               >
-                <Bookmark className={`w-4 h-4 ${isBookmarked ? 'fill-current' : ''}`} />
+                <Bookmark className={`w-4 h-4 transition-transform duration-200 ${isBookmarked ? 'fill-current scale-110' : ''}`} />
                 <span>{isBookmarked ? t.bookmarked : t.bookmark}</span>
               </button>
 
               <button
                 onClick={handleCopyLink}
-                className="flex items-center space-x-1.5 px-4 py-2 rounded-xl text-xs font-bold bg-white border border-gray-200 text-gray-700 hover:bg-gray-100 transition"
+                className={`flex items-center space-x-2 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all duration-200 active:scale-[0.97] cursor-pointer ${
+                  copied
+                    ? 'bg-emerald-600 text-white shadow-md shadow-emerald-200 hover:bg-emerald-700'
+                    : 'bg-white border border-gray-200/90 text-gray-700 hover:text-blue-600 hover:border-blue-200 hover:bg-blue-50/60 shadow-xs hover:shadow-sm'
+                }`}
               >
-                {copied ? <Check className="w-4 h-4 text-green-600" /> : <Share2 className="w-4 h-4" />}
+                {copied ? <Check className="w-4 h-4 text-white animate-bounce" /> : <Share2 className="w-4 h-4" />}
                 <span>{copied ? t.linkCopied : t.copyLink}</span>
               </button>
 
               <button
                 onClick={handlePrint}
-                className="flex items-center space-x-1.5 px-4 py-2 rounded-xl text-xs font-bold bg-white border border-gray-200 text-gray-700 hover:bg-gray-100 transition"
+                className="flex items-center space-x-2 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold bg-white border border-gray-200/90 text-gray-700 hover:text-gray-900 hover:border-gray-300 hover:bg-gray-100/80 shadow-xs hover:shadow-sm transition-all duration-200 active:scale-[0.97] cursor-pointer"
               >
-                <Printer className="w-4 h-4" />
+                <Printer className="w-4 h-4 text-gray-500" />
                 <span>{t.print}</span>
               </button>
             </div>
 
             {/* Social Share icons */}
             <div className="flex items-center space-x-2">
+              {typeof navigator !== 'undefined' && 'share' in navigator && (
+                <button
+                  onClick={() => {
+                    navigator.share({
+                      title: articleTitle,
+                      text: language === 'bn' ? article.summaryBn : article.summaryEn,
+                      url: articleShareUrl
+                    }).catch(() => {});
+                  }}
+                  className="flex items-center space-x-1.5 px-3 py-2 rounded-full text-xs font-bold bg-red-50 text-red-600 hover:bg-red-100 transition border border-red-200 mr-1"
+                  title="Share"
+                >
+                  <Share2 className="w-3.5 h-3.5" />
+                  <span>{language === 'bn' ? 'শেয়ার' : 'Share'}</span>
+                </button>
+              )}
+
               <a 
-                href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}`} 
+                href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(articleShareUrl)}`} 
                 target="_blank" 
                 rel="noreferrer"
-                className="w-9 h-9 rounded-full bg-blue-600 text-white flex items-center justify-center hover:opacity-90 transition"
+                className="w-9 h-9 rounded-full bg-blue-600 text-white flex items-center justify-center hover:opacity-90 transition shadow-sm"
                 title="Share on Facebook"
               >
                 <Facebook className="w-4 h-4" />
               </a>
               <a 
-                href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(window.location.href)}`} 
+                href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(articleShareUrl)}&text=${encodeURIComponent(articleTitle)}`} 
                 target="_blank" 
                 rel="noreferrer"
-                className="w-9 h-9 rounded-full bg-sky-500 text-white flex items-center justify-center hover:opacity-90 transition"
+                className="w-9 h-9 rounded-full bg-sky-500 text-white flex items-center justify-center hover:opacity-90 transition shadow-sm"
                 title="Share on Twitter"
               >
                 <Twitter className="w-4 h-4" />
+              </a>
+              <a 
+                href={`https://api.whatsapp.com/send?text=${encodeURIComponent(articleTitle + ' ' + articleShareUrl)}`} 
+                target="_blank" 
+                rel="noreferrer"
+                className="w-9 h-9 rounded-full bg-green-600 text-white flex items-center justify-center hover:opacity-90 transition shadow-sm"
+                title="Share on WhatsApp"
+              >
+                <MessageSquare className="w-4 h-4" />
               </a>
             </div>
           </div>

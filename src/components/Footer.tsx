@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Language, ViewState, BannerAd } from '../types';
+import { Language, ViewState, BannerAd, SiteSettings } from '../types';
 import { translations } from '../data/mockNews';
 import { BannerAdComponent } from './BannerAdComponent';
 import { Mail, Phone, MapPin, Facebook, Youtube, Instagram, Twitter, CheckCircle2, Send } from 'lucide-react';
@@ -8,9 +8,10 @@ interface FooterProps {
   language: Language;
   onNavigate: (view: ViewState) => void;
   bannerAds?: BannerAd[];
+  siteSettings?: SiteSettings;
 }
 
-export const Footer: React.FC<FooterProps> = ({ language, onNavigate, bannerAds = [] }) => {
+export const Footer: React.FC<FooterProps> = ({ language, onNavigate, bannerAds = [], siteSettings }) => {
   const t = translations[language];
   const [email, setEmail] = useState('');
   const [subscribed, setSubscribed] = useState(false);
@@ -81,13 +82,40 @@ export const Footer: React.FC<FooterProps> = ({ language, onNavigate, bannerAds 
           
           {/* Brand Column */}
           <div>
-            <div className="flex items-center space-x-3 mb-4">
-              <div className="w-10 h-10 bg-red-600 rounded-lg flex items-center justify-center text-white font-black text-xl">
-                ২৪
-              </div>
-              <span className="text-2xl font-extrabold text-white tracking-tight">
-                {t.siteTitle}
-              </span>
+            <div className="mb-4">
+              {/* Footer Mobile Logo */}
+              {(siteSettings?.footerMobileLogoUrl || siteSettings?.mobileLogoUrl) && (
+                <div className="block md:hidden">
+                  <img 
+                    src={siteSettings.footerMobileLogoUrl || siteSettings.mobileLogoUrl} 
+                    alt="Footer Mobile Logo" 
+                    className="h-9 max-w-[180px] object-contain"
+                  />
+                </div>
+              )}
+
+              {/* Footer Desktop Logo */}
+              {(siteSettings?.footerDesktopLogoUrl || siteSettings?.desktopLogoUrl) && (
+                <div className="hidden md:block">
+                  <img 
+                    src={siteSettings.footerDesktopLogoUrl || siteSettings.desktopLogoUrl} 
+                    alt="Footer Desktop Logo" 
+                    className="h-10 max-w-[240px] object-contain"
+                  />
+                </div>
+              )}
+
+              {/* Default Monogram & Title if custom logos missing */}
+              {(!siteSettings?.footerMobileLogoUrl && !siteSettings?.mobileLogoUrl && !siteSettings?.footerDesktopLogoUrl && !siteSettings?.desktopLogoUrl) && (
+                <div className="flex items-center space-x-3">
+                  <div className="w-10 h-10 bg-red-600 rounded-lg flex items-center justify-center text-white font-black text-xl">
+                    ২৪
+                  </div>
+                  <span className="text-2xl font-extrabold text-white tracking-tight">
+                    {language === 'bn' ? (siteSettings?.siteNameBn || t.siteTitle) : (siteSettings?.siteNameEn || t.siteTitle)}
+                  </span>
+                </div>
+              )}
             </div>
             <p className="text-gray-400 text-sm leading-relaxed mb-4">
               {language === 'bn' 

@@ -3,7 +3,7 @@ import { Article, Category, Language, BannerAd } from '../types';
 import { NewsCard } from './NewsCard';
 import { BannerAdComponent } from './BannerAdComponent';
 import { translations } from '../data/mockNews';
-import { Flame, ArrowRight, Sparkles, X } from 'lucide-react';
+import { Flame, ArrowRight, X } from 'lucide-react';
 
 interface HomeViewProps {
   articles: Article[];
@@ -61,9 +61,9 @@ export const HomeView: React.FC<HomeViewProps> = ({
         <div className="lg:col-span-2 space-y-4">
           
           <div className="flex items-center justify-between border-b border-gray-200 pb-2">
-            <h2 className="text-xl font-bold text-gray-900 flex items-center space-x-2">
-              <Sparkles className="w-5 h-5 text-red-600 fill-red-100" />
-              <span>{language === 'bn' ? 'প্রধান সংবাদসমূহ (Featured Stories)' : 'Featured Stories'}</span>
+            <h2 className="text-lg sm:text-xl font-bold text-gray-900 flex items-center space-x-2">
+              <span className="w-2.5 h-6 bg-red-600 rounded-sm"></span>
+              <span>{language === 'bn' ? 'প্রধান সংবাদ' : 'Featured Stories'}</span>
             </h2>
             {featuredArticles.length > 0 && (
               <button
@@ -105,9 +105,9 @@ export const HomeView: React.FC<HomeViewProps> = ({
                 />
               )}
 
-              {/* 2nd to 5th Featured Stories (Grid Layout) */}
+              {/* 2nd to 5th Featured Stories (2 Column Grid on Mobile & Desktop) */}
               {featuredArticles.length > 1 && (
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6">
+                <div className="grid grid-cols-2 gap-3 sm:gap-4 md:gap-6">
                   {featuredArticles.slice(1, 5).map((art) => (
                     <NewsCard
                       key={art.id}

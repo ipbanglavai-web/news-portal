@@ -368,7 +368,9 @@ export const siteSettings: SiteSettings = {
   twitterUrl: 'https://twitter.com',
   maintenanceMode: false,
   desktopLogoUrl: '',
-  mobileLogoUrl: ''
+  mobileLogoUrl: '',
+  footerDesktopLogoUrl: '',
+  footerMobileLogoUrl: ''
 };
 
 export const initialAdRequests: AdRequest[] = [

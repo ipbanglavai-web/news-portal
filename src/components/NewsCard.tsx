@@ -36,7 +36,7 @@ export const NewsCard: React.FC<NewsCardProps> = ({
     return (
       <div 
         onClick={() => onSelectArticle(article.id)}
-        className="group relative bg-white rounded-xl overflow-hidden border border-gray-100 shadow-md hover:shadow-xl transition-all duration-300 cursor-pointer flex flex-col md:flex-row"
+        className="group relative bg-white rounded-xl overflow-hidden border border-gray-100 shadow-sm hover:shadow-lg transition-all duration-300 cursor-pointer flex flex-col md:flex-row"
       >
         {onDismiss && (
           <button
@@ -50,7 +50,7 @@ export const NewsCard: React.FC<NewsCardProps> = ({
             <X className="w-4 h-4" />
           </button>
         )}
-        <div className="md:w-3/5 relative overflow-hidden aspect-video md:aspect-auto md:min-h-[300px]">
+        <div className="md:w-3/5 relative overflow-hidden aspect-[16/9] md:aspect-auto md:min-h-[300px]">
           <img 
             src={article.imageUrl} 
             alt={language === 'bn' ? article.titleBn : article.titleEn}
@@ -69,9 +69,9 @@ export const NewsCard: React.FC<NewsCardProps> = ({
             </button>
           )}
         </div>
-        <div className="md:w-2/5 p-4 sm:p-6 flex flex-col justify-between bg-white">
+        <div className="md:w-2/5 p-3.5 sm:p-6 flex flex-col justify-between bg-white">
           <div>
-            <div className="flex items-center justify-between text-xs text-gray-500 mb-2">
+            <div className="flex items-center justify-between text-[11px] sm:text-xs text-gray-500 mb-1.5 sm:mb-2">
               <span className="flex items-center space-x-1">
                 <Clock className="w-3.5 h-3.5" />
                 <span>{formattedDate}</span>
@@ -81,27 +81,27 @@ export const NewsCard: React.FC<NewsCardProps> = ({
                 <span>{article.viewsCount.toLocaleString(language === 'bn' ? 'bn-BD' : 'en-US')}</span>
               </span>
             </div>
-            <h2 className="text-xl md:text-2xl font-bold text-gray-900 group-hover:text-red-600 transition-colors leading-snug mb-3 line-clamp-3">
+            <h2 className="text-base sm:text-xl md:text-2xl font-bold text-gray-900 group-hover:text-red-600 transition-colors leading-snug mb-2 sm:mb-3 line-clamp-3">
               {language === 'bn' ? article.titleBn : article.titleEn}
             </h2>
-            <p className="text-gray-600 text-sm line-clamp-3 mb-4 leading-relaxed">
+            <p className="hidden sm:block text-gray-600 text-sm line-clamp-3 mb-4 leading-relaxed">
               {language === 'bn' ? article.summaryBn : article.summaryEn}
             </p>
           </div>
-          <div className="flex items-center justify-between pt-4 border-t border-gray-100 mt-auto">
-            <span className="text-xs font-semibold text-gray-700">
+          <div className="flex items-center justify-between pt-2.5 sm:pt-4 border-t border-gray-100 mt-auto text-xs">
+            <span className="font-semibold text-gray-700">
               {article.reporterName}
             </span>
             <button
               onClick={(e) => onToggleBookmark(article, e)}
-              className={`p-2 rounded-full transition ${
+              className={`p-1.5 sm:p-2 rounded-full transition ${
                 isBookmarked 
                   ? 'bg-red-100 text-red-600' 
                   : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
               }`}
               title={isBookmarked ? 'Bookmarked' : 'Bookmark'}
             >
-              <Bookmark className={`w-4 h-4 ${isBookmarked ? 'fill-current' : ''}`} />
+              <Bookmark className={`w-3.5 h-3.5 sm:w-4 sm:h-4 ${isBookmarked ? 'fill-current' : ''}`} />
             </button>
           </div>
         </div>
@@ -157,14 +157,14 @@ export const NewsCard: React.FC<NewsCardProps> = ({
                 e.stopPropagation();
                 onSelectCategory(category.id);
               }}
-              className="absolute top-3 left-3 bg-red-600 text-white text-[11px] font-semibold px-2.5 py-0.5 rounded-full uppercase tracking-wider shadow hover:bg-red-700 transition"
+              className="absolute top-2 left-2 sm:top-3 sm:left-3 bg-red-600 text-white text-[9px] sm:text-[11px] font-semibold px-2 py-0.5 sm:px-2.5 rounded-full uppercase tracking-wider shadow hover:bg-red-700 transition"
             >
               {language === 'bn' ? category.nameBn : category.nameEn}
             </button>
           )}
         </div>
-        <div className="p-3 sm:p-4">
-          <div className="flex items-center justify-between text-xs text-gray-500 mb-2">
+        <div className="p-2.5 sm:p-4">
+          <div className="flex items-center justify-between text-[10px] sm:text-xs text-gray-500 mb-1 sm:mb-2">
             <span className="flex items-center space-x-1">
               <Clock className="w-3 h-3" />
               <span>{formattedDate}</span>
@@ -174,28 +174,28 @@ export const NewsCard: React.FC<NewsCardProps> = ({
               <span>{article.viewsCount}</span>
             </span>
           </div>
-          <h3 className="text-sm sm:text-base font-bold text-gray-900 group-hover:text-red-600 transition-colors line-clamp-2 leading-snug mb-1.5 sm:mb-2">
+          <h3 className="text-xs sm:text-base font-bold text-gray-900 group-hover:text-red-600 transition-colors line-clamp-2 leading-snug mb-1 sm:mb-2">
             {language === 'bn' ? article.titleBn : article.titleEn}
           </h3>
-          <p className="text-gray-600 text-xs line-clamp-2 leading-relaxed">
+          <p className="hidden sm:block text-gray-600 text-xs line-clamp-2 leading-relaxed">
             {language === 'bn' ? article.summaryBn : article.summaryEn}
           </p>
         </div>
       </div>
-      <div className="px-3 sm:px-4 pb-3 sm:pb-4 pt-2 border-t border-gray-100 flex items-center justify-between text-xs">
+      <div className="px-2.5 sm:px-4 pb-2.5 sm:pb-4 pt-1.5 sm:pt-2 border-t border-gray-100 flex items-center justify-between text-[10px] sm:text-xs">
         <span className="font-medium text-gray-700 truncate max-w-[70%]">
           {article.reporterName}
         </span>
         <button
           onClick={(e) => onToggleBookmark(article, e)}
-          className={`p-1.5 rounded-full transition ${
+          className={`p-1 sm:p-1.5 rounded-full transition ${
             isBookmarked 
               ? 'bg-red-100 text-red-600' 
               : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
           }`}
           title={isBookmarked ? 'Bookmarked' : 'Bookmark'}
         >
-          <Bookmark className={`w-3.5 h-3.5 ${isBookmarked ? 'fill-current' : ''}`} />
+          <Bookmark className={`w-3 h-3 sm:w-3.5 sm:h-3.5 ${isBookmarked ? 'fill-current' : ''}`} />
         </button>
       </div>
     </div>

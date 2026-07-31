@@ -125,6 +125,8 @@ export interface SiteSettings {
   maintenanceMode: boolean;
   desktopLogoUrl: string;
   mobileLogoUrl: string;
+  footerDesktopLogoUrl?: string;
+  footerMobileLogoUrl?: string;
 }
 
 export type ViewState = 
