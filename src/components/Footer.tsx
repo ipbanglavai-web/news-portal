@@ -89,7 +89,7 @@ export const Footer: React.FC<FooterProps> = ({ language, onNavigate, bannerAds 
                   <img 
                     src={siteSettings.footerMobileLogoUrl} 
                     alt="Footer Mobile Logo" 
-                    className="w-auto h-auto max-h-16 max-w-[280px] object-contain drop-shadow-sm"
+                    className="w-auto h-auto max-h-20 max-w-[320px] object-contain drop-shadow-sm"
                   />
                 </div>
               )}
@@ -100,7 +100,7 @@ export const Footer: React.FC<FooterProps> = ({ language, onNavigate, bannerAds 
                   <img 
                     src={siteSettings.footerDesktopLogoUrl} 
                     alt="Footer Desktop Logo" 
-                    className="w-auto h-auto max-h-20 max-w-[360px] object-contain drop-shadow-sm"
+                    className="w-auto h-auto max-h-28 max-w-[440px] object-contain drop-shadow-sm"
                   />
                 </div>
               )}

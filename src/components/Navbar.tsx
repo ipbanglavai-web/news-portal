@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Language, ViewState, SiteSettings } from '../types';
 import { translations } from '../data/mockNews';
 import { Search, Bookmark, Globe, Menu, X, Shield, Send, Megaphone, Phone, FileText, Info } from 'lucide-react';
+import { WeatherWidget } from './WeatherWidget';
 
 interface NavbarProps {
   language: Language;
@@ -37,7 +38,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           <div className="flex items-center space-x-4">
             <span className="font-medium">{currentDateStr}</span>
             <span className="hidden sm:inline text-gray-500">|</span>
-            <span className="hidden sm:inline text-red-400 font-semibold">ঢাকা: ৩০°C, বৃষ্টিপাত</span>
+            <WeatherWidget language={language} />
           </div>
           <div className="flex items-center space-x-4">
             <button 
@@ -82,15 +83,15 @@ export const Navbar: React.FC<NavbarProps> = ({
                 <img 
                   src={siteSettings.mobileLogoUrl} 
                   alt="Mobile Logo" 
-                  className="w-auto h-auto max-h-12 max-w-[220px] object-contain drop-shadow-sm"
+                  className="w-auto h-auto max-h-16 max-w-[280px] sm:max-w-[320px] object-contain drop-shadow-sm"
                 />
               ) : (
                 <>
-                  <div className="w-10 h-10 bg-gradient-to-br from-red-600 to-red-700 rounded-xl flex items-center justify-center text-white font-black text-lg shadow-md shadow-red-200">
+                  <div className="w-12 h-12 bg-gradient-to-br from-red-600 to-red-700 rounded-xl flex items-center justify-center text-white font-black text-xl shadow-md shadow-red-200">
                     {siteSettings?.defaultLogoMonogram || '২৪'}
                   </div>
                   <div>
-                    <h1 className="text-xl font-black text-gray-900 tracking-tight">
+                    <h1 className="text-2xl font-black text-gray-900 tracking-tight">
                       {language === 'bn' ? (siteSettings?.siteNameBn || t.siteTitle) : (siteSettings?.siteNameEn || t.siteTitle)}
                     </h1>
                   </div>
@@ -104,15 +105,15 @@ export const Navbar: React.FC<NavbarProps> = ({
                 <img 
                   src={siteSettings.desktopLogoUrl} 
                   alt="Desktop Logo" 
-                  className="w-auto h-auto max-h-16 max-w-[320px] object-contain drop-shadow-sm"
+                  className="w-auto h-auto max-h-24 md:max-h-28 max-w-[420px] lg:max-w-[500px] object-contain drop-shadow-sm"
                 />
               ) : (
                 <div className="flex items-center space-x-3">
-                  <div className="w-12 h-12 bg-gradient-to-br from-red-600 to-red-700 rounded-xl flex items-center justify-center text-white font-black text-2xl shadow-lg shadow-red-200 group-hover:scale-105 transition-transform">
+                  <div className="w-14 h-14 bg-gradient-to-br from-red-600 to-red-700 rounded-2xl flex items-center justify-center text-white font-black text-3xl shadow-lg shadow-red-200 group-hover:scale-105 transition-transform">
                     {siteSettings?.defaultLogoMonogram || '২৪'}
                   </div>
                   <div>
-                    <h1 className="text-3xl md:text-4xl font-black text-gray-900 tracking-tight group-hover:text-red-600 transition-colors">
+                    <h1 className="text-3xl lg:text-4xl font-black text-gray-900 tracking-tight group-hover:text-red-600 transition-colors">
                       {language === 'bn' ? (siteSettings?.siteNameBn || t.siteTitle) : (siteSettings?.siteNameEn || t.siteTitle)}
                     </h1>
                     <p className="text-xs text-gray-500 tracking-wide font-semibold">
@@ -186,13 +187,13 @@ export const Navbar: React.FC<NavbarProps> = ({
                   <img 
                     src={siteSettings.hamburgerLogoUrl} 
                     alt="Hamburger Logo" 
-                    className="h-8 max-w-[160px] object-contain bg-white/10 rounded p-1"
+                    className="h-12 max-w-[220px] object-contain bg-white/10 rounded-lg p-1 drop-shadow-sm"
                   />
                 ) : (siteSettings?.mobileLogoUrl || siteSettings?.desktopLogoUrl) ? (
                   <img 
                     src={siteSettings.mobileLogoUrl || siteSettings.desktopLogoUrl} 
                     alt="Logo" 
-                    className="h-12 max-w-[220px] object-contain bg-white/10 rounded-lg p-1 drop-shadow-sm"
+                    className="h-14 max-w-[250px] object-contain bg-white/10 rounded-lg p-1 drop-shadow-sm"
                   />
                 ) : (
                   <>
@@ -214,6 +215,14 @@ export const Navbar: React.FC<NavbarProps> = ({
             </div>
 
             <div className="flex-1 overflow-y-auto py-4 px-6 space-y-4">
+              {/* Weather & Date info for mobile */}
+              <div className="bg-gray-900 text-white p-3 rounded-xl shadow-inner border border-gray-800 text-xs flex flex-col gap-1.5">
+                <span className="text-gray-400 font-medium">{currentDateStr}</span>
+                <div className="pt-1 border-t border-gray-800">
+                  <WeatherWidget language={language} />
+                </div>
+              </div>
+
               <div className="space-y-1">
                 <button
                   onClick={() => { onNavigate({ type: 'home' }); setMobileMenuOpen(false); }}
