@@ -118,6 +118,8 @@ export interface SiteSettings {
   contactEmail: string;
   contactPhone: string;
   address: string;
+  publisherName?: string;
+  editorName?: string;
   facebookUrl: string;
   youtubeUrl: string;
   instagramUrl: string;

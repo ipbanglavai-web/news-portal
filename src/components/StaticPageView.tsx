@@ -1,15 +1,16 @@
 import React from 'react';
-import { Language, ViewState } from '../types';
+import { Language, ViewState, SiteSettings } from '../types';
 import { translations } from '../data/mockNews';
-import { ArrowLeft, Mail, Phone, MapPin } from 'lucide-react';
+import { ArrowLeft, Mail, Phone, MapPin, User, FileText } from 'lucide-react';
 
 interface StaticPageViewProps {
   page: 'about' | 'privacy' | 'terms' | 'contact' | 'editorial' | 'sitemap';
   language: Language;
+  siteSettings?: SiteSettings;
   onBack: () => void;
 }
 
-export const StaticPageView: React.FC<StaticPageViewProps> = ({ page, language, onBack }) => {
+export const StaticPageView: React.FC<StaticPageViewProps> = ({ page, language, siteSettings, onBack }) => {
   const t = translations[language];
 
   const getPageTitle = () => {
@@ -79,17 +80,29 @@ export const StaticPageView: React.FC<StaticPageViewProps> = ({ page, language, 
           <div className="space-y-6 text-gray-700 leading-relaxed text-base">
             <p>{language === 'bn' ? 'যেকোনো প্রয়োজনে আমাদের সাথে যোগাযোগ করুন:' : 'Get in touch with us for any inquiries:'}</p>
             <div className="space-y-4 bg-gray-50 p-6 rounded-xl border border-gray-200">
+              {siteSettings?.publisherName && (
+                <div className="flex items-center space-x-3">
+                  <User className="w-5 h-5 text-red-600 shrink-0" />
+                  <span>{language === 'bn' ? 'প্রকাশক: ' : 'Publisher: '}<strong className="text-gray-900">{siteSettings.publisherName}</strong></span>
+                </div>
+              )}
+              {siteSettings?.editorName && (
+                <div className="flex items-center space-x-3">
+                  <FileText className="w-5 h-5 text-red-600 shrink-0" />
+                  <span>{language === 'bn' ? 'সম্পাদক: ' : 'Editor: '}<strong className="text-gray-900">{siteSettings.editorName}</strong></span>
+                </div>
+              )}
               <div className="flex items-center space-x-3">
                 <MapPin className="w-5 h-5 text-red-600 shrink-0" />
-                <span>কাওরান বাজার, ঢাকা-১২১৫, বাংলাদেশ</span>
+                <span>{siteSettings?.address || 'কাওরান বাজার, ঢাকা-১২১৫, বাংলাদেশ'}</span>
               </div>
               <div className="flex items-center space-x-3">
                 <Phone className="w-5 h-5 text-red-600 shrink-0" />
-                <span>+৮৮০ ৯৬১২ ৩৪০৫৬৭</span>
+                <span>{siteSettings?.contactPhone || '+৮৮০ ৯৬১২ ৩৪০৫৬৭'}</span>
               </div>
               <div className="flex items-center space-x-3">
                 <Mail className="w-5 h-5 text-red-600 shrink-0" />
-                <span>contact@banglanews24.mock</span>
+                <span>{siteSettings?.contactEmail || 'contact@banglanews24.mock'}</span>
               </div>
             </div>
           </div>

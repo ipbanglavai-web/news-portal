@@ -192,11 +192,11 @@ export const Navbar: React.FC<NavbarProps> = ({
                   <img 
                     src={siteSettings.mobileLogoUrl || siteSettings.desktopLogoUrl} 
                     alt="Logo" 
-                    className="h-8 max-w-[150px] object-contain bg-white/10 rounded p-1"
+                    className="h-12 max-w-[220px] object-contain bg-white/10 rounded-lg p-1 drop-shadow-sm"
                   />
                 ) : (
                   <>
-                    <div className="w-8 h-8 bg-white text-red-600 rounded flex items-center justify-center font-black">
+                    <div className="w-10 h-10 bg-white text-red-600 rounded-xl flex items-center justify-center font-black text-xl shadow-md">
                       {siteSettings?.defaultLogoMonogram || '২৪'}
                     </div>
                     <span className="font-bold text-lg">

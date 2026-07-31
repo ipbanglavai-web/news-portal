@@ -9,7 +9,13 @@ import {
   deleteModeratorFromFirebase,
   fetchSiteSettingsFromFirebase,
   saveSiteSettingsToFirebase,
-  subscribeToSiteSettings
+  subscribeToSiteSettings,
+  articlesFirebase,
+  categoriesFirebase,
+  bannerAdsFirebase,
+  adRequestsFirebase,
+  submittedNewsFirebase,
+  commentsFirebase
 } from './lib/firebase';
 import { Navbar } from './components/Navbar';
 import { BreakingNewsMarquee } from './components/BreakingNewsMarquee';
@@ -145,6 +151,8 @@ export default function App() {
       contactEmail: 'contact@banglanews24.example',
       contactPhone: '+880 1700 000000',
       address: 'কাওরান বাজার, ঢাকা-১২১৫, বাংলাদেশ',
+      publisherName: 'কাজী আশরাফুল ইসলাম',
+      editorName: 'মাহাবুবুর রহমান',
       facebookUrl: 'https://facebook.com',
       youtubeUrl: 'https://youtube.com',
       instagramUrl: 'https://instagram.com',
@@ -168,19 +176,19 @@ export default function App() {
 
   useEffect(() => {
     localStorage.setItem('bn_news_settings', JSON.stringify(siteSettings));
-    saveSiteSettingsToFirebase(siteSettings).catch(err => console.error('Failed to save site settings to Firebase:', err));
   }, [siteSettings]);
 
   useEffect(() => {
-    // Fetch initial site settings from Firebase
+    // Fetch and subscribe to site settings from Firebase
     fetchSiteSettingsFromFirebase().then(remoteSettings => {
       if (remoteSettings && remoteSettings.siteNameBn) {
         setSiteSettings(remoteSettings);
         localStorage.setItem('bn_news_settings', JSON.stringify(remoteSettings));
+      } else {
+        saveSiteSettingsToFirebase(siteSettings).catch(err => console.error('Failed to seed site settings:', err));
       }
     }).catch(err => console.error('Failed to fetch site settings from Firebase:', err));
 
-    // Subscribe to real-time site settings updates
     const unsubscribeSettings = subscribeToSiteSettings((remoteSettings) => {
       if (remoteSettings && remoteSettings.siteNameBn) {
         setSiteSettings(remoteSettings);
@@ -188,7 +196,108 @@ export default function App() {
       }
     });
 
-    return () => unsubscribeSettings();
+    // Content Subscribers & Seeding
+    // 1. Articles
+    articlesFirebase.fetch().then(list => {
+      if (list && list.length > 0) {
+        setArticles(list);
+        localStorage.setItem('bn_news_articles', JSON.stringify(list));
+      } else {
+        articlesFirebase.save(initialArticles);
+      }
+    });
+    const unSubArticles = articlesFirebase.subscribe(list => {
+      if (list && list.length > 0) {
+        setArticles(list);
+        localStorage.setItem('bn_news_articles', JSON.stringify(list));
+      }
+    });
+
+    // 2. Categories
+    categoriesFirebase.fetch().then(list => {
+      if (list && list.length > 0) {
+        setCategories(list);
+        localStorage.setItem('bn_news_categories', JSON.stringify(list));
+      } else {
+        categoriesFirebase.save(initialCategories);
+      }
+    });
+    const unSubCategories = categoriesFirebase.subscribe(list => {
+      if (list && list.length > 0) {
+        setCategories(list);
+        localStorage.setItem('bn_news_categories', JSON.stringify(list));
+      }
+    });
+
+    // 3. Banner Ads
+    bannerAdsFirebase.fetch().then(list => {
+      if (list && list.length > 0) {
+        setBannerAds(list);
+        localStorage.setItem('bn_news_banner_ads', JSON.stringify(list));
+      } else {
+        bannerAdsFirebase.save(initialBannerAds);
+      }
+    });
+    const unSubBannerAds = bannerAdsFirebase.subscribe(list => {
+      if (list && list.length > 0) {
+        setBannerAds(list);
+        localStorage.setItem('bn_news_banner_ads', JSON.stringify(list));
+      }
+    });
+
+    // 4. Ad Requests
+    adRequestsFirebase.fetch().then(list => {
+      if (list && list.length > 0) {
+        setAdRequests(list);
+        localStorage.setItem('bn_news_ads', JSON.stringify(list));
+      } else {
+        adRequestsFirebase.save(initialAdRequests);
+      }
+    });
+    const unSubAdRequests = adRequestsFirebase.subscribe(list => {
+      if (list && list.length > 0) {
+        setAdRequests(list);
+        localStorage.setItem('bn_news_ads', JSON.stringify(list));
+      }
+    });
+
+    // 5. Submitted News
+    submittedNewsFirebase.fetch().then(list => {
+      if (list) {
+        setSubmittedNews(list);
+        localStorage.setItem('bn_news_submissions', JSON.stringify(list));
+      }
+    });
+    const unSubSubmissions = submittedNewsFirebase.subscribe(list => {
+      if (list) {
+        setSubmittedNews(list);
+        localStorage.setItem('bn_news_submissions', JSON.stringify(list));
+      }
+    });
+
+    // 6. Comments
+    commentsFirebase.fetch().then(list => {
+      if (list && list.length > 0) {
+        setComments(list);
+        localStorage.setItem('bn_news_comments', JSON.stringify(list));
+      }
+    });
+    const unSubComments = commentsFirebase.subscribe(list => {
+      if (list && list.length > 0) {
+        setComments(list);
+        localStorage.setItem('bn_news_comments', JSON.stringify(list));
+      }
+    });
+
+    return () => {
+      unsubscribeSettings();
+      unSubArticles();
+      unSubCategories();
+      unSubBannerAds();
+      unSubAdRequests();
+      unSubSubmissions();
+      unSubComments();
+    };
   }, []);
 
   useEffect(() => {
@@ -321,7 +430,11 @@ export default function App() {
 
   const handleSelectArticle = (id: string) => {
     // Increment view count
-    setArticles(prev => prev.map(a => a.id === id ? { ...a, viewsCount: a.viewsCount + 1 } : a));
+    setArticles(prev => {
+      const updated = prev.map(a => a.id === id ? { ...a, viewsCount: a.viewsCount + 1 } : a);
+      articlesFirebase.save(updated);
+      return updated;
+    });
     setCurrentView({ type: 'article', articleId: id });
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -424,10 +537,14 @@ export default function App() {
             onBack={() => setCurrentView({ type: 'home' })}
             comments={comments}
             onAddComment={(newComment) => {
-              setComments(prev => [
-                { ...newComment, id: `comm-${Date.now()}`, createdAt: new Date().toISOString(), isApproved: true },
-                ...prev
-              ]);
+              setComments(prev => {
+                const updated = [
+                  { ...newComment, id: `comm-${Date.now()}`, createdAt: new Date().toISOString(), isApproved: true },
+                  ...prev
+                ];
+                commentsFirebase.save(updated);
+                return updated;
+              });
             }}
           />
         )}
@@ -452,10 +569,14 @@ export default function App() {
             language={language}
             onBack={() => setCurrentView({ type: 'home' })}
             onSubmitNews={(data) => {
-              setSubmittedNews(prev => [
-                { ...data, id: `sub-${Date.now()}`, createdAt: new Date().toISOString(), status: 'pending' },
-                ...prev
-              ]);
+              setSubmittedNews(prev => {
+                const updated = [
+                  { ...data, id: `sub-${Date.now()}`, createdAt: new Date().toISOString(), status: 'pending' as const },
+                  ...prev
+                ];
+                submittedNewsFirebase.save(updated);
+                return updated;
+              });
             }}
           />
         )}
@@ -465,10 +586,14 @@ export default function App() {
             language={language}
             onBack={() => setCurrentView({ type: 'home' })}
             onSubmitAdRequest={(data) => {
-              setAdRequests(prev => [
-                { ...data, id: `ad-${Date.now()}`, createdAt: new Date().toISOString(), status: 'pending' },
-                ...prev
-              ]);
+              setAdRequests(prev => {
+                const updated = [
+                  { ...data, id: `ad-${Date.now()}`, createdAt: new Date().toISOString(), status: 'pending' as const },
+                  ...prev
+                ];
+                adRequestsFirebase.save(updated);
+                return updated;
+              });
             }}
           />
         )}
@@ -490,6 +615,7 @@ export default function App() {
           <StaticPageView
             page={currentView.page}
             language={language}
+            siteSettings={siteSettings}
             onBack={() => setCurrentView({ type: 'home' })}
           />
         )}
@@ -535,13 +661,25 @@ export default function App() {
                   likesCount: 0,
                   commentsCount: 0
                 };
-                setArticles(prev => [articleWithId, ...prev]);
+                setArticles(prev => {
+                  const updated = [articleWithId, ...prev];
+                  articlesFirebase.save(updated);
+                  return updated;
+                });
               }}
               onUpdateArticleViews={(id, viewsCount) => {
-                setArticles(prev => prev.map(a => a.id === id ? { ...a, viewsCount } : a));
+                setArticles(prev => {
+                  const updated = prev.map(a => a.id === id ? { ...a, viewsCount } : a);
+                  articlesFirebase.save(updated);
+                  return updated;
+                });
               }}
               onDeleteArticle={(id) => {
-                setArticles(prev => prev.filter(a => a.id !== id));
+                setArticles(prev => {
+                  const updated = prev.filter(a => a.id !== id);
+                  articlesFirebase.save(updated);
+                  return updated;
+                });
               }}
               onAddCategory={(cat) => {
                 const newCat: Category = {
@@ -549,32 +687,61 @@ export default function App() {
                   id: `cat-${Date.now()}`,
                   iconName: 'Globe'
                 };
-                setCategories(prev => [...prev, newCat]);
+                setCategories(prev => {
+                  const updated = [...prev, newCat];
+                  categoriesFirebase.save(updated);
+                  return updated;
+                });
               }}
               onDeleteCategory={(id) => {
-                setCategories(prev => prev.filter(c => c.id !== id));
+                setCategories(prev => {
+                  const updated = prev.filter(c => c.id !== id);
+                  categoriesFirebase.save(updated);
+                  return updated;
+                });
               }}
               onUpdateSiteSettings={(settings) => {
                 setSiteSettings(settings);
+                saveSiteSettingsToFirebase(settings).catch(err => console.error('Error saving settings:', err));
               }}
               onUpdateAdStatus={(id, status) => {
-                setAdRequests(prev => prev.map(ad => ad.id === id ? { ...ad, status } : ad));
+                setAdRequests(prev => {
+                  const updated = prev.map(ad => ad.id === id ? { ...ad, status } : ad);
+                  adRequestsFirebase.save(updated);
+                  return updated;
+                });
               }}
               onDeleteAdRequest={(id) => {
-                setAdRequests(prev => prev.filter(ad => ad.id !== id));
+                setAdRequests(prev => {
+                  const updated = prev.filter(ad => ad.id !== id);
+                  adRequestsFirebase.save(updated);
+                  return updated;
+                });
               }}
               onAddBannerAd={(newAd) => {
                 const adWithId: BannerAd = {
                   ...newAd,
                   id: `banner-${Date.now()}`
                 };
-                setBannerAds(prev => [adWithId, ...prev]);
+                setBannerAds(prev => {
+                  const updated = [adWithId, ...prev];
+                  bannerAdsFirebase.save(updated);
+                  return updated;
+                });
               }}
               onDeleteBannerAd={(id) => {
-                setBannerAds(prev => prev.filter(ad => ad.id !== id));
+                setBannerAds(prev => {
+                  const updated = prev.filter(ad => ad.id !== id);
+                  bannerAdsFirebase.save(updated);
+                  return updated;
+                });
               }}
               onToggleBannerAd={(id) => {
-                setBannerAds(prev => prev.map(ad => ad.id === id ? { ...ad, isActive: !ad.isActive } : ad));
+                setBannerAds(prev => {
+                  const updated = prev.map(ad => ad.id === id ? { ...ad, isActive: !ad.isActive } : ad);
+                  bannerAdsFirebase.save(updated);
+                  return updated;
+                });
               }}
               onAddModerator={async (mod) => {
                 await addModeratorToFirebase(mod);

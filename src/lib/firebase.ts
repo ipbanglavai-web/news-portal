@@ -14,7 +14,7 @@ import {
   getDoc
 } from 'firebase/firestore';
 import firebaseConfig from '../../firebase-applet-config.json';
-import { Moderator, SiteSettings } from '../types';
+import { Moderator, SiteSettings, Article, Category, BannerAd, AdRequest, SubmittedNews, Comment } from '../types';
 
 // Initialize Firebase App
 const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
@@ -247,4 +247,58 @@ export const subscribeToSiteSettings = (onUpdate: (settings: SiteSettings) => vo
     return () => {};
   }
 };
+
+// Generic Content Document Sync Factory for Firestore
+const createDocSyncHelpers = <T>(collectionName: string, documentName: string) => {
+  const docRef = doc(db, collectionName, documentName);
+  
+  return {
+    fetch: async (): Promise<T[] | null> => {
+      try {
+        const snap = await getDoc(docRef);
+        if (snap.exists()) {
+          const data = snap.data();
+          if (Array.isArray(data.list)) {
+            return data.list as T[];
+          }
+        }
+        return null;
+      } catch (err) {
+        console.error(`Error fetching ${collectionName}/${documentName}:`, err);
+        return null;
+      }
+    },
+    save: async (list: T[]): Promise<void> => {
+      try {
+        await setDoc(docRef, { list, updatedAt: new Date().toISOString() }, { merge: true });
+      } catch (err) {
+        console.error(`Error saving ${collectionName}/${documentName}:`, err);
+      }
+    },
+    subscribe: (onUpdate: (list: T[]) => void) => {
+      try {
+        return onSnapshot(docRef, (snap) => {
+          if (snap.exists()) {
+            const data = snap.data();
+            if (Array.isArray(data.list)) {
+              onUpdate(data.list as T[]);
+            }
+          }
+        }, (error) => {
+          console.error(`Error in snapshot listener for ${collectionName}/${documentName}:`, error);
+        });
+      } catch (error) {
+        console.error(`Failed to subscribe to ${collectionName}/${documentName}:`, error);
+        return () => {};
+      }
+    }
+  };
+};
+
+export const articlesFirebase = createDocSyncHelpers<Article>('content', 'articles');
+export const categoriesFirebase = createDocSyncHelpers<Category>('content', 'categories');
+export const bannerAdsFirebase = createDocSyncHelpers<BannerAd>('content', 'banner_ads');
+export const adRequestsFirebase = createDocSyncHelpers<AdRequest>('content', 'ad_requests');
+export const submittedNewsFirebase = createDocSyncHelpers<SubmittedNews>('content', 'submitted_news');
+export const commentsFirebase = createDocSyncHelpers<Comment>('content', 'comments');
 

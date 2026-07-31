@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Language, ViewState, BannerAd, SiteSettings } from '../types';
 import { translations } from '../data/mockNews';
 import { BannerAdComponent } from './BannerAdComponent';
-import { Mail, Phone, MapPin, Facebook, Youtube, Instagram, Twitter, CheckCircle2, Send } from 'lucide-react';
+import { Mail, Phone, MapPin, Facebook, Youtube, Instagram, Twitter, CheckCircle2, Send, User, FileText } from 'lucide-react';
 
 interface FooterProps {
   language: Language;
@@ -198,17 +198,29 @@ export const Footer: React.FC<FooterProps> = ({ language, onNavigate, bannerAds 
               {language === 'bn' ? 'যোগাযোগ ও অফিস' : 'Office & Contact'}
             </h4>
             <ul className="space-y-3 text-sm text-gray-400">
+              {siteSettings?.publisherName && (
+                <li className="flex items-start space-x-3">
+                  <User className="w-5 h-5 text-red-500 shrink-0 mt-0.5" />
+                  <span>{language === 'bn' ? 'প্রকাশক: ' : 'Publisher: '}<strong className="text-gray-200">{siteSettings.publisherName}</strong></span>
+                </li>
+              )}
+              {siteSettings?.editorName && (
+                <li className="flex items-start space-x-3">
+                  <FileText className="w-5 h-5 text-red-500 shrink-0 mt-0.5" />
+                  <span>{language === 'bn' ? 'সম্পাদক: ' : 'Editor: '}<strong className="text-gray-200">{siteSettings.editorName}</strong></span>
+                </li>
+              )}
               <li className="flex items-start space-x-3">
                 <MapPin className="w-5 h-5 text-red-500 shrink-0 mt-0.5" />
-                <span>কাওরান বাজার, ঢাকা-১২১৫, বাংলাদেশ</span>
+                <span>{siteSettings?.address || 'কাওরান বাজার, ঢাকা-১২১৫, বাংলাদেশ'}</span>
               </li>
               <li className="flex items-center space-x-3">
                 <Phone className="w-5 h-5 text-red-500 shrink-0" />
-                <span>+৮৮০ ৯৬১২ ৩вало৫৬৭</span>
+                <span>{siteSettings?.contactPhone || '+৮৮০ ৯৬১২ ৩৪০৫৬৭'}</span>
               </li>
               <li className="flex items-center space-x-3">
                 <Mail className="w-5 h-5 text-red-500 shrink-0" />
-                <span>contact@banglanews24.mock</span>
+                <span>{siteSettings?.contactEmail || 'contact@banglanews24.mock'}</span>
               </li>
             </ul>
           </div>

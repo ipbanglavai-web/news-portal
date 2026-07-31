@@ -122,6 +122,14 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   const [developerCreditInput, setDeveloperCreditInput] = useState(siteSettings.developerCredit || 'Bangla Media Group');
   const [developerWebsiteUrlInput, setDeveloperWebsiteUrlInput] = useState(siteSettings.developerWebsiteUrl || '');
   const [developerPrefixTextInput, setDeveloperPrefixTextInput] = useState(siteSettings.developerPrefixText || 'Designed & Developed with Professional Standards for');
+  
+  // Contact & Publisher / Editor State
+  const [publisherNameInput, setPublisherNameInput] = useState(siteSettings.publisherName || 'কাজী আশরাফুল ইসলাম');
+  const [editorNameInput, setEditorNameInput] = useState(siteSettings.editorName || 'মাহাবুবুর রহমান');
+  const [addressInput, setAddressInput] = useState(siteSettings.address || 'কাওরান বাজার, ঢাকা-১২১৫, বাংলাদেশ');
+  const [contactPhoneInput, setContactPhoneInput] = useState(siteSettings.contactPhone || '+৮৮০ ৯৬১২ ৩৪০৫৬৭');
+  const [contactEmailInput, setContactEmailInput] = useState(siteSettings.contactEmail || 'contact@banglanews24.mock');
+
   const [settingsSuccess, setSettingsSuccess] = useState(false);
 
   const handleLogoFileUpload = (e: React.ChangeEvent<HTMLInputElement>, target: 'navDesktop' | 'navMobile' | 'footerDesktop' | 'footerMobile' | 'hamburger') => {
@@ -159,6 +167,11 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
       developerCredit: developerCreditInput,
       developerWebsiteUrl: developerWebsiteUrlInput,
       developerPrefixText: developerPrefixTextInput,
+      publisherName: publisherNameInput,
+      editorName: editorNameInput,
+      address: addressInput,
+      contactPhone: contactPhoneInput,
+      contactEmail: contactEmailInput,
     });
     setSettingsSuccess(true);
     setTimeout(() => setSettingsSuccess(false), 3000);
@@ -574,7 +587,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                   {desktopLogoInput && (
                     <div className="p-3 bg-gray-50 border border-gray-200 rounded-xl flex items-center space-x-3">
                       <span className="text-xs font-semibold text-gray-500">Preview:</span>
-                      <img src={desktopLogoInput} alt="Navbar Desktop Preview" className="h-9 object-contain max-w-[200px]" onError={(e) => {(e.target as HTMLElement).style.display = 'none';}} />
+                      <img src={desktopLogoInput} alt="Navbar Desktop Preview" className="h-14 object-contain max-w-[280px]" onError={(e) => {(e.target as HTMLElement).style.display = 'none';}} />
                     </div>
                   )}
                 </div>
@@ -586,7 +599,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                       {language === 'bn' ? 'হেডার মোবাইল লোগো (Navbar Mobile Logo)' : 'Navbar Mobile Logo'}
                     </label>
                     <span className="text-[11px] font-semibold text-gray-500 bg-gray-100 px-2 py-0.5 rounded-md">
-                      {language === 'bn' ? 'প্রস্তাবিত সাইজ: ১৫০px × ৪০px' : 'Recommended: 150px × 40px'}
+                      {language === 'bn' ? 'প্রস্তাবিত সাইজ: ২০০px × ৬০px' : 'Recommended: 200px × 60px'}
                     </span>
                   </div>
                   <div className="flex flex-col sm:flex-row gap-2">
@@ -610,13 +623,13 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                   </div>
                   <p className="text-xs text-gray-500">
                     {language === 'bn' 
-                      ? 'মোবাইল নেভিগেশন বারের জন্য সর্বোচ্চ সাইজ ১৫০px × ৪০px (স্বচ্ছ PNG পছন্দনীয়)।' 
-                      : 'Recommended size: 150px × 40px for mobile header (Transparent PNG preferred).'}
+                      ? 'মোবাইল নেভিগেশন বারের জন্য লোগো (স্বচ্ছ PNG পছন্দনীয়)।' 
+                      : 'Logo for mobile header (Transparent PNG preferred).'}
                   </p>
                   {mobileLogoInput && (
                     <div className="p-3 bg-gray-50 border border-gray-200 rounded-xl flex items-center space-x-3">
                       <span className="text-xs font-semibold text-gray-500">Preview:</span>
-                      <img src={mobileLogoInput} alt="Navbar Mobile Preview" className="h-8 object-contain max-w-[150px]" onError={(e) => {(e.target as HTMLElement).style.display = 'none';}} />
+                      <img src={mobileLogoInput} alt="Navbar Mobile Preview" className="h-12 object-contain max-w-[220px]" onError={(e) => {(e.target as HTMLElement).style.display = 'none';}} />
                     </div>
                   )}
                 </div>
@@ -628,7 +641,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                       {language === 'bn' ? 'ড্রয়ার / হ্যামবার্গার মেনু লোগো (Hamburger Menu Logo)' : 'Hamburger Menu / Drawer Logo'}
                     </label>
                     <span className="text-[11px] font-semibold text-gray-500 bg-gray-100 px-2 py-0.5 rounded-md">
-                      {language === 'bn' ? 'প্রস্তাবিত সাইজ: ১৬০px × ৪০px' : 'Recommended: 160px × 40px'}
+                      {language === 'bn' ? 'প্রস্তাবিত সাইজ: ২০০px × ৬০px' : 'Recommended: 200px × 60px'}
                     </span>
                   </div>
                   <div className="flex flex-col sm:flex-row gap-2">
@@ -658,7 +671,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                   {hamburgerLogoInput && (
                     <div className="p-3 bg-red-900 border border-red-800 rounded-xl flex items-center space-x-3">
                       <span className="text-xs font-semibold text-red-200">Hamburger Drawer Preview (Red BG):</span>
-                      <img src={hamburgerLogoInput} alt="Hamburger Logo Preview" className="h-8 object-contain max-w-[150px] bg-white/10 rounded p-1" onError={(e) => {(e.target as HTMLElement).style.display = 'none';}} />
+                      <img src={hamburgerLogoInput} alt="Hamburger Logo Preview" className="h-12 object-contain max-w-[220px] bg-white/10 rounded p-1" onError={(e) => {(e.target as HTMLElement).style.display = 'none';}} />
                     </div>
                   )}
                 </div>
@@ -678,7 +691,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                       {language === 'bn' ? 'ফুটার ডেস্কটপ লোগো (Footer Desktop Logo)' : 'Footer Desktop Logo'}
                     </label>
                     <span className="text-[11px] font-semibold text-gray-500 bg-gray-100 px-2 py-0.5 rounded-md">
-                      {language === 'bn' ? 'প্রস্তাবিত সাইজ: ২৪০px × ৫০px' : 'Recommended: 240px × 50px'}
+                      {language === 'bn' ? 'প্রস্তাবিত সাইজ: ৩০০px × ৮০px' : 'Recommended: 300px × 80px'}
                     </span>
                   </div>
                   <div className="flex flex-col sm:flex-row gap-2">
@@ -702,13 +715,13 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                   </div>
                   <p className="text-xs text-gray-500">
                     {language === 'bn' 
-                      ? 'ডেস্কটপ ফুটারের জন্য সর্বোচ্চ সাইজ ২৪০px × ৫০px (গাঢ় ব্যাকগ্রাউন্ডের জন্য লাইট/সাদা লোগো)।' 
-                      : 'Recommended size: 240px × 50px for desktop footer (Light/white logo for dark background).'}
+                      ? 'ডেস্কটপ ফুটারের জন্য লোগো (গাঢ় ব্যাকগ্রাউন্ডের জন্য লাইট/সাদা লোগো)।' 
+                      : 'Logo for desktop footer (Light/white logo for dark background).'}
                   </p>
                   {footerDesktopLogoInput && (
                     <div className="p-3 bg-gray-900 border border-gray-800 rounded-xl flex items-center space-x-3">
                       <span className="text-xs font-semibold text-gray-400">Footer Desktop Preview (Dark BG):</span>
-                      <img src={footerDesktopLogoInput} alt="Footer Desktop Preview" className="h-9 object-contain max-w-[200px]" onError={(e) => {(e.target as HTMLElement).style.display = 'none';}} />
+                      <img src={footerDesktopLogoInput} alt="Footer Desktop Preview" className="h-16 object-contain max-w-[320px]" onError={(e) => {(e.target as HTMLElement).style.display = 'none';}} />
                     </div>
                   )}
                 </div>
@@ -720,7 +733,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                       {language === 'bn' ? 'ফুটার মোবাইল লোগো (Footer Mobile Logo)' : 'Footer Mobile Logo'}
                     </label>
                     <span className="text-[11px] font-semibold text-gray-500 bg-gray-100 px-2 py-0.5 rounded-md">
-                      {language === 'bn' ? 'প্রস্তাবিত সাইজ: ১৮০px × ৪০px' : 'Recommended: 180px × 40px'}
+                      {language === 'bn' ? 'প্রস্তাবিত সাইজ: ২৬০px × ৭০px' : 'Recommended: 260px × 70px'}
                     </span>
                   </div>
                   <div className="flex flex-col sm:flex-row gap-2">
@@ -744,13 +757,13 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                   </div>
                   <p className="text-xs text-gray-500">
                     {language === 'bn' 
-                      ? 'মোবাইল ফুটারের জন্য সর্বোচ্চ সাইজ ১৮০px × ৪০px (গাঢ় ব্যাকগ্রাউন্ডের জন্য লাইট/সাদা লোগো)।' 
-                      : 'Recommended size: 180px × 40px for mobile footer (Light/white logo for dark background).'}
+                      ? 'মোবাইল ফুটারের জন্য লোগো (গাঢ় ব্যাকগ্রাউন্ডের জন্য লাইট/সাদা লোগো)।' 
+                      : 'Logo for mobile footer (Light/white logo for dark background).'}
                   </p>
                   {footerMobileLogoInput && (
                     <div className="p-3 bg-gray-900 border border-gray-800 rounded-xl flex items-center space-x-3">
                       <span className="text-xs font-semibold text-gray-400">Footer Mobile Preview (Dark BG):</span>
-                      <img src={footerMobileLogoInput} alt="Footer Mobile Preview" className="h-8 object-contain max-w-[150px]" onError={(e) => {(e.target as HTMLElement).style.display = 'none';}} />
+                      <img src={footerMobileLogoInput} alt="Footer Mobile Preview" className="h-14 object-contain max-w-[260px]" onError={(e) => {(e.target as HTMLElement).style.display = 'none';}} />
                     </div>
                   )}
                 </div>
@@ -824,6 +837,76 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                     placeholder="e.g. The Premier Online News Source"
                     className="w-full bg-gray-50 border border-gray-300 rounded-xl px-4 py-2.5 text-sm font-medium focus:outline-none focus:border-red-600"
                   />
+                </div>
+              </div>
+
+              {/* Contact, Editorial & Office Settings */}
+              <div className="pt-4 border-t border-gray-200">
+                <h4 className="text-base font-bold text-gray-900 mb-3 flex items-center space-x-2">
+                  <Phone className="w-5 h-5 text-red-600" />
+                  <span>{language === 'bn' ? 'যোগাযোগ, সম্পাদক ও প্রকাশক তথ্য (Office & Editorial Contact)' : 'Office & Editorial Contact Details'}</span>
+                </h4>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-bold text-gray-700 mb-1">
+                      {language === 'bn' ? 'প্রকাশকের নাম' : 'Publisher Name'}
+                    </label>
+                    <input
+                      type="text"
+                      value={publisherNameInput}
+                      onChange={(e) => setPublisherNameInput(e.target.value)}
+                      placeholder="যেমন: কাজী আশরাফুল ইসলাম"
+                      className="w-full bg-gray-50 border border-gray-300 rounded-xl px-4 py-2.5 text-sm font-medium focus:outline-none focus:border-red-600"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-bold text-gray-700 mb-1">
+                      {language === 'bn' ? 'সম্পাদকের নাম' : 'Editor Name'}
+                    </label>
+                    <input
+                      type="text"
+                      value={editorNameInput}
+                      onChange={(e) => setEditorNameInput(e.target.value)}
+                      placeholder="যেমন: মাহাবুবুর রহমান"
+                      className="w-full bg-gray-50 border border-gray-300 rounded-xl px-4 py-2.5 text-sm font-medium focus:outline-none focus:border-red-600"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-bold text-gray-700 mb-1">
+                      {language === 'bn' ? 'অফিস ঠিকানা (Address)' : 'Office Address'}
+                    </label>
+                    <input
+                      type="text"
+                      value={addressInput}
+                      onChange={(e) => setAddressInput(e.target.value)}
+                      placeholder="যেমন: কাওরান বাজার, ঢাকা-১২১৫, বাংলাদেশ"
+                      className="w-full bg-gray-50 border border-gray-300 rounded-xl px-4 py-2.5 text-sm font-medium focus:outline-none focus:border-red-600"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-bold text-gray-700 mb-1">
+                      {language === 'bn' ? 'যোগাযোগের ফোন নম্বর' : 'Contact Phone Number'}
+                    </label>
+                    <input
+                      type="text"
+                      value={contactPhoneInput}
+                      onChange={(e) => setContactPhoneInput(e.target.value)}
+                      placeholder="+৮৮০ ৯৬১২ ৩৪০৫৬৭"
+                      className="w-full bg-gray-50 border border-gray-300 rounded-xl px-4 py-2.5 text-sm font-medium focus:outline-none focus:border-red-600"
+                    />
+                  </div>
+                  <div className="md:col-span-2">
+                    <label className="block text-sm font-bold text-gray-700 mb-1">
+                      {language === 'bn' ? 'অফিসিয়ালি যোগাযোগের ইমেইল' : 'Contact Email Address'}
+                    </label>
+                    <input
+                      type="email"
+                      value={contactEmailInput}
+                      onChange={(e) => setContactEmailInput(e.target.value)}
+                      placeholder="contact@speednews24.com"
+                      className="w-full bg-gray-50 border border-gray-300 rounded-xl px-4 py-2.5 text-sm font-medium focus:outline-none focus:border-red-600"
+                    />
+                  </div>
                 </div>
               </div>
 
