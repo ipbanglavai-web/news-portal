@@ -137,6 +137,36 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   const [instagramUrlInput, setInstagramUrlInput] = useState(siteSettings.instagramUrl || 'https://instagram.com');
   const [twitterUrlInput, setTwitterUrlInput] = useState(siteSettings.twitterUrl || 'https://twitter.com');
 
+  // Static Pages Content State
+  const [activeStaticSubTab, setActiveStaticSubTab] = useState<'about' | 'privacy' | 'terms' | 'editorial'>('about');
+  const [aboutUsBnInput, setAboutUsBnInput] = useState(
+    siteSettings.aboutUsBn || 'বাংলা নিউজ ২৪ হলো বাংলাদেশের অন্যতম শীর্ষস্থানীয় আধুনিক ও নির্ভরযোগ্য অনলাইন নিউজ পোর্টাল। সত্যের সন্ধানে অবিচল থেকে আমরা দেশ ও বিদেশের সর্বশেষ সংবাদ, রাজনীতি, অর্থনীতি, প্রযুক্তি, বিনোদন এবং খেলাধুলার রিয়েল-টাইম আপডেট পরিবেশন করে আসছি।\n\nআমাদের লক্ষ্য হলো বস্তুনিষ্ঠ ও নিরপেক্ষ সাংবাদিকতার মাধ্যমে পাঠকদের কাছে সঠিক তথ্য পৌঁছে দেওয়া এবং একটি সচেতন সমাজ গঠনে ভূমিকা রাখা।'
+  );
+  const [aboutUsEnInput, setAboutUsEnInput] = useState(
+    siteSettings.aboutUsEn || 'Bangla News 24 is one of Bangladesh\'s leading modern and reliable online news portals. Uncompromising in our search for truth, we deliver real-time updates on national and international affairs, politics, economy, technology, entertainment, and sports.\n\nOur mission is to deliver accurate information to readers through objective and neutral journalism and contribute to building a conscious society.'
+  );
+
+  const [privacyPolicyBnInput, setPrivacyPolicyBnInput] = useState(
+    siteSettings.privacyPolicyBn || 'আমরা আপনার গোপনীয়তাকে সর্বোচ্চ গুরুত্ব দিই। আমাদের ওয়েবসাইটে ভিজিট করার সময় সংগৃহীত তথ্য কেবল ব্যবহারকারীর অভিজ্ঞতা উন্নত করার জন্য ব্যবহৃত হয়। কোনো অবস্থাতেই তৃতীয় পক্ষের কাছে আপনার ব্যক্তিগত তথ্য বিক্রি বা শেয়ার করা হয় না。\n\nআমরা কুকি ব্যবহার করি সাইটের সঠিক পরিবেশন নিশ্চিত করতে এবং কাস্টমাইজড সংবাদ প্রদান করতে।'
+  );
+  const [privacyPolicyEnInput, setPrivacyPolicyEnInput] = useState(
+    siteSettings.privacyPolicyEn || 'We value your privacy immensely. Information collected while visiting our website is used solely to enhance user experience and is never sold or shared with third parties.\n\nWe use standard browser cookies to ensure proper site performance and tailored news content.'
+  );
+
+  const [termsBnInput, setTermsBnInput] = useState(
+    siteSettings.termsBn || 'বাংলা নিউজ ২৪-এর সমস্ত কন্টেন্ট, টেক্সট, লোগো, এবং ছবি কপিরাইট আইনের আওতাধীন। পূর্বানুমতি ছাড়া এই পোর্টালের কোনো সংবাদ বা ছবি বাণিজ্যিক উদ্দেশ্যে পুনপ্রকাশ বা অনুলিপি করা আইনত দণ্ডনীয়।\n\nআমাদের পোর্টালে মন্তব্য করার সময় মার্জিত ভাষা ও সৌজন্য বজায় রাখার অনুরোধ করা হচ্ছে।'
+  );
+  const [termsEnInput, setTermsEnInput] = useState(
+    siteSettings.termsEn || 'All content, logos, text, and images on Bangla News 24 are protected by copyright laws. Unauthorized commercial redistribution or duplication is strictly prohibited.\n\nUsers are requested to maintain respectful language when submitting public comments.'
+  );
+
+  const [editorialPolicyBnInput, setEditorialPolicyBnInput] = useState(
+    siteSettings.editorialPolicyBn || 'আমরা সংবাদ পরিবেশনে নির্ভুলতা, ভারসাম্য এবং সত্যনিষ্ঠাকে প্রধান অগ্রাধিকার দেই। কোনো পক্ষপাতিত্ব ছাড়াই ঘটনার পেছনের সত্য তুলে ধরাই আমাদের মূল অঙ্গীকার।\n\nযেকোনো সংবাদের বস্তুনিষ্ঠতা বজায় রাখতে আমরা একাধিক বিশ্বস্ত সূত্র থেকে তথ্য যাচাই নিশ্চিত করি।'
+  );
+  const [editorialPolicyEnInput, setEditorialPolicyEnInput] = useState(
+    siteSettings.editorialPolicyEn || 'We prioritize accuracy, balance, and integrity in reporting. Our core commitment is to uncover the truth behind events without bias.\n\nTo maintain journalistic integrity, we strictly verify information from multiple reliable sources before publication.'
+  );
+
   useEffect(() => {
     if (siteSettings) {
       setDesktopLogoInput(siteSettings.desktopLogoUrl || '');
@@ -164,6 +194,14 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
       setYoutubeUrlInput(siteSettings.youtubeUrl || 'https://youtube.com');
       setInstagramUrlInput(siteSettings.instagramUrl || 'https://instagram.com');
       setTwitterUrlInput(siteSettings.twitterUrl || 'https://twitter.com');
+      setAboutUsBnInput(siteSettings.aboutUsBn || '');
+      setAboutUsEnInput(siteSettings.aboutUsEn || '');
+      setPrivacyPolicyBnInput(siteSettings.privacyPolicyBn || '');
+      setPrivacyPolicyEnInput(siteSettings.privacyPolicyEn || '');
+      setTermsBnInput(siteSettings.termsBn || '');
+      setTermsEnInput(siteSettings.termsEn || '');
+      setEditorialPolicyBnInput(siteSettings.editorialPolicyBn || '');
+      setEditorialPolicyEnInput(siteSettings.editorialPolicyEn || '');
     }
   }, [siteSettings]);
 
@@ -215,6 +253,14 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
       youtubeUrl: youtubeUrlInput,
       instagramUrl: instagramUrlInput,
       twitterUrl: twitterUrlInput,
+      aboutUsBn: aboutUsBnInput,
+      aboutUsEn: aboutUsEnInput,
+      privacyPolicyBn: privacyPolicyBnInput,
+      privacyPolicyEn: privacyPolicyEnInput,
+      termsBn: termsBnInput,
+      termsEn: termsEnInput,
+      editorialPolicyBn: editorialPolicyBnInput,
+      editorialPolicyEn: editorialPolicyEnInput,
     });
     setSettingsSuccess(true);
     setTimeout(() => setSettingsSuccess(false), 3000);
@@ -1018,6 +1064,283 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                     />
                   </div>
                 </div>
+              </div>
+
+              {/* --- STATIC PAGES & POLICIES EDITOR --- */}
+              <div className="pt-6 border-t border-gray-200 space-y-4">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                  <h4 className="text-base font-extrabold text-gray-900 flex items-center space-x-2">
+                    <Info className="w-5 h-5 text-red-600" />
+                    <span>{language === 'bn' ? 'স্থায়ী পৃষ্ঠা ও পলিসি কন্টেন্ট ব্যবস্থাপনা (Static Pages & Policies)' : 'Static Pages & Policies Content Manager'}</span>
+                  </h4>
+
+                  <span className="text-xs font-semibold text-gray-500">
+                    {language === 'bn' ? 'পাঠকদের জন্য ওয়েবসাইটের সমস্ত পলিসি এডিট করুন' : 'Edit all public static pages for visitors'}
+                  </span>
+                </div>
+
+                {/* Sub-tab Selection Header */}
+                <div className="flex flex-wrap items-center gap-1.5 p-1 bg-gray-100 rounded-xl border border-gray-200">
+                  <button
+                    type="button"
+                    onClick={() => setActiveStaticSubTab('about')}
+                    className={`flex-1 min-w-[120px] text-xs font-extrabold px-3 py-2 rounded-lg transition text-center ${
+                      activeStaticSubTab === 'about'
+                        ? 'bg-red-600 text-white shadow-xs'
+                        : 'text-gray-700 hover:bg-gray-200'
+                    }`}
+                  >
+                    {language === 'bn' ? '১. আমাদের সম্পর্কে' : '1. About Us'}
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => setActiveStaticSubTab('privacy')}
+                    className={`flex-1 min-w-[120px] text-xs font-extrabold px-3 py-2 rounded-lg transition text-center ${
+                      activeStaticSubTab === 'privacy'
+                        ? 'bg-red-600 text-white shadow-xs'
+                        : 'text-gray-700 hover:bg-gray-200'
+                    }`}
+                  >
+                    {language === 'bn' ? '২. গোপনীয়তা নীতি' : '2. Privacy Policy'}
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => setActiveStaticSubTab('terms')}
+                    className={`flex-1 min-w-[120px] text-xs font-extrabold px-3 py-2 rounded-lg transition text-center ${
+                      activeStaticSubTab === 'terms'
+                        ? 'bg-red-600 text-white shadow-xs'
+                        : 'text-gray-700 hover:bg-gray-200'
+                    }`}
+                  >
+                    {language === 'bn' ? '৩. ব্যবহারের শর্তাবলী' : '3. Terms of Use'}
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => setActiveStaticSubTab('editorial')}
+                    className={`flex-1 min-w-[120px] text-xs font-extrabold px-3 py-2 rounded-lg transition text-center ${
+                      activeStaticSubTab === 'editorial'
+                        ? 'bg-red-600 text-white shadow-xs'
+                        : 'text-gray-700 hover:bg-gray-200'
+                    }`}
+                  >
+                    {language === 'bn' ? '৪. সম্পাদনা নীতি' : '4. Editorial Policy'}
+                  </button>
+                </div>
+
+                {/* Sub-tab 1: About Us */}
+                {activeStaticSubTab === 'about' && (
+                  <div className="space-y-4 bg-gray-50/70 p-4 rounded-2xl border border-gray-200">
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs font-bold text-gray-800 flex items-center space-x-1.5">
+                        <span className="w-2 h-2 rounded-full bg-red-600"></span>
+                        <span>{language === 'bn' ? 'আমাদের সম্পর্কে (About Us) কন্টেন্ট' : 'About Us Page Content'}</span>
+                      </span>
+
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setAboutUsBnInput('বাংলা নিউজ ২৪ হলো বাংলাদেশের অন্যতম শীর্ষস্থানীয় আধুনিক ও নির্ভরযোগ্য অনলাইন নিউজ পোর্টাল। সত্যের সন্ধানে অবিচল থেকে আমরা দেশ ও বিদেশের সর্বশেষ সংবাদ, রাজনীতি, অর্থনীতি, প্রযুক্তি, বিনোদন এবং খেলাধুলার রিয়েল-টাইম আপডেট পরিবেশন করে আসছি।\n\nআমাদের লক্ষ্য হলো বস্তুনিষ্ঠ ও নিরপেক্ষ সাংবাদিকতার মাধ্যমে পাঠকদের কাছে সঠিক তথ্য পৌঁছে দেওয়া এবং একটি সচেতন সমাজ গঠনে ভূমিকা রাখা।');
+                          setAboutUsEnInput('Bangla News 24 is one of Bangladesh\'s leading modern and reliable online news portals. Uncompromising in our search for truth, we deliver real-time updates on national and international affairs, politics, economy, technology, entertainment, and sports.\n\nOur mission is to deliver accurate information to readers through objective and neutral journalism and contribute to building a conscious society.');
+                        }}
+                        className="text-[11px] text-red-600 hover:text-red-700 font-bold bg-white hover:bg-red-50 px-2.5 py-1 rounded-lg border border-red-200 transition shrink-0"
+                      >
+                        ⚡ {language === 'bn' ? 'ডিফল্ট তথ্য রিসেট' : 'Reset Default Sample'}
+                      </button>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className="space-y-1.5">
+                        <label className="block text-xs font-bold text-gray-800 flex items-center justify-between">
+                          <span>{language === 'bn' ? 'বাংলা বিবরণ' : 'Bangla Text'}</span>
+                          <span className="text-[10px] text-gray-400 font-mono">{aboutUsBnInput.length} chars</span>
+                        </label>
+                        <textarea
+                          rows={6}
+                          value={aboutUsBnInput}
+                          onChange={(e) => setAboutUsBnInput(e.target.value)}
+                          placeholder="বাংলা ভাষায় লিখুন..."
+                          className="w-full bg-white border border-gray-300 rounded-xl p-3 text-xs font-medium focus:outline-none focus:border-red-600 leading-relaxed"
+                        />
+                      </div>
+
+                      <div className="space-y-1.5">
+                        <label className="block text-xs font-bold text-gray-800 flex items-center justify-between">
+                          <span>{language === 'bn' ? 'ইংরাজি বিবরণ (English)' : 'English Text'}</span>
+                          <span className="text-[10px] text-gray-400 font-mono">{aboutUsEnInput.length} chars</span>
+                        </label>
+                        <textarea
+                          rows={6}
+                          value={aboutUsEnInput}
+                          onChange={(e) => setAboutUsEnInput(e.target.value)}
+                          placeholder="Enter English description..."
+                          className="w-full bg-white border border-gray-300 rounded-xl p-3 text-xs font-medium focus:outline-none focus:border-red-600 leading-relaxed"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* Sub-tab 2: Privacy Policy */}
+                {activeStaticSubTab === 'privacy' && (
+                  <div className="space-y-4 bg-gray-50/70 p-4 rounded-2xl border border-gray-200">
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs font-bold text-gray-800 flex items-center space-x-1.5">
+                        <span className="w-2 h-2 rounded-full bg-red-600"></span>
+                        <span>{language === 'bn' ? 'গোপনীয়তা নীতি (Privacy Policy) কন্টেন্ট' : 'Privacy Policy Content'}</span>
+                      </span>
+
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setPrivacyPolicyBnInput('আমরা আপনার গোপনীয়তাকে সর্বোচ্চ গুরুত্ব দিই। আমাদের ওয়েবসাইটে ভিজিট করার সময় সংগৃহীত তথ্য কেবল ব্যবহারকারীর অভিজ্ঞতা উন্নত করার জন্য ব্যবহৃত হয়। কোনো অবস্থাতেই তৃতীয় পক্ষের কাছে আপনার ব্যক্তিগত তথ্য বিক্রি বা শেয়ার করা হয় না。\n\nআমরা কুকি ব্যবহার করি সাইটের সঠিক পরিবেশন নিশ্চিত করতে এবং কাস্টমাইজড সংবাদ প্রদান করতে।');
+                          setPrivacyPolicyEnInput('We value your privacy immensely. Information collected while visiting our website is used solely to enhance user experience and is never sold or shared with third parties.\n\nWe use standard browser cookies to ensure proper site performance and tailored news content.');
+                        }}
+                        className="text-[11px] text-red-600 hover:text-red-700 font-bold bg-white hover:bg-red-50 px-2.5 py-1 rounded-lg border border-red-200 transition shrink-0"
+                      >
+                        ⚡ {language === 'bn' ? 'ডিফল্ট তথ্য রিসেট' : 'Reset Default Sample'}
+                      </button>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className="space-y-1.5">
+                        <label className="block text-xs font-bold text-gray-800 flex items-center justify-between">
+                          <span>{language === 'bn' ? 'বাংলা প্রাইভেসি পলিসি' : 'Bangla Privacy Policy'}</span>
+                          <span className="text-[10px] text-gray-400 font-mono">{privacyPolicyBnInput.length} chars</span>
+                        </label>
+                        <textarea
+                          rows={6}
+                          value={privacyPolicyBnInput}
+                          onChange={(e) => setPrivacyPolicyBnInput(e.target.value)}
+                          placeholder="বাংলা প্রাইভেসি পলিসি লিখুন..."
+                          className="w-full bg-white border border-gray-300 rounded-xl p-3 text-xs font-medium focus:outline-none focus:border-red-600 leading-relaxed"
+                        />
+                      </div>
+
+                      <div className="space-y-1.5">
+                        <label className="block text-xs font-bold text-gray-800 flex items-center justify-between">
+                          <span>{language === 'bn' ? 'ইংরাজি প্রাইভেসি পলিসি' : 'English Privacy Policy'}</span>
+                          <span className="text-[10px] text-gray-400 font-mono">{privacyPolicyEnInput.length} chars</span>
+                        </label>
+                        <textarea
+                          rows={6}
+                          value={privacyPolicyEnInput}
+                          onChange={(e) => setPrivacyPolicyEnInput(e.target.value)}
+                          placeholder="Enter English privacy policy..."
+                          className="w-full bg-white border border-gray-300 rounded-xl p-3 text-xs font-medium focus:outline-none focus:border-red-600 leading-relaxed"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* Sub-tab 3: Terms of Use */}
+                {activeStaticSubTab === 'terms' && (
+                  <div className="space-y-4 bg-gray-50/70 p-4 rounded-2xl border border-gray-200">
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs font-bold text-gray-800 flex items-center space-x-1.5">
+                        <span className="w-2 h-2 rounded-full bg-red-600"></span>
+                        <span>{language === 'bn' ? 'ব্যবহারের শর্তাবলী (Terms of Service) কন্টেন্ট' : 'Terms of Service Content'}</span>
+                      </span>
+
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setTermsBnInput('বাংলা নিউজ ২৪-এর সমস্ত কন্টেন্ট, টেক্সট, লোগো, এবং ছবি কপিরাইট আইনের আওতাধীন। পূর্বানুমতি ছাড়া এই পোর্টালের কোনো সংবাদ বা ছবি বাণিজ্যিক উদ্দেশ্যে পুনপ্রকাশ বা অনুলিপি করা আইনত দণ্ডনীয়।\n\nআমাদের পোর্টালে মন্তব্য করার সময় মার্জিত ভাষা ও সৌজন্য বজায় রাখার অনুরোধ করা হচ্ছে।');
+                          setTermsEnInput('All content, logos, text, and images on Bangla News 24 are protected by copyright laws. Unauthorized commercial redistribution or duplication is strictly prohibited.\n\nUsers are requested to maintain respectful language when submitting public comments.');
+                        }}
+                        className="text-[11px] text-red-600 hover:text-red-700 font-bold bg-white hover:bg-red-50 px-2.5 py-1 rounded-lg border border-red-200 transition shrink-0"
+                      >
+                        ⚡ {language === 'bn' ? 'ডিফল্ট তথ্য রিসেট' : 'Reset Default Sample'}
+                      </button>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className="space-y-1.5">
+                        <label className="block text-xs font-bold text-gray-800 flex items-center justify-between">
+                          <span>{language === 'bn' ? 'বাংলা ব্যবহারের শর্তাবলী' : 'Bangla Terms'}</span>
+                          <span className="text-[10px] text-gray-400 font-mono">{termsBnInput.length} chars</span>
+                        </label>
+                        <textarea
+                          rows={6}
+                          value={termsBnInput}
+                          onChange={(e) => setTermsBnInput(e.target.value)}
+                          placeholder="বাংলা শর্তাবলী লিখুন..."
+                          className="w-full bg-white border border-gray-300 rounded-xl p-3 text-xs font-medium focus:outline-none focus:border-red-600 leading-relaxed"
+                        />
+                      </div>
+
+                      <div className="space-y-1.5">
+                        <label className="block text-xs font-bold text-gray-800 flex items-center justify-between">
+                          <span>{language === 'bn' ? 'ইংরাজি ব্যবহারের শর্তাবলী' : 'English Terms'}</span>
+                          <span className="text-[10px] text-gray-400 font-mono">{termsEnInput.length} chars</span>
+                        </label>
+                        <textarea
+                          rows={6}
+                          value={termsEnInput}
+                          onChange={(e) => setTermsEnInput(e.target.value)}
+                          placeholder="Enter English terms..."
+                          className="w-full bg-white border border-gray-300 rounded-xl p-3 text-xs font-medium focus:outline-none focus:border-red-600 leading-relaxed"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* Sub-tab 4: Editorial Policy */}
+                {activeStaticSubTab === 'editorial' && (
+                  <div className="space-y-4 bg-gray-50/70 p-4 rounded-2xl border border-gray-200">
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs font-bold text-gray-800 flex items-center space-x-1.5">
+                        <span className="w-2 h-2 rounded-full bg-red-600"></span>
+                        <span>{language === 'bn' ? 'সম্পাদনা নীতি (Editorial Policy) কন্টেন্ট' : 'Editorial Policy Content'}</span>
+                      </span>
+
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setEditorialPolicyBnInput('আমরা সংবাদ পরিবেশনে নির্ভুলতা, ভারসাম্য এবং সত্যনিষ্ঠাকে প্রধান অগ্রাধিকার দেই। কোনো পক্ষপাতিত্ব ছাড়াই ঘটনার পেছনের সত্য তুলে ধরাই আমাদের মূল অঙ্গীকার।\n\nযেকোনো সংবাদের বস্তুনিষ্ঠতা বজায় রাখতে আমরা একাধিক বিশ্বস্ত সূত্র থেকে তথ্য যাচাই নিশ্চিত করি।');
+                          setEditorialPolicyEnInput('We prioritize accuracy, balance, and integrity in reporting. Our core commitment is to uncover the truth behind events without bias.\n\nTo maintain journalistic integrity, we strictly verify information from multiple reliable sources before publication.');
+                        }}
+                        className="text-[11px] text-red-600 hover:text-red-700 font-bold bg-white hover:bg-red-50 px-2.5 py-1 rounded-lg border border-red-200 transition shrink-0"
+                      >
+                        ⚡ {language === 'bn' ? 'ডিফল্ট তথ্য রিসেট' : 'Reset Default Sample'}
+                      </button>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className="space-y-1.5">
+                        <label className="block text-xs font-bold text-gray-800 flex items-center justify-between">
+                          <span>{language === 'bn' ? 'বাংলা সম্পাদনা নীতি' : 'Bangla Editorial Policy'}</span>
+                          <span className="text-[10px] text-gray-400 font-mono">{editorialPolicyBnInput.length} chars</span>
+                        </label>
+                        <textarea
+                          rows={6}
+                          value={editorialPolicyBnInput}
+                          onChange={(e) => setEditorialPolicyBnInput(e.target.value)}
+                          placeholder="বাংলা সম্পাদনা নীতি লিখুন..."
+                          className="w-full bg-white border border-gray-300 rounded-xl p-3 text-xs font-medium focus:outline-none focus:border-red-600 leading-relaxed"
+                        />
+                      </div>
+
+                      <div className="space-y-1.5">
+                        <label className="block text-xs font-bold text-gray-800 flex items-center justify-between">
+                          <span>{language === 'bn' ? 'ইংরাজি সম্পাদনা নীতি' : 'English Editorial Policy'}</span>
+                          <span className="text-[10px] text-gray-400 font-mono">{editorialPolicyEnInput.length} chars</span>
+                        </label>
+                        <textarea
+                          rows={6}
+                          value={editorialPolicyEnInput}
+                          onChange={(e) => setEditorialPolicyEnInput(e.target.value)}
+                          placeholder="Enter English editorial policy..."
+                          className="w-full bg-white border border-gray-300 rounded-xl p-3 text-xs font-medium focus:outline-none focus:border-red-600 leading-relaxed"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                )}
               </div>
 
               {/* Footer Copyright & Developer Credit Inputs */}

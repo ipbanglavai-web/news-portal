@@ -370,7 +370,15 @@ export const siteSettings: SiteSettings = {
   desktopLogoUrl: '',
   mobileLogoUrl: '',
   footerDesktopLogoUrl: '',
-  footerMobileLogoUrl: ''
+  footerMobileLogoUrl: '',
+  aboutUsBn: 'বাংলা নিউজ ২৪ হলো বাংলাদেশের অন্যতম শীর্ষস্থানীয় আধুনিক ও নির্ভরযোগ্য অনলাইন নিউজ পোর্টাল। সত্যের সন্ধানে অবিচল থেকে আমরা দেশ ও বিদেশের সর্বশেষ সংবাদ, রাজনীতি, অর্থনীতি, প্রযুক্তি, বিনোদন এবং খেলাধুলার রিয়েল-টাইম আপডেট পরিবেশন করে আসছি।\n\nআমাদের লক্ষ্য হলো বস্তুনিষ্ঠ ও নিরপেক্ষ সাংবাদিকতার মাধ্যমে পাঠকদের কাছে সঠিক তথ্য পৌঁছে দেওয়া এবং একটি সচেতন সমাজ গঠনে ভূমিকা রাখা।',
+  aboutUsEn: 'Bangla News 24 is one of Bangladesh\'s leading modern and reliable online news portals. Uncompromising in our search for truth, we deliver real-time updates on national and international affairs, politics, economy, technology, entertainment, and sports.\n\nOur mission is to deliver accurate information to readers through objective and neutral journalism and contribute to building a conscious society.',
+  privacyPolicyBn: 'আমরা আপনার গোপনীয়তাকে সর্বোচ্চ গুরুত্ব দিই। আমাদের ওয়েবসাইটে ভিজিট করার সময় সংগৃহীত তথ্য কেবল ব্যবহারকারীর অভিজ্ঞতা উন্নত করার জন্য ব্যবহৃত হয়। কোনো অবস্থাতেই তৃতীয় পক্ষের কাছে আপনার ব্যক্তিগত তথ্য বিক্রি বা শেয়ার করা হয় না।\n\nআমরা কুকি ব্যবহার করি সাইটের সঠিক পরিবেশন নিশ্চিত করতে এবং কাস্টমাইজড সংবাদ প্রদান করতে।',
+  privacyPolicyEn: 'We value your privacy immensely. Information collected while visiting our website is used solely to enhance user experience and is never sold or shared with third parties.\n\nWe use standard browser cookies to ensure proper site performance and tailored news content.',
+  termsBn: 'বাংলা নিউজ ২৪-এর সমস্ত কন্টেন্ট, টেক্সট, লোগো, এবং ছবি কপিরাইট আইনের আওতাধীন। পূর্বানুমতি ছাড়া এই পোর্টালের কোনো সংবাদ বা ছবি বাণিজ্যিক উদ্দেশ্যে পুনপ্রকাশ বা অনুলিপি করা আইনত দণ্ডনীয়।\n\nআমাদের পোর্টালে মন্তব্য করার সময় মার্জিত ভাষা ও সৌজন্য বজায় রাখার অনুরোধ করা হচ্ছে।',
+  termsEn: 'All content, logos, text, and images on Bangla News 24 are protected by copyright laws. Unauthorized commercial redistribution or duplication is strictly prohibited.\n\nUsers are requested to maintain respectful language when submitting public comments.',
+  editorialPolicyBn: 'আমরা সংবাদ পরিবেশনে নির্ভুলতা, ভারসাম্য এবং সত্যনিষ্ঠাকে প্রধান অগ্রাধিকার দেই। কোনো পক্ষপাতিত্ব ছাড়াই ঘটনার পেছনের সত্য তুলে ধরাই আমাদের মূল অঙ্গীকার।\n\nযেকোনো সংবাদের বস্তুনিষ্ঠতা বজায় রাখতে আমরা একাধিক বিশ্বস্ত সূত্র থেকে তথ্য যাচাই নিশ্চিত করি।',
+  editorialPolicyEn: 'We prioritize accuracy, balance, and integrity in reporting. Our core commitment is to uncover the truth behind events without bias.\n\nTo maintain journalistic integrity, we strictly verify information from multiple reliable sources before publication.'
 };
 
 export const initialAdRequests: AdRequest[] = [

@@ -138,6 +138,14 @@ export interface SiteSettings {
   developerCredit?: string;
   developerWebsiteUrl?: string;
   developerPrefixText?: string;
+  aboutUsBn?: string;
+  aboutUsEn?: string;
+  privacyPolicyBn?: string;
+  privacyPolicyEn?: string;
+  termsBn?: string;
+  termsEn?: string;
+  editorialPolicyBn?: string;
+  editorialPolicyEn?: string;
 }
 
 export type ViewState = 
