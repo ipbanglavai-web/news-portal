@@ -125,7 +125,7 @@ export const BannerAdComponent: React.FC<BannerAdComponentProps> = ({
   const isGif = (activeAd.imageUrl + (activeAd.mobileImageUrl || '')).toLowerCase().includes('.gif');
 
   // Helper to render responsive ad image (desktop vs mobile)
-  const renderAdImage = (customClass = "w-full h-full object-contain object-center rounded-xl") => {
+  const renderAdImage = (customClass = "w-full h-full object-cover object-center rounded-xl") => {
     const desktopImg = activeAd.imageUrl;
     const mobileImg = activeAd.mobileImageUrl;
 
@@ -175,9 +175,9 @@ export const BannerAdComponent: React.FC<BannerAdComponentProps> = ({
     href: activeAd.linkUrl,
     target: '_blank',
     rel: 'noopener noreferrer',
-    className: 'group block relative overflow-hidden rounded-2xl shadow-sm border border-gray-200/80 bg-gray-900/5 hover:opacity-95 transition'
+    className: 'group block relative overflow-hidden rounded-2xl shadow-sm border border-gray-200/80 hover:opacity-95 transition'
   } : {
-    className: 'relative overflow-hidden rounded-2xl shadow-sm border border-gray-200/80 bg-gray-900/5'
+    className: 'relative overflow-hidden rounded-2xl shadow-sm border border-gray-200/80'
   };
 
   if (position === 'header') {
@@ -191,9 +191,9 @@ export const BannerAdComponent: React.FC<BannerAdComponentProps> = ({
               {isGif && <span className="bg-yellow-500 text-black px-1 rounded text-[8px] font-black">GIF</span>}
             </div>
 
-            {/* Responsive Container with object-contain to preserve perfect aspect ratio */}
-            <div className="w-full h-[65px] sm:h-[90px] md:h-[100px] flex items-center justify-center bg-gray-950/90 rounded-2xl p-1">
-              {renderAdImage("w-full h-full object-contain object-center rounded-xl transition-all duration-300")}
+            {/* Responsive Container with full size fill */}
+            <div className="w-full h-[65px] sm:h-[90px] md:h-[100px] flex items-center justify-center overflow-hidden rounded-2xl">
+              {renderAdImage("w-full h-full object-cover object-center rounded-2xl transition-all duration-300")}
             </div>
 
             {activeAd.linkUrl && (
@@ -218,8 +218,8 @@ export const BannerAdComponent: React.FC<BannerAdComponentProps> = ({
               {isGif && <span className="bg-yellow-500 text-black px-1 rounded text-[8px] font-black">GIF</span>}
             </div>
 
-            <div className="w-full h-[250px] sm:h-[280px] bg-gray-950/90 flex items-center justify-center p-2 rounded-2xl">
-              {renderAdImage("w-full h-full object-contain rounded-xl")}
+            <div className="w-full h-[250px] sm:h-[280px] flex items-center justify-center overflow-hidden rounded-t-2xl">
+              {renderAdImage("w-full h-full object-cover object-center rounded-t-2xl")}
             </div>
 
             <div className="p-3 bg-white border-t border-gray-100 flex items-center justify-between">
@@ -247,8 +247,8 @@ export const BannerAdComponent: React.FC<BannerAdComponentProps> = ({
               {isGif && <span className="bg-yellow-500 text-black px-1 rounded text-[8px] font-black">GIF</span>}
             </div>
 
-            <div className="w-full h-[85px] sm:h-[120px] bg-gray-950/90 flex items-center justify-center p-1.5 rounded-2xl">
-              {renderAdImage("w-full h-full object-contain object-center rounded-xl")}
+            <div className="w-full h-[85px] sm:h-[120px] flex items-center justify-center overflow-hidden rounded-2xl">
+              {renderAdImage("w-full h-full object-cover object-center rounded-2xl")}
             </div>
           </AdContainer>
         </div>
@@ -264,8 +264,8 @@ export const BannerAdComponent: React.FC<BannerAdComponentProps> = ({
           <div className="absolute top-1.5 left-3 z-10 bg-black/80 text-white text-[9px] font-bold px-2 py-0.5 rounded uppercase">
             {language === 'bn' ? 'বিজ্ঞাপন' : 'AD'}
           </div>
-          <div className="w-full h-[55px] sm:h-[90px] flex items-center justify-center bg-gray-950/80 rounded-xl p-1">
-            {renderAdImage("w-full h-full object-contain object-center rounded-lg")}
+          <div className="w-full h-[55px] sm:h-[90px] flex items-center justify-center overflow-hidden rounded-xl">
+            {renderAdImage("w-full h-full object-cover object-center rounded-xl")}
           </div>
         </AdContainer>
       </div>

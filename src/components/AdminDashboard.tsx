@@ -1743,12 +1743,12 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                             {adPosition === 'footer' && '970 × 90 px'}
                           </span>
                         </span>
-                        <div className="border border-blue-200 rounded-xl p-3 bg-gray-900/90 flex items-center justify-center min-h-[110px]">
+                        <div className="border border-blue-200 rounded-xl overflow-hidden flex items-center justify-center h-[110px] w-full bg-gray-900/90">
                           {adImageUrl ? (
                             <img
                               src={adImageUrl}
                               alt="Live Desktop Ad Preview"
-                              className="max-h-[120px] w-auto object-contain rounded-lg shadow-sm"
+                              className="w-full h-full object-cover shadow-sm"
                               onError={(e) => {
                                 (e.target as HTMLElement).style.display = 'none';
                               }}
@@ -1778,11 +1778,11 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                             {adPosition === 'footer' && '320 × 50 px'}
                           </span>
                         </span>
-                        <div className="border border-emerald-200 rounded-xl p-3 bg-gray-900/90 flex items-center justify-center min-h-[110px] max-w-[320px] mx-auto w-full">
+                        <div className="border border-emerald-200 rounded-xl overflow-hidden flex items-center justify-center h-[110px] max-w-[320px] mx-auto w-full bg-gray-900/90">
                           <img
                             src={adMobileImageUrl || adImageUrl}
                             alt="Live Mobile Ad Preview"
-                            className="max-h-[85px] w-full object-contain rounded-md shadow-sm"
+                            className="w-full h-full object-cover shadow-sm"
                             onError={(e) => {
                               (e.target as HTMLElement).style.display = 'none';
                             }}
