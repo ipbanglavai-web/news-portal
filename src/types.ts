@@ -77,6 +77,7 @@ export interface BannerAd {
   title: string;
   position: 'header' | 'sidebar' | 'footer' | 'inline';
   imageUrl: string;
+  mobileImageUrl?: string;
   linkUrl: string;
   isActive: boolean;
 }

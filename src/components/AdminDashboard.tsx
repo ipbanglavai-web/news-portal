@@ -102,7 +102,8 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   // New Banner Ad Form State
   const [adTitle, setAdTitle] = useState('');
   const [adPosition, setAdPosition] = useState<'header' | 'sidebar' | 'inline' | 'footer'>('header');
-  const [adImageUrl, setAdImageUrl] = useState('');
+  const [adImageUrl, setAdImageUrl] = useState(''); // Desktop image URL
+  const [adMobileImageUrl, setAdMobileImageUrl] = useState(''); // Mobile image URL
   const [adLinkUrl, setAdLinkUrl] = useState('');
   const [adIsActive, setAdIsActive] = useState(true);
   const [adSuccessMsg, setAdSuccessMsg] = useState(false);
@@ -415,24 +416,39 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
         title: adTitle,
         position: adPosition,
         imageUrl: adImageUrl,
+        mobileImageUrl: adMobileImageUrl.trim() || undefined,
         linkUrl: adLinkUrl || '#',
         isActive: adIsActive
       });
       setAdTitle('');
       setAdImageUrl('');
+      setAdMobileImageUrl('');
       setAdLinkUrl('');
       setAdSuccessMsg(true);
       setTimeout(() => setAdSuccessMsg(false), 3000);
     }
   };
 
-  const handleImageFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleDesktopImageFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
         if (typeof reader.result === 'string') {
           setAdImageUrl(reader.result);
+        }
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleMobileImageFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        if (typeof reader.result === 'string') {
+          setAdMobileImageUrl(reader.result);
         }
       };
       reader.readAsDataURL(file);
@@ -1424,10 +1440,10 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                             onChange={(e) => setAdPosition(e.target.value as any)}
                             className="w-full bg-gray-50 border border-gray-300 rounded-xl px-3.5 py-2.5 text-sm focus:outline-none focus:border-red-600 font-semibold text-gray-800"
                           >
-                            <option value="header">📌 Top Header Banner (হেডার ব্যানার)</option>
-                            <option value="sidebar">📌 Right Sidebar Box (সাইডবার ব্যানার)</option>
-                            <option value="inline">📌 In-Article Feed (ইন-আর্টিকেল ব্যানার)</option>
-                            <option value="footer">📌 Bottom Footer Banner (ফুটার ব্যানার)</option>
+                            <option value="header">📌 Top Header Banner (728×90 px | Mobile: 320×50 px)</option>
+                            <option value="sidebar">📌 Right Sidebar Box (300×250 px Desktop & Mobile)</option>
+                            <option value="inline">📌 In-Article Feed (750×200 px | Mobile: 320×100 px)</option>
+                            <option value="footer">📌 Bottom Footer Banner (970×90 px | Mobile: 320×50 px)</option>
                           </select>
                         </div>
 
@@ -1447,51 +1463,120 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                         </div>
                       </div>
 
-                      {/* Image Source Input & File Upload */}
-                      <div>
-                        <label className="block text-xs font-bold text-gray-700 mb-1">
-                          {language === 'bn' ? 'বিজ্ঞাপনের ছবি / এনিমেটেড GIF লিংক বা ফাইল আপলোড' : 'Banner Image URL or Upload File (GIF / JPG / PNG)'} *
-                        </label>
+                      {/* Dual Image Input Grid: Desktop vs Mobile */}
+                      <div className="space-y-4 pt-1">
+                        {/* 1. Desktop Ad Image */}
+                        <div className="bg-blue-50/70 border border-blue-200 p-3.5 rounded-2xl space-y-2">
+                          <div className="flex items-center justify-between">
+                            <label className="text-xs font-extrabold text-blue-900 flex items-center space-x-1.5">
+                              <Monitor className="w-4 h-4 text-blue-600" />
+                              <span>{language === 'bn' ? 'ডেক্সটপ ভার্সন বিজ্ঞাপন ছবি (Desktop Ad Image)' : 'Desktop Ad Image (GIF/JPG/PNG)'} *</span>
+                            </label>
+                            <span className="text-[10px] font-extrabold text-blue-800 bg-blue-100 px-2 py-0.5 rounded-md">
+                              {adPosition === 'header' && '728×90 px'}
+                              {adPosition === 'sidebar' && '300×250 px'}
+                              {adPosition === 'inline' && '750×200 px'}
+                              {adPosition === 'footer' && '970×90 px'}
+                            </span>
+                          </div>
 
-                        <div className="space-y-2">
                           <input
                             type="text"
                             required
                             value={adImageUrl}
                             onChange={(e) => setAdImageUrl(e.target.value)}
-                            placeholder="https://... image URL (.gif, .jpg, .png)"
-                            className="w-full bg-gray-50 border border-gray-300 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-red-600 font-medium"
+                            placeholder="https://... desktop image URL (.gif, .jpg, .png)"
+                            className="w-full bg-white border border-gray-300 rounded-xl px-3.5 py-2 text-xs focus:outline-none focus:border-blue-600 font-medium"
                           />
 
-                          <div className="flex flex-wrap items-center gap-2 pt-1">
-                            {/* File Upload Button */}
-                            <label className="bg-gray-100 hover:bg-gray-200 text-gray-800 font-bold text-xs px-3 py-1.5 rounded-lg border border-gray-300 cursor-pointer flex items-center space-x-1.5 transition">
-                              <Upload className="w-3.5 h-3.5 text-red-600" />
-                              <span>{language === 'bn' ? 'কম্পিউটার থেকে ছবি আপলোড করুন' : 'Upload Local Image File'}</span>
+                          <div className="flex flex-wrap items-center gap-2 pt-0.5">
+                            <label className="bg-white hover:bg-gray-100 text-gray-800 font-bold text-xs px-3 py-1.5 rounded-lg border border-gray-300 cursor-pointer flex items-center space-x-1.5 transition shadow-xs">
+                              <Upload className="w-3.5 h-3.5 text-blue-600" />
+                              <span>{language === 'bn' ? 'ডেক্সটপ ফাইল আপলোড' : 'Upload Desktop File'}</span>
                               <input
                                 type="file"
                                 accept="image/gif, image/jpeg, image/png, image/webp"
-                                onChange={handleImageFileUpload}
+                                onChange={handleDesktopImageFileUpload}
                                 className="hidden"
                               />
                             </label>
 
-                            {/* Preset Samples */}
                             <button
                               type="button"
                               onClick={() => setAdImageUrl('https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHp1MGdzdTZoOGdrZnIxbjFzbXV4MGZxeWVreTVzbnhrOHdtNHUyeCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/l0HlHFRb4PRI12cwU/giphy.gif')}
-                              className="bg-yellow-50 hover:bg-yellow-100 text-yellow-800 border border-yellow-300 text-xs font-bold px-2.5 py-1.5 rounded-lg transition"
+                              className="bg-yellow-50 hover:bg-yellow-100 text-yellow-800 border border-yellow-300 text-[11px] font-bold px-2 py-1 rounded-lg transition"
                             >
-                              ⚡ {language === 'bn' ? 'নমুনা GIF ব্যানার' : 'Sample GIF Ad'}
+                              ⚡ Sample GIF
                             </button>
 
                             <button
                               type="button"
                               onClick={() => setAdImageUrl('https://images.unsplash.com/photo-1607346256330-dee7af15f7c5?auto=format&fit=crop&w=1200&q=80')}
-                              className="bg-blue-50 hover:bg-blue-100 text-blue-800 border border-blue-300 text-xs font-bold px-2.5 py-1.5 rounded-lg transition"
+                              className="bg-blue-100 hover:bg-blue-200 text-blue-900 border border-blue-300 text-[11px] font-bold px-2 py-1 rounded-lg transition"
                             >
-                              🖼️ {language === 'bn' ? 'নমুনা JPG ব্যানার' : 'Sample JPG Ad'}
+                              🖼️ Sample JPG
                             </button>
+                          </div>
+                        </div>
+
+                        {/* 2. Mobile Ad Image */}
+                        <div className="bg-emerald-50/70 border border-emerald-200 p-3.5 rounded-2xl space-y-2">
+                          <div className="flex items-center justify-between">
+                            <label className="text-xs font-extrabold text-emerald-900 flex items-center space-x-1.5">
+                              <Smartphone className="w-4 h-4 text-emerald-600" />
+                              <span>{language === 'bn' ? 'মোবাইল ভার্সন বিজ্ঞাপন ছবি (Mobile Ad Image)' : 'Mobile Ad Image (Optional)'}</span>
+                            </label>
+                            <span className="text-[10px] font-extrabold text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded-md">
+                              {adPosition === 'header' && '320×50 px'}
+                              {adPosition === 'sidebar' && '300×250 px'}
+                              {adPosition === 'inline' && '320×100 px'}
+                              {adPosition === 'footer' && '320×50 px'}
+                            </span>
+                          </div>
+
+                          <p className="text-[11px] text-emerald-800 font-semibold">
+                            {language === 'bn'
+                              ? '💡 ফাঁকা রাখলে ডেক্সটপ ভার্সনের ছবিই মোবাইলে স্বয়ংক্রিয়ভাবে ব্যবহৃত হবে।'
+                              : '💡 If left blank, desktop image will automatically be used on mobile devices.'}
+                          </p>
+
+                          <input
+                            type="text"
+                            value={adMobileImageUrl}
+                            onChange={(e) => setAdMobileImageUrl(e.target.value)}
+                            placeholder="https://... mobile image URL (.gif, .jpg, .png) - Optional"
+                            className="w-full bg-white border border-gray-300 rounded-xl px-3.5 py-2 text-xs focus:outline-none focus:border-emerald-600 font-medium"
+                          />
+
+                          <div className="flex flex-wrap items-center gap-2 pt-0.5">
+                            <label className="bg-white hover:bg-gray-100 text-gray-800 font-bold text-xs px-3 py-1.5 rounded-lg border border-gray-300 cursor-pointer flex items-center space-x-1.5 transition shadow-xs">
+                              <Upload className="w-3.5 h-3.5 text-emerald-600" />
+                              <span>{language === 'bn' ? 'মোবাইল ফাইল আপলোড' : 'Upload Mobile File'}</span>
+                              <input
+                                type="file"
+                                accept="image/gif, image/jpeg, image/png, image/webp"
+                                onChange={handleMobileImageFileUpload}
+                                className="hidden"
+                              />
+                            </label>
+
+                            <button
+                              type="button"
+                              onClick={() => setAdMobileImageUrl('https://images.unsplash.com/photo-1556742049-0a670f4a4591?auto=format&fit=crop&w=600&q=80')}
+                              className="bg-emerald-100 hover:bg-emerald-200 text-emerald-900 border border-emerald-300 text-[11px] font-bold px-2 py-1 rounded-lg transition"
+                            >
+                              📱 Mobile Sample
+                            </button>
+
+                            {adMobileImageUrl && (
+                              <button
+                                type="button"
+                                onClick={() => setAdMobileImageUrl('')}
+                                className="bg-red-50 hover:bg-red-100 text-red-700 border border-red-200 text-[11px] font-bold px-2 py-1 rounded-lg transition"
+                              >
+                                ✕ {language === 'bn' ? 'রিমুভ' : 'Clear'}
+                              </button>
+                            )}
                           </div>
                         </div>
                       </div>
@@ -1623,48 +1708,84 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                 </div>
 
                 {/* Live Preview Section */}
-                {adImageUrl && (
+                {(adImageUrl || adMobileImageUrl) && (
                   <div className="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm space-y-3">
                     <div className="flex items-center justify-between border-b border-gray-100 pb-2">
                       <h4 className="font-extrabold text-sm text-gray-900 flex items-center space-x-2">
                         <Eye className="w-4 h-4 text-red-600" />
                         <span>{language === 'bn' ? 'বিজ্ঞাপনের রিয়েল-টাইম লাইভ প্রিভিউ' : 'Live Ad Real-time Preview'}</span>
                       </h4>
-                      <span className="text-xs font-bold text-gray-500">
-                        Position: <strong className="uppercase text-red-600">{adPosition}</strong>
-                      </span>
+                      <div className="flex items-center space-x-2">
+                        <span className="text-xs font-bold text-gray-500">
+                          Position: <strong className="uppercase text-red-600">{adPosition}</strong>
+                        </span>
+                        <span className="text-[10px] font-extrabold bg-gray-900 text-yellow-400 px-2 py-0.5 rounded-full">
+                          {adPosition === 'header' && '728×90 px (Desktop) / 320×50 px (Mobile)'}
+                          {adPosition === 'sidebar' && '300×250 px (Desktop & Mobile)'}
+                          {adPosition === 'inline' && '750×200 px (Desktop) / 320×100 px (Mobile)'}
+                          {adPosition === 'footer' && '970×90 px (Desktop) / 320×50 px (Mobile)'}
+                        </span>
+                      </div>
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
                       {/* Desktop Preview Container */}
                       <div className="space-y-1.5">
-                        <span className="text-xs font-bold text-gray-700 flex items-center space-x-1">
-                          <Monitor className="w-3.5 h-3.5 text-blue-600" />
-                          <span>Desktop Preview</span>
+                        <span className="text-xs font-bold text-gray-700 flex items-center justify-between">
+                          <span className="flex items-center space-x-1.5">
+                            <Monitor className="w-3.5 h-3.5 text-blue-600" />
+                            <span className="font-extrabold text-blue-900">Desktop View</span>
+                          </span>
+                          <span className="text-[10px] text-gray-400 font-mono">
+                            {adPosition === 'header' && '728 × 90 px'}
+                            {adPosition === 'sidebar' && '300 × 250 px'}
+                            {adPosition === 'inline' && '750 × 200 px'}
+                            {adPosition === 'footer' && '970 × 90 px'}
+                          </span>
                         </span>
-                        <div className="border border-gray-200 rounded-xl p-3 bg-gray-50 flex items-center justify-center min-h-[100px]">
-                          <img
-                            src={adImageUrl}
-                            alt="Live Ad Preview"
-                            className="max-h-[140px] w-auto object-contain rounded-lg shadow-sm"
-                            onError={(e) => {
-                              (e.target as HTMLElement).style.display = 'none';
-                            }}
-                          />
+                        <div className="border border-blue-200 rounded-xl p-3 bg-gray-900/90 flex items-center justify-center min-h-[110px]">
+                          {adImageUrl ? (
+                            <img
+                              src={adImageUrl}
+                              alt="Live Desktop Ad Preview"
+                              className="max-h-[120px] w-auto object-contain rounded-lg shadow-sm"
+                              onError={(e) => {
+                                (e.target as HTMLElement).style.display = 'none';
+                              }}
+                            />
+                          ) : (
+                            <span className="text-xs text-gray-500 italic">No Desktop Image Provided</span>
+                          )}
                         </div>
                       </div>
 
                       {/* Mobile Preview Container */}
                       <div className="space-y-1.5">
-                        <span className="text-xs font-bold text-gray-700 flex items-center space-x-1">
-                          <Smartphone className="w-3.5 h-3.5 text-green-600" />
-                          <span>Mobile View Preview</span>
+                        <span className="text-xs font-bold text-gray-700 flex items-center justify-between">
+                          <span className="flex items-center space-x-1.5">
+                            <Smartphone className="w-3.5 h-3.5 text-emerald-600" />
+                            <span className="font-extrabold text-emerald-900">Mobile View</span>
+                            {adMobileImageUrl ? (
+                              <span className="text-[9px] bg-emerald-100 text-emerald-800 font-extrabold px-1.5 py-0.2 rounded">Custom Asset</span>
+                            ) : (
+                              <span className="text-[9px] bg-gray-100 text-gray-600 font-bold px-1.5 py-0.2 rounded">Desktop Fallback</span>
+                            )}
+                          </span>
+                          <span className="text-[10px] text-gray-400 font-mono">
+                            {adPosition === 'header' && '320 × 50 px'}
+                            {adPosition === 'sidebar' && '300 × 250 px'}
+                            {adPosition === 'inline' && '320 × 100 px'}
+                            {adPosition === 'footer' && '320 × 50 px'}
+                          </span>
                         </span>
-                        <div className="border border-gray-200 rounded-xl p-3 bg-gray-50 flex items-center justify-center min-h-[100px] max-w-[320px] mx-auto">
+                        <div className="border border-emerald-200 rounded-xl p-3 bg-gray-900/90 flex items-center justify-center min-h-[110px] max-w-[320px] mx-auto w-full">
                           <img
-                            src={adImageUrl}
-                            alt="Live Ad Mobile Preview"
-                            className="max-h-[80px] w-full object-cover rounded-md shadow-sm"
+                            src={adMobileImageUrl || adImageUrl}
+                            alt="Live Mobile Ad Preview"
+                            className="max-h-[85px] w-full object-contain rounded-md shadow-sm"
+                            onError={(e) => {
+                              (e.target as HTMLElement).style.display = 'none';
+                            }}
                           />
                         </div>
                       </div>
@@ -1695,12 +1816,13 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                     </div>
                   ) : (
                     <div className="overflow-x-auto">
-                      <table className="w-full text-left border-collapse min-w-[700px]">
+                      <table className="w-full text-left border-collapse min-w-[750px]">
                         <thead>
                           <tr className="bg-gray-50 border-b border-gray-200 text-xs font-bold text-gray-600 uppercase">
-                            <th className="p-4">Ad Image (GIF / JPG)</th>
+                            <th className="p-4">Ad Images (Desktop & Mobile)</th>
                             <th className="p-4">Campaign Title</th>
                             <th className="p-4">Position</th>
+                            <th className="p-4">Dimensions (px)</th>
                             <th className="p-4">Target Link</th>
                             <th className="p-4 text-center">Status</th>
                             <th className="p-4 text-right">Actions</th>
@@ -1708,21 +1830,39 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                         </thead>
                         <tbody className="divide-y divide-gray-100 text-sm">
                           {bannerAds.map((ad) => {
-                            const isGif = ad.imageUrl.toLowerCase().includes('.gif');
+                            const isGif = (ad.imageUrl + (ad.mobileImageUrl || '')).toLowerCase().includes('.gif');
                             return (
                               <tr key={ad.id} className="hover:bg-gray-50 transition">
                                 <td className="p-4">
-                                  <div className="relative w-28 h-14 bg-gray-900/10 rounded-lg overflow-hidden border border-gray-200 flex items-center justify-center">
-                                    <img
-                                      src={ad.imageUrl}
-                                      alt={ad.title}
-                                      className="w-full h-full object-cover"
-                                    />
-                                    {isGif && (
-                                      <span className="absolute top-1 left-1 bg-yellow-400 text-black font-extrabold text-[8px] px-1 rounded shadow">
-                                        GIF
+                                  <div className="flex items-center space-x-2">
+                                    {/* Desktop Thumbnail */}
+                                    <div className="relative w-20 h-12 bg-gray-900/90 rounded-lg overflow-hidden border border-blue-300 flex items-center justify-center p-0.5 shrink-0" title="Desktop Image">
+                                      <img
+                                        src={ad.imageUrl}
+                                        alt={ad.title}
+                                        className="w-full h-full object-contain"
+                                      />
+                                      <span className="absolute bottom-0.5 right-0.5 bg-blue-600 text-white font-extrabold text-[7px] px-1 rounded shadow">
+                                        🖥️
                                       </span>
-                                    )}
+                                      {isGif && (
+                                        <span className="absolute top-0.5 left-0.5 bg-yellow-400 text-black font-extrabold text-[7px] px-0.5 rounded shadow">
+                                          GIF
+                                        </span>
+                                      )}
+                                    </div>
+
+                                    {/* Mobile Thumbnail */}
+                                    <div className="relative w-14 h-12 bg-gray-900/90 rounded-lg overflow-hidden border border-emerald-300 flex items-center justify-center p-0.5 shrink-0" title={ad.mobileImageUrl ? "Custom Mobile Image" : "Desktop Image Used as Fallback"}>
+                                      <img
+                                        src={ad.mobileImageUrl || ad.imageUrl}
+                                        alt={`${ad.title} mobile`}
+                                        className="w-full h-full object-contain"
+                                      />
+                                      <span className="absolute bottom-0.5 right-0.5 bg-emerald-600 text-white font-extrabold text-[7px] px-1 rounded shadow">
+                                        📱 {ad.mobileImageUrl ? 'Custom' : 'Auto'}
+                                      </span>
+                                    </div>
                                   </div>
                                 </td>
                                 <td className="p-4 font-bold text-gray-900 max-w-xs">{ad.title}</td>
@@ -1730,6 +1870,29 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                                   <span className="capitalize text-xs font-extrabold bg-red-50 text-red-700 px-2.5 py-1 rounded-full border border-red-200">
                                     {ad.position}
                                   </span>
+                                </td>
+                                <td className="p-4 text-xs font-mono font-bold text-gray-700">
+                                  {ad.position === 'header' && (
+                                    <div className="space-y-0.5">
+                                      <span className="block text-blue-600">🖥️ 728×90 px</span>
+                                      <span className="block text-green-600">📱 320×50 px</span>
+                                    </div>
+                                  )}
+                                  {ad.position === 'sidebar' && (
+                                    <span className="text-yellow-700">🖥️📱 300×250 px</span>
+                                  )}
+                                  {ad.position === 'inline' && (
+                                    <div className="space-y-0.5">
+                                      <span className="block text-blue-600">🖥️ 750×200 px</span>
+                                      <span className="block text-green-600">📱 320×100 px</span>
+                                    </div>
+                                  )}
+                                  {ad.position === 'footer' && (
+                                    <div className="space-y-0.5">
+                                      <span className="block text-blue-600">🖥️ 970×90 px</span>
+                                      <span className="block text-green-600">📱 320×50 px</span>
+                                    </div>
+                                  )}
                                 </td>
                                 <td className="p-4 text-xs">
                                   <a

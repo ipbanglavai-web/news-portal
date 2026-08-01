@@ -25,26 +25,26 @@ export const BannerAdComponent: React.FC<BannerAdComponentProps> = ({
     if (position === 'header') {
       return (
         <div className={`w-full flex justify-center my-3 px-2 ${className}`}>
-          <div className="w-full max-w-[728px] h-[60px] sm:h-[90px] bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 rounded-xl border border-gray-700/60 p-2 sm:p-3 flex items-center justify-between text-white shadow-sm overflow-hidden">
+          <div className="w-full max-w-[970px] h-[65px] sm:h-[90px] bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 rounded-2xl border border-gray-700/80 p-2 sm:p-3 flex items-center justify-between text-white shadow-sm overflow-hidden">
             <div className="flex items-center space-x-2 sm:space-x-3">
-              <span className="bg-red-600/30 text-red-400 p-1.5 sm:p-2 rounded-lg shrink-0">
+              <span className="bg-red-600/30 text-red-400 p-1.5 sm:p-2 rounded-xl shrink-0">
                 <Sparkles className="w-4 h-4 sm:w-5 sm:h-5 text-yellow-400 animate-pulse" />
               </span>
               <div>
-                <span className="text-[10px] sm:text-xs text-red-400 font-bold uppercase tracking-wider block">
-                  {language === 'bn' ? 'বিজ্ঞাপন স্থান' : 'HEADER AD SLOT (728x90)'}
+                <span className="text-[10px] sm:text-xs text-red-400 font-extrabold uppercase tracking-wider block">
+                  {language === 'bn' ? 'হেডার বিজ্ঞাপন স্থান (728×90px / 320×50px)' : 'HEADER AD SLOT (728×90 px | Mobile: 320×50 px)'}
                 </span>
                 <p className="text-xs sm:text-sm font-bold truncate">
-                  {language === 'bn' ? 'এখানে আপনার পণ্যের বিজ্ঞাপন দিন' : 'Advertise Your Brand Here'}
+                  {language === 'bn' ? 'এখানে আপনার ব্র্যান্ডের বিজ্ঞাপন দিন' : 'Showcase Your Brand Here'}
                 </p>
               </div>
             </div>
             {onNavigateToAdvertise && (
               <button
                 onClick={onNavigateToAdvertise}
-                className="bg-red-600 hover:bg-red-700 text-white font-bold text-xs px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg transition shadow shrink-0 whitespace-nowrap"
+                className="bg-red-600 hover:bg-red-700 text-white font-bold text-xs px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl transition shadow shrink-0 whitespace-nowrap"
               >
-                {language === 'bn' ? 'যোগাযোগ করুন' : 'Book Space'}
+                {language === 'bn' ? 'বিজ্ঞাপন দিন' : 'Book Space'}
               </button>
             )}
           </div>
@@ -54,18 +54,18 @@ export const BannerAdComponent: React.FC<BannerAdComponentProps> = ({
 
     if (position === 'sidebar') {
       return (
-        <div className={`bg-gradient-to-br from-gray-900 to-gray-800 rounded-2xl p-5 text-white text-center shadow-sm border border-gray-700 ${className}`}>
+        <div className={`w-full max-w-[340px] mx-auto bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 rounded-2xl p-5 text-white text-center shadow-sm border border-gray-700 ${className}`}>
           <div className="inline-flex p-3 bg-red-600/20 text-yellow-400 rounded-full mb-3">
             <Sparkles className="w-6 h-6 animate-bounce" />
           </div>
-          <span className="text-[10px] text-gray-400 uppercase tracking-widest font-bold block mb-1">
-            {language === 'bn' ? 'সাইডবার বিজ্ঞাপন (300x250)' : 'SIDEBAR AD SLOT (300x250)'}
+          <span className="text-[10px] text-yellow-400 uppercase tracking-widest font-extrabold block mb-1">
+            {language === 'bn' ? 'সাইডবার বিজ্ঞাপন স্থান (300×250 px)' : 'SIDEBAR AD SLOT (300×250 px)'}
           </span>
           <h5 className="font-extrabold text-base mb-1">
             {language === 'bn' ? 'আপনার ব্র্যান্ড প্রচার করুন' : 'Promote Your Business'}
           </h5>
           <p className="text-xs text-gray-300 mb-4 leading-relaxed">
-            {language === 'bn' ? 'লাখ লাখ পাঠকের কাছে পৌঁছান সহজে।' : 'Reach over a million active readers daily with GIF or JPG ads.'}
+            {language === 'bn' ? 'প্রতিদিন লক্ষাধিক পাঠকের কাছে পৌঁছান।' : 'Reach active daily readers with crisp GIF or JPG ads.'}
           </p>
           {onNavigateToAdvertise && (
             <button 
@@ -81,14 +81,14 @@ export const BannerAdComponent: React.FC<BannerAdComponentProps> = ({
 
     if (position === 'inline') {
       return (
-        <div className={`w-full my-6 ${className}`}>
-          <div className="w-full max-w-[750px] mx-auto h-[80px] sm:h-[100px] bg-gray-100 rounded-2xl border-2 border-dashed border-gray-300 p-3 flex items-center justify-between text-gray-600">
+        <div className={`w-full my-6 flex justify-center ${className}`}>
+          <div className="w-full max-w-[750px] h-[80px] sm:h-[100px] bg-gray-100 rounded-2xl border-2 border-dashed border-gray-300 p-3 flex items-center justify-between text-gray-600">
             <div className="flex items-center space-x-3">
-              <span className="text-xs bg-gray-200 text-gray-700 font-bold px-2.5 py-1 rounded-md uppercase">
-                {language === 'bn' ? 'ইন-আর্টিকেল বিজ্ঞাপন (728x90 / 320x100)' : 'IN-ARTICLE AD (728x90 / 320x100)'}
+              <span className="text-[11px] sm:text-xs bg-gray-200 text-gray-800 font-extrabold px-2.5 py-1 rounded-md uppercase">
+                {language === 'bn' ? 'ইন-আর্টিকেল (750×200px / 320×100px)' : 'IN-ARTICLE AD (750×200 px | Mobile: 320×100 px)'}
               </span>
-              <p className="text-xs font-semibold hidden sm:block">
-                {language === 'bn' ? 'আপনার আকর্ষণীয় GIF বা JPG বিজ্ঞাপন দিন' : 'Showcase your animated GIF or banner ad here'}
+              <p className="text-xs font-semibold hidden md:block text-gray-600">
+                {language === 'bn' ? 'আপনার আকর্ষণীয় GIF বা JPG বিজ্ঞাপনটি প্রকাশ করুন' : 'Showcase your animated GIF or banner ad here'}
               </p>
             </div>
             {onNavigateToAdvertise && (
@@ -108,8 +108,8 @@ export const BannerAdComponent: React.FC<BannerAdComponentProps> = ({
     return (
       <div className={`w-full py-4 bg-gray-900 border-t border-gray-800 ${className}`}>
         <div className="max-w-7xl mx-auto px-4 flex items-center justify-between text-xs text-gray-400">
-          <span className="font-semibold">
-            {language === 'bn' ? 'ফুটার বিজ্ঞাপন স্থান (970x90 / 320x50)' : 'FOOTER AD SLOT (970x90 / 320x50)'}
+          <span className="font-extrabold text-gray-300">
+            {language === 'bn' ? 'ফুটার বিজ্ঞাপন স্থান (970×90 px / 320×50 px)' : 'FOOTER AD SLOT (970×90 px | Mobile: 320×50 px)'}
           </span>
           {onNavigateToAdvertise && (
             <button onClick={onNavigateToAdvertise} className="text-red-400 hover:underline font-bold">
@@ -122,7 +122,52 @@ export const BannerAdComponent: React.FC<BannerAdComponentProps> = ({
   }
 
   // Helper to check if image is GIF or JPG/PNG
-  const isGif = activeAd.imageUrl.toLowerCase().includes('.gif');
+  const isGif = (activeAd.imageUrl + (activeAd.mobileImageUrl || '')).toLowerCase().includes('.gif');
+
+  // Helper to render responsive ad image (desktop vs mobile)
+  const renderAdImage = (customClass = "w-full h-full object-contain object-center rounded-xl") => {
+    const desktopImg = activeAd.imageUrl;
+    const mobileImg = activeAd.mobileImageUrl;
+
+    if (mobileImg && mobileImg.trim() !== '') {
+      return (
+        <>
+          {/* Desktop Image */}
+          <img
+            src={desktopImg}
+            alt={activeAd.title}
+            className={`hidden sm:block ${customClass}`}
+            loading="lazy"
+            onError={(e) => {
+              (e.target as HTMLElement).style.display = 'none';
+            }}
+          />
+          {/* Mobile Image */}
+          <img
+            src={mobileImg}
+            alt={`${activeAd.title} (Mobile)`}
+            className={`block sm:hidden ${customClass}`}
+            loading="lazy"
+            onError={(e) => {
+              (e.target as HTMLElement).style.display = 'none';
+            }}
+          />
+        </>
+      );
+    }
+
+    return (
+      <img
+        src={desktopImg}
+        alt={activeAd.title}
+        className={customClass}
+        loading="lazy"
+        onError={(e) => {
+          (e.target as HTMLElement).style.display = 'none';
+        }}
+      />
+    );
+  };
 
   // Render Active Ad
   const AdContainer = activeAd.linkUrl ? 'a' : 'div';
@@ -130,9 +175,9 @@ export const BannerAdComponent: React.FC<BannerAdComponentProps> = ({
     href: activeAd.linkUrl,
     target: '_blank',
     rel: 'noopener noreferrer',
-    className: 'group block relative overflow-hidden rounded-2xl shadow-sm border border-gray-200/80 bg-black/5 hover:opacity-98 transition'
+    className: 'group block relative overflow-hidden rounded-2xl shadow-sm border border-gray-200/80 bg-gray-900/5 hover:opacity-95 transition'
   } : {
-    className: 'relative overflow-hidden rounded-2xl shadow-sm border border-gray-200/80 bg-black/5'
+    className: 'relative overflow-hidden rounded-2xl shadow-sm border border-gray-200/80 bg-gray-900/5'
   };
 
   if (position === 'header') {
@@ -141,27 +186,18 @@ export const BannerAdComponent: React.FC<BannerAdComponentProps> = ({
         <div className="w-full max-w-[970px] relative">
           <AdContainer {...containerProps}>
             {/* Ad Badge */}
-            <div className="absolute top-1.5 left-1.5 z-10 bg-black/70 backdrop-blur-md text-white text-[9px] font-bold px-2 py-0.5 rounded uppercase tracking-wider flex items-center space-x-1">
+            <div className="absolute top-1.5 left-1.5 z-10 bg-black/75 backdrop-blur-md text-white text-[9px] font-bold px-2 py-0.5 rounded uppercase tracking-wider flex items-center space-x-1">
               <span>{language === 'bn' ? 'বিজ্ঞাপন' : 'AD'}</span>
-              {isGif && <span className="bg-yellow-500 text-black px-1 rounded text-[8px]">GIF</span>}
+              {isGif && <span className="bg-yellow-500 text-black px-1 rounded text-[8px] font-black">GIF</span>}
             </div>
 
-            {/* Desktop / Mobile Optimized Image Container */}
-            <div className="w-full h-[60px] sm:h-[90px] md:h-[100px] flex items-center justify-center bg-gray-900/5">
-              <img
-                src={activeAd.imageUrl}
-                alt={activeAd.title}
-                className="w-full h-full object-cover sm:object-fill rounded-2xl"
-                loading="lazy"
-                onError={(e) => {
-                  // Fallback if image fails
-                  (e.target as HTMLElement).style.display = 'none';
-                }}
-              />
+            {/* Responsive Container with object-contain to preserve perfect aspect ratio */}
+            <div className="w-full h-[65px] sm:h-[90px] md:h-[100px] flex items-center justify-center bg-gray-950/90 rounded-2xl p-1">
+              {renderAdImage("w-full h-full object-contain object-center rounded-xl transition-all duration-300")}
             </div>
 
             {activeAd.linkUrl && (
-              <div className="absolute bottom-1.5 right-1.5 z-10 bg-black/60 text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition">
+              <div className="absolute bottom-1.5 right-1.5 z-10 bg-black/70 text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition">
                 <ExternalLink className="w-3.5 h-3.5" />
               </div>
             )}
@@ -173,22 +209,17 @@ export const BannerAdComponent: React.FC<BannerAdComponentProps> = ({
 
   if (position === 'sidebar') {
     return (
-      <div className={`w-full ${className}`}>
+      <div className={`w-full max-w-[340px] mx-auto ${className}`}>
         <div className="relative">
           <AdContainer {...containerProps}>
             {/* Ad Badge */}
-            <div className="absolute top-2 left-2 z-10 bg-black/70 backdrop-blur-md text-white text-[9px] font-bold px-2 py-0.5 rounded uppercase tracking-wider flex items-center space-x-1">
+            <div className="absolute top-2 left-2 z-10 bg-black/75 backdrop-blur-md text-white text-[9px] font-bold px-2 py-0.5 rounded uppercase tracking-wider flex items-center space-x-1">
               <span>{language === 'bn' ? 'বিজ্ঞাপন' : 'SPONSORED'}</span>
-              {isGif && <span className="bg-yellow-500 text-black px-1 rounded text-[8px]">GIF</span>}
+              {isGif && <span className="bg-yellow-500 text-black px-1 rounded text-[8px] font-black">GIF</span>}
             </div>
 
-            <div className="w-full min-h-[220px] max-h-[300px] sm:min-h-[250px] bg-gray-900/5 flex items-center justify-center">
-              <img
-                src={activeAd.imageUrl}
-                alt={activeAd.title}
-                className="w-full h-full object-cover rounded-2xl"
-                loading="lazy"
-              />
+            <div className="w-full h-[250px] sm:h-[280px] bg-gray-950/90 flex items-center justify-center p-2 rounded-2xl">
+              {renderAdImage("w-full h-full object-contain rounded-xl")}
             </div>
 
             <div className="p-3 bg-white border-t border-gray-100 flex items-center justify-between">
@@ -211,18 +242,13 @@ export const BannerAdComponent: React.FC<BannerAdComponentProps> = ({
       <div className={`w-full my-6 flex justify-center ${className}`}>
         <div className="w-full max-w-[750px] relative">
           <AdContainer {...containerProps}>
-            <div className="absolute top-1.5 left-1.5 z-10 bg-black/70 backdrop-blur-md text-white text-[9px] font-bold px-2 py-0.5 rounded uppercase tracking-wider flex items-center space-x-1">
+            <div className="absolute top-1.5 left-1.5 z-10 bg-black/75 backdrop-blur-md text-white text-[9px] font-bold px-2 py-0.5 rounded uppercase tracking-wider flex items-center space-x-1">
               <span>{language === 'bn' ? 'বিজ্ঞাপন' : 'SPONSORED'}</span>
-              {isGif && <span className="bg-yellow-500 text-black px-1 rounded text-[8px]">GIF</span>}
+              {isGif && <span className="bg-yellow-500 text-black px-1 rounded text-[8px] font-black">GIF</span>}
             </div>
 
-            <div className="w-full h-[80px] sm:h-[120px] bg-gray-900/5 flex items-center justify-center">
-              <img
-                src={activeAd.imageUrl}
-                alt={activeAd.title}
-                className="w-full h-full object-cover sm:object-fill rounded-2xl"
-                loading="lazy"
-              />
+            <div className="w-full h-[85px] sm:h-[120px] bg-gray-950/90 flex items-center justify-center p-1.5 rounded-2xl">
+              {renderAdImage("w-full h-full object-contain object-center rounded-xl")}
             </div>
           </AdContainer>
         </div>
@@ -238,13 +264,8 @@ export const BannerAdComponent: React.FC<BannerAdComponentProps> = ({
           <div className="absolute top-1.5 left-3 z-10 bg-black/80 text-white text-[9px] font-bold px-2 py-0.5 rounded uppercase">
             {language === 'bn' ? 'বিজ্ঞাপন' : 'AD'}
           </div>
-          <div className="w-full h-[50px] sm:h-[90px] flex items-center justify-center">
-            <img
-              src={activeAd.imageUrl}
-              alt={activeAd.title}
-              className="w-full h-full object-cover sm:object-fill rounded-xl"
-              loading="lazy"
-            />
+          <div className="w-full h-[55px] sm:h-[90px] flex items-center justify-center bg-gray-950/80 rounded-xl p-1">
+            {renderAdImage("w-full h-full object-contain object-center rounded-lg")}
           </div>
         </AdContainer>
       </div>
