@@ -141,34 +141,45 @@ export default function App() {
     return localStorage.getItem('bn_news_admin_auth') === 'true';
   });
 
+  const DEFAULT_SITE_SETTINGS: SiteSettings = {
+    siteNameBn: 'স্পিড নিউজ ২৪',
+    siteNameEn: 'Speed News 24',
+    taglineBn: 'সত্যের সন্ধানে অবিচল',
+    taglineEn: 'Uncompromising in Search of Truth',
+    contactEmail: 'contact@banglanews24.example',
+    contactPhone: '+880 1700 000000',
+    address: 'কাওরান বাজার, ঢাকা-১২১৫, বাংলাদেশ',
+    publisherName: 'কাজী আশরাফুল ইসলাম',
+    editorName: 'মাহাবুবুর রহমান',
+    facebookUrl: 'https://facebook.com',
+    youtubeUrl: 'https://youtube.com',
+    instagramUrl: 'https://instagram.com',
+    twitterUrl: 'https://twitter.com',
+    maintenanceMode: false,
+    desktopLogoUrl: '',
+    mobileLogoUrl: '',
+    footerDesktopLogoUrl: '',
+    footerMobileLogoUrl: '',
+    hamburgerLogoUrl: '',
+    defaultLogoMonogram: '২৪',
+    copyrightText: 'All rights reserved.',
+    copyrightTextBn: 'সর্বস্বত্ব সংরক্ষিত।',
+    copyrightTextEn: 'All rights reserved.',
+    developerCredit: 'Bangla Media Group',
+    developerWebsiteUrl: '',
+    developerPrefixText: 'Designed & Developed with Professional Standards for'
+  };
+
   const [siteSettings, setSiteSettings] = useState<SiteSettings>(() => {
     const saved = localStorage.getItem('bn_news_settings');
-    return saved ? JSON.parse(saved) : {
-      siteNameBn: 'বাংলা নিউজ ২৪',
-      siteNameEn: 'Bangla News 24',
-      taglineBn: 'সত্যের সন্ধানে অবিচল',
-      taglineEn: 'Uncompromising in Search of Truth',
-      contactEmail: 'contact@banglanews24.example',
-      contactPhone: '+880 1700 000000',
-      address: 'কাওরান বাজার, ঢাকা-১২১৫, বাংলাদেশ',
-      publisherName: 'কাজী আশরাফুল ইসলাম',
-      editorName: 'মাহাবুবুর রহমান',
-      facebookUrl: 'https://facebook.com',
-      youtubeUrl: 'https://youtube.com',
-      instagramUrl: 'https://instagram.com',
-      twitterUrl: 'https://twitter.com',
-      maintenanceMode: false,
-      desktopLogoUrl: '',
-      mobileLogoUrl: '',
-      footerDesktopLogoUrl: '',
-      footerMobileLogoUrl: '',
-      hamburgerLogoUrl: '',
-      defaultLogoMonogram: '২৪',
-      copyrightText: 'All rights reserved.',
-      developerCredit: 'Bangla Media Group',
-      developerWebsiteUrl: '',
-      developerPrefixText: 'Designed & Developed with Professional Standards for'
-    };
+    if (saved) {
+      try {
+        return { ...DEFAULT_SITE_SETTINGS, ...JSON.parse(saved) };
+      } catch (e) {
+        console.error('Failed to parse site settings from localStorage', e);
+      }
+    }
+    return DEFAULT_SITE_SETTINGS;
   });
 
   const [searchModalOpen, setSearchModalOpen] = useState(false);
@@ -182,8 +193,9 @@ export default function App() {
     // Fetch and subscribe to site settings from Firebase
     fetchSiteSettingsFromFirebase().then(remoteSettings => {
       if (remoteSettings && remoteSettings.siteNameBn) {
-        setSiteSettings(remoteSettings);
-        localStorage.setItem('bn_news_settings', JSON.stringify(remoteSettings));
+        const merged = { ...DEFAULT_SITE_SETTINGS, ...remoteSettings };
+        setSiteSettings(merged);
+        localStorage.setItem('bn_news_settings', JSON.stringify(merged));
       } else {
         saveSiteSettingsToFirebase(siteSettings).catch(err => console.error('Failed to seed site settings:', err));
       }
@@ -191,8 +203,9 @@ export default function App() {
 
     const unsubscribeSettings = subscribeToSiteSettings((remoteSettings) => {
       if (remoteSettings && remoteSettings.siteNameBn) {
-        setSiteSettings(remoteSettings);
-        localStorage.setItem('bn_news_settings', JSON.stringify(remoteSettings));
+        const merged = { ...DEFAULT_SITE_SETTINGS, ...remoteSettings };
+        setSiteSettings(merged);
+        localStorage.setItem('bn_news_settings', JSON.stringify(merged));
       }
     });
 

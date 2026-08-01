@@ -132,6 +132,8 @@ export interface SiteSettings {
   hamburgerLogoUrl?: string;
   defaultLogoMonogram?: string;
   copyrightText?: string;
+  copyrightTextBn?: string;
+  copyrightTextEn?: string;
   developerCredit?: string;
   developerWebsiteUrl?: string;
   developerPrefixText?: string;

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Article, Category, Language, AdRequest, SubmittedNews, SiteSettings, BannerAd, Moderator, AdminSession } from '../types';
 import { translations } from '../data/mockNews';
 import { 
@@ -114,10 +114,12 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   const [footerMobileLogoInput, setFooterMobileLogoInput] = useState(siteSettings.footerMobileLogoUrl || '');
   const [hamburgerLogoInput, setHamburgerLogoInput] = useState(siteSettings.hamburgerLogoUrl || '');
   const [defaultLogoMonogramInput, setDefaultLogoMonogramInput] = useState(siteSettings.defaultLogoMonogram || '২৪');
-  const [siteNameBnInput, setSiteNameBnInput] = useState(siteSettings.siteNameBn);
-  const [siteNameEnInput, setSiteNameEnInput] = useState(siteSettings.siteNameEn);
-  const [taglineBnInput, setTaglineBnInput] = useState(siteSettings.taglineBn);
-  const [taglineEnInput, setTaglineEnInput] = useState(siteSettings.taglineEn);
+  const [siteNameBnInput, setSiteNameBnInput] = useState(siteSettings.siteNameBn || '');
+  const [siteNameEnInput, setSiteNameEnInput] = useState(siteSettings.siteNameEn || '');
+  const [taglineBnInput, setTaglineBnInput] = useState(siteSettings.taglineBn || '');
+  const [taglineEnInput, setTaglineEnInput] = useState(siteSettings.taglineEn || '');
+  const [copyrightTextBnInput, setCopyrightTextBnInput] = useState(siteSettings.copyrightTextBn || 'সর্বস্বত্ব সংরক্ষিত।');
+  const [copyrightTextEnInput, setCopyrightTextEnInput] = useState(siteSettings.copyrightTextEn || siteSettings.copyrightText || 'All rights reserved.');
   const [copyrightTextInput, setCopyrightTextInput] = useState(siteSettings.copyrightText || 'All rights reserved.');
   const [developerCreditInput, setDeveloperCreditInput] = useState(siteSettings.developerCredit || 'Bangla Media Group');
   const [developerWebsiteUrlInput, setDeveloperWebsiteUrlInput] = useState(siteSettings.developerWebsiteUrl || '');
@@ -129,6 +131,40 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   const [addressInput, setAddressInput] = useState(siteSettings.address || 'কাওরান বাজার, ঢাকা-১২১৫, বাংলাদেশ');
   const [contactPhoneInput, setContactPhoneInput] = useState(siteSettings.contactPhone || '+৮৮০ ৯৬১২ ৩৪০৫৬৭');
   const [contactEmailInput, setContactEmailInput] = useState(siteSettings.contactEmail || 'contact@banglanews24.mock');
+  const [facebookUrlInput, setFacebookUrlInput] = useState(siteSettings.facebookUrl || 'https://facebook.com');
+  const [youtubeUrlInput, setYoutubeUrlInput] = useState(siteSettings.youtubeUrl || 'https://youtube.com');
+  const [instagramUrlInput, setInstagramUrlInput] = useState(siteSettings.instagramUrl || 'https://instagram.com');
+  const [twitterUrlInput, setTwitterUrlInput] = useState(siteSettings.twitterUrl || 'https://twitter.com');
+
+  useEffect(() => {
+    if (siteSettings) {
+      setDesktopLogoInput(siteSettings.desktopLogoUrl || '');
+      setMobileLogoInput(siteSettings.mobileLogoUrl || '');
+      setFooterDesktopLogoInput(siteSettings.footerDesktopLogoUrl || '');
+      setFooterMobileLogoInput(siteSettings.footerMobileLogoUrl || '');
+      setHamburgerLogoInput(siteSettings.hamburgerLogoUrl || '');
+      setDefaultLogoMonogramInput(siteSettings.defaultLogoMonogram || '২৪');
+      setSiteNameBnInput(siteSettings.siteNameBn || '');
+      setSiteNameEnInput(siteSettings.siteNameEn || '');
+      setTaglineBnInput(siteSettings.taglineBn || '');
+      setTaglineEnInput(siteSettings.taglineEn || '');
+      setCopyrightTextBnInput(siteSettings.copyrightTextBn || 'সর্বস্বত্ব সংরক্ষিত।');
+      setCopyrightTextEnInput(siteSettings.copyrightTextEn || siteSettings.copyrightText || 'All rights reserved.');
+      setCopyrightTextInput(siteSettings.copyrightText || 'All rights reserved.');
+      setDeveloperCreditInput(siteSettings.developerCredit || 'Bangla Media Group');
+      setDeveloperWebsiteUrlInput(siteSettings.developerWebsiteUrl || '');
+      setDeveloperPrefixTextInput(siteSettings.developerPrefixText || 'Designed & Developed with Professional Standards for');
+      setPublisherNameInput(siteSettings.publisherName || '');
+      setEditorNameInput(siteSettings.editorName || '');
+      setAddressInput(siteSettings.address || '');
+      setContactPhoneInput(siteSettings.contactPhone || '');
+      setContactEmailInput(siteSettings.contactEmail || '');
+      setFacebookUrlInput(siteSettings.facebookUrl || 'https://facebook.com');
+      setYoutubeUrlInput(siteSettings.youtubeUrl || 'https://youtube.com');
+      setInstagramUrlInput(siteSettings.instagramUrl || 'https://instagram.com');
+      setTwitterUrlInput(siteSettings.twitterUrl || 'https://twitter.com');
+    }
+  }, [siteSettings]);
 
   const [settingsSuccess, setSettingsSuccess] = useState(false);
 
@@ -163,7 +199,9 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
       siteNameEn: siteNameEnInput,
       taglineBn: taglineBnInput,
       taglineEn: taglineEnInput,
-      copyrightText: copyrightTextInput,
+      copyrightTextBn: copyrightTextBnInput,
+      copyrightTextEn: copyrightTextEnInput,
+      copyrightText: copyrightTextEnInput || copyrightTextInput,
       developerCredit: developerCreditInput,
       developerWebsiteUrl: developerWebsiteUrlInput,
       developerPrefixText: developerPrefixTextInput,
@@ -172,6 +210,10 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
       address: addressInput,
       contactPhone: contactPhoneInput,
       contactEmail: contactEmailInput,
+      facebookUrl: facebookUrlInput,
+      youtubeUrl: youtubeUrlInput,
+      instagramUrl: instagramUrlInput,
+      twitterUrl: twitterUrlInput,
     });
     setSettingsSuccess(true);
     setTimeout(() => setSettingsSuccess(false), 3000);
@@ -908,57 +950,176 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                     />
                   </div>
                 </div>
+
+                {/* Social Media Links */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4 pt-4 border-t border-gray-100">
+                  <div>
+                    <label className="block text-sm font-bold text-gray-700 mb-1">
+                      {language === 'bn' ? 'ফেসবুক পেজ লিংক' : 'Facebook Page URL'}
+                    </label>
+                    <input
+                      type="url"
+                      value={facebookUrlInput}
+                      onChange={(e) => setFacebookUrlInput(e.target.value)}
+                      placeholder="https://facebook.com/yourpage"
+                      className="w-full bg-gray-50 border border-gray-300 rounded-xl px-4 py-2.5 text-sm font-medium focus:outline-none focus:border-red-600"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-bold text-gray-700 mb-1">
+                      {language === 'bn' ? 'ইউটিউব চ্যানেল লিংক' : 'YouTube Channel URL'}
+                    </label>
+                    <input
+                      type="url"
+                      value={youtubeUrlInput}
+                      onChange={(e) => setYoutubeUrlInput(e.target.value)}
+                      placeholder="https://youtube.com/@yourchannel"
+                      className="w-full bg-gray-50 border border-gray-300 rounded-xl px-4 py-2.5 text-sm font-medium focus:outline-none focus:border-red-600"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-bold text-gray-700 mb-1">
+                      {language === 'bn' ? 'ইনস্টাগ্রাম লিংক' : 'Instagram URL'}
+                    </label>
+                    <input
+                      type="url"
+                      value={instagramUrlInput}
+                      onChange={(e) => setInstagramUrlInput(e.target.value)}
+                      placeholder="https://instagram.com/yourhandle"
+                      className="w-full bg-gray-50 border border-gray-300 rounded-xl px-4 py-2.5 text-sm font-medium focus:outline-none focus:border-red-600"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-bold text-gray-700 mb-1">
+                      {language === 'bn' ? 'টুইটার (X) লিংক' : 'Twitter / X URL'}
+                    </label>
+                    <input
+                      type="url"
+                      value={twitterUrlInput}
+                      onChange={(e) => setTwitterUrlInput(e.target.value)}
+                      placeholder="https://twitter.com/yourhandle"
+                      className="w-full bg-gray-50 border border-gray-300 rounded-xl px-4 py-2.5 text-sm font-medium focus:outline-none focus:border-red-600"
+                    />
+                  </div>
+                </div>
               </div>
 
               {/* Footer Copyright & Developer Credit Inputs */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
-                <div>
-                  <label className="block text-sm font-bold text-gray-700 mb-1">
-                    {language === 'bn' ? 'কপিরাইট টেক্সট' : 'Copyright Text'}
-                  </label>
-                  <input
-                    type="text"
-                    value={copyrightTextInput}
-                    onChange={(e) => setCopyrightTextInput(e.target.value)}
-                    placeholder="All rights reserved."
-                    className="w-full bg-gray-50 border border-gray-300 rounded-xl px-4 py-2.5 text-sm font-medium focus:outline-none focus:border-red-600"
-                  />
+              <div className="pt-4 border-t border-gray-200">
+                <h4 className="text-base font-extrabold text-gray-900 mb-3 flex items-center space-x-2">
+                  <span className="w-2 h-2 rounded-full bg-red-600"></span>
+                  <span>{language === 'bn' ? 'ফুটার কপিরাইট ও ক্রেডিট সেটিংস' : 'Footer Copyright & Credit Settings'}</span>
+                </h4>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-bold text-gray-700 mb-1">
+                      {language === 'bn' ? 'বাংলা কপিরাইট বার্তা' : 'Bangla Copyright Text'}
+                    </label>
+                    <input
+                      type="text"
+                      value={copyrightTextBnInput}
+                      onChange={(e) => {
+                        setCopyrightTextBnInput(e.target.value);
+                      }}
+                      placeholder="সর্বস্বত্ব সংরক্ষিত।"
+                      className="w-full bg-gray-50 border border-gray-300 rounded-xl px-4 py-2.5 text-sm font-medium focus:outline-none focus:border-red-600"
+                    />
+                    <p className="text-[11px] text-gray-500 mt-1">
+                      {language === 'bn' 
+                        ? 'টিপস: আপনি "সর্বস্বত্ব সংরক্ষিত।" অথবা "© {year} {siteName}। সর্বস্বত্ব সংরক্ষিত।" ব্যবহার করতে পারেন।' 
+                        : 'Tip: You can enter "সর্বস্বত্ব সংরক্ষিত।" or full string with placeholders "{year}" and "{siteName}".'}
+                    </p>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-bold text-gray-700 mb-1">
+                      {language === 'bn' ? 'English Copyright Text' : 'English Copyright Text'}
+                    </label>
+                    <input
+                      type="text"
+                      value={copyrightTextEnInput}
+                      onChange={(e) => {
+                        setCopyrightTextEnInput(e.target.value);
+                        setCopyrightTextInput(e.target.value);
+                      }}
+                      placeholder="All rights reserved."
+                      className="w-full bg-gray-50 border border-gray-300 rounded-xl px-4 py-2.5 text-sm font-medium focus:outline-none focus:border-red-600"
+                    />
+                    <p className="text-[11px] text-gray-500 mt-1">
+                      {language === 'bn' 
+                        ? 'টিপস: "All rights reserved." অথবা "© {year} {siteName}. All rights reserved."' 
+                        : 'Tip: "All rights reserved." or "© {year} {siteName}. All rights reserved."'}
+                    </p>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-bold text-gray-700 mb-1">
+                      {language === 'bn' ? 'ডেভেলপার ক্রেডিট প্রিফিক্স টেক্সট' : 'Developer Credit Prefix Text'}
+                    </label>
+                    <input
+                      type="text"
+                      value={developerPrefixTextInput}
+                      onChange={(e) => setDeveloperPrefixTextInput(e.target.value)}
+                      placeholder="Designed & Developed with Professional Standards for"
+                      className="w-full bg-gray-50 border border-gray-300 rounded-xl px-4 py-2.5 text-sm font-medium focus:outline-none focus:border-red-600"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-bold text-gray-700 mb-1">
+                      {language === 'bn' ? 'ডেভেলপার নাম / ব্র্যান্ড ক্রেডিট' : 'Developer Name / Brand Credit'}
+                    </label>
+                    <input
+                      type="text"
+                      value={developerCreditInput}
+                      onChange={(e) => setDeveloperCreditInput(e.target.value)}
+                      placeholder="Bangla Media Group"
+                      className="w-full bg-gray-50 border border-gray-300 rounded-xl px-4 py-2.5 text-sm font-medium focus:outline-none focus:border-red-600"
+                    />
+                  </div>
+
+                  <div className="md:col-span-2">
+                    <label className="block text-sm font-bold text-gray-700 mb-1">
+                      {language === 'bn' ? 'ডেভেলপার ওয়েবসাইট লিংক' : 'Developer Website URL'}
+                    </label>
+                    <input
+                      type="url"
+                      value={developerWebsiteUrlInput}
+                      onChange={(e) => setDeveloperWebsiteUrlInput(e.target.value)}
+                      placeholder="https://example.com"
+                      className="w-full bg-gray-50 border border-gray-300 rounded-xl px-4 py-2.5 text-sm font-medium focus:outline-none focus:border-red-600"
+                    />
+                  </div>
                 </div>
-                <div>
-                  <label className="block text-sm font-bold text-gray-700 mb-1">
-                    {language === 'bn' ? 'ডেভেলপার ক্রেডিট প্রিফিক্স টেক্সট' : 'Developer Credit Prefix Text'}
-                  </label>
-                  <input
-                    type="text"
-                    value={developerPrefixTextInput}
-                    onChange={(e) => setDeveloperPrefixTextInput(e.target.value)}
-                    placeholder="Designed & Developed with Professional Standards for"
-                    className="w-full bg-gray-50 border border-gray-300 rounded-xl px-4 py-2.5 text-sm font-medium focus:outline-none focus:border-red-600"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-bold text-gray-700 mb-1">
-                    {language === 'bn' ? 'ডেভেলপার নাম / ব্র্যান্ড ক্রেডিট' : 'Developer Name / Brand Credit'}
-                  </label>
-                  <input
-                    type="text"
-                    value={developerCreditInput}
-                    onChange={(e) => setDeveloperCreditInput(e.target.value)}
-                    placeholder="Bangla Media Group"
-                    className="w-full bg-gray-50 border border-gray-300 rounded-xl px-4 py-2.5 text-sm font-medium focus:outline-none focus:border-red-600"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-bold text-gray-700 mb-1">
-                    {language === 'bn' ? 'ডেভেলপার ওয়েবসাইট লিংক' : 'Developer Website URL'}
-                  </label>
-                  <input
-                    type="url"
-                    value={developerWebsiteUrlInput}
-                    onChange={(e) => setDeveloperWebsiteUrlInput(e.target.value)}
-                    placeholder="https://example.com"
-                    className="w-full bg-gray-50 border border-gray-300 rounded-xl px-4 py-2.5 text-sm font-medium focus:outline-none focus:border-red-600"
-                  />
+
+                {/* Live Preview Box */}
+                <div className="mt-4 p-4 bg-gray-900 text-gray-300 rounded-xl border border-gray-800 text-xs">
+                  <div className="text-[11px] font-bold text-red-400 uppercase tracking-wider mb-2">
+                    {language === 'bn' ? 'ফুটার লাইভ প্রিভিউ (Live Footer Copyright Preview)' : 'Live Footer Copyright Preview'}
+                  </div>
+                  <div className="space-y-1">
+                    <p className="text-gray-200 font-medium">
+                      <span className="text-gray-500 font-mono mr-2">[BN]</span>
+                      {(() => {
+                        const yr = '২০২৬';
+                        const sName = siteNameBnInput || 'স্পিড নিউজ ২৪';
+                        const raw = copyrightTextBnInput || 'সর্বস্বত্ব সংরক্ষিত।';
+                        const proc = raw.replace(/\{year\}/g, yr).replace(/\{siteName\}/g, sName);
+                        return /^[\s]*[©®]|কপিরাইট|Copyright/i.test(proc) ? proc : `© ${yr} ${sName}। ${proc}`;
+                      })()}
+                    </p>
+                    <p className="text-gray-400">
+                      <span className="text-gray-500 font-mono mr-2">[EN]</span>
+                      {(() => {
+                        const yr = '2026';
+                        const sName = siteNameEnInput || 'Speed News 24';
+                        const raw = copyrightTextEnInput || copyrightTextInput || 'All rights reserved.';
+                        const proc = raw.replace(/\{year\}/g, yr).replace(/\{siteName\}/g, sName);
+                        return /^[\s]*[©®]|কপিরাইট|Copyright/i.test(proc) ? proc : `© ${yr} ${sName}. ${proc}`;
+                      })()}
+                    </p>
+                  </div>
                 </div>
               </div>
 

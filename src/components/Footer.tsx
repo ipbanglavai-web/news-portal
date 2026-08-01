@@ -24,6 +24,33 @@ export const Footer: React.FC<FooterProps> = ({ language, onNavigate, bannerAds 
     }
   };
 
+  const toBanglaNumeral = (num: number | string): string => {
+    const bnDigits = ['০', '১', '২', '৩', '৪', '৫', '৬', '৭', '৮', '৯'];
+    return String(num).replace(/\d/g, (d) => bnDigits[parseInt(d, 10)]);
+  };
+
+  const currentYearNum = new Date().getFullYear();
+  const currentYearBn = toBanglaNumeral(currentYearNum);
+  const currentYearEn = String(currentYearNum);
+
+  const currentYearStr = language === 'bn' ? currentYearBn : currentYearEn;
+  const currentSiteTitle = language === 'bn' ? (siteSettings?.siteNameBn || t.siteTitle) : (siteSettings?.siteNameEn || t.siteTitle);
+
+  const rawCopyright = language === 'bn'
+    ? (siteSettings?.copyrightTextBn || siteSettings?.copyrightText || 'সর্বস্বত্ব সংরক্ষিত।')
+    : (siteSettings?.copyrightTextEn || siteSettings?.copyrightText || 'All rights reserved.');
+
+  const processedCopyright = rawCopyright
+    .replace(/\{year\}/g, currentYearStr)
+    .replace(/\{siteName\}/g, currentSiteTitle);
+
+  const isFullFormat = /^[\s]*[©®]|কপিরাইট|Copyright/i.test(processedCopyright);
+  const formattedCopyrightText = isFullFormat
+    ? processedCopyright
+    : language === 'bn'
+      ? `© ${currentYearStr} ${currentSiteTitle}। ${processedCopyright}`
+      : `© ${currentYearStr} ${currentSiteTitle}. ${processedCopyright}`;
+
   return (
     <footer className="bg-gray-900 text-gray-300 pt-8 pb-12 border-t border-gray-800">
       {/* Footer Banner Ad */}
@@ -119,20 +146,20 @@ export const Footer: React.FC<FooterProps> = ({ language, onNavigate, bannerAds 
             </div>
             <p className="text-gray-400 text-sm leading-relaxed mb-4">
               {language === 'bn' 
-                ? 'সত্যের সন্ধানে অবিচল থেকে আমরা প্রকাশ করি নিরপেক্ষ ও বস্তুনিষ্ঠ সংবাদ। দেশের প্রতিটি কোণ থেকে সর্বশেষ আপডেট জানতে আমাদের সাথেই থাকুন।' 
-                : 'Uncompromising in the search for truth, we bring you objective and authentic news updates from across the nation.'}
+                ? (siteSettings?.taglineBn || 'সত্যের সন্ধানে অবিচল থেকে আমরা প্রকাশ করি নিরপেক্ষ ও বস্তুনিষ্ঠ সংবাদ। দেশের প্রতিটি কোণ থেকে সর্বশেষ আপডেট জানতে আমাদের সাথেই থাকুন।') 
+                : (siteSettings?.taglineEn || 'Uncompromising in the search for truth, we bring you objective and authentic news updates from across the nation.')}
             </p>
             <div className="flex items-center space-x-3">
-              <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="w-9 h-9 bg-gray-800 hover:bg-red-600 text-white rounded-full flex items-center justify-center transition">
+              <a href={siteSettings?.facebookUrl || 'https://facebook.com'} target="_blank" rel="noopener noreferrer" className="w-9 h-9 bg-gray-800 hover:bg-red-600 text-white rounded-full flex items-center justify-center transition">
                 <Facebook className="w-4 h-4" />
               </a>
-              <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" className="w-9 h-9 bg-gray-800 hover:bg-red-600 text-white rounded-full flex items-center justify-center transition">
+              <a href={siteSettings?.youtubeUrl || 'https://youtube.com'} target="_blank" rel="noopener noreferrer" className="w-9 h-9 bg-gray-800 hover:bg-red-600 text-white rounded-full flex items-center justify-center transition">
                 <Youtube className="w-4 h-4" />
               </a>
-              <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="w-9 h-9 bg-gray-800 hover:bg-red-600 text-white rounded-full flex items-center justify-center transition">
+              <a href={siteSettings?.instagramUrl || 'https://instagram.com'} target="_blank" rel="noopener noreferrer" className="w-9 h-9 bg-gray-800 hover:bg-red-600 text-white rounded-full flex items-center justify-center transition">
                 <Instagram className="w-4 h-4" />
               </a>
-              <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="w-9 h-9 bg-gray-800 hover:bg-red-600 text-white rounded-full flex items-center justify-center transition">
+              <a href={siteSettings?.twitterUrl || 'https://twitter.com'} target="_blank" rel="noopener noreferrer" className="w-9 h-9 bg-gray-800 hover:bg-red-600 text-white rounded-full flex items-center justify-center transition">
                 <Twitter className="w-4 h-4" />
               </a>
             </div>
@@ -229,7 +256,7 @@ export const Footer: React.FC<FooterProps> = ({ language, onNavigate, bannerAds 
 
         {/* Bottom Bar */}
         <div className="pt-8 border-t border-gray-800 flex flex-col md:flex-row items-center justify-between text-xs text-gray-500 gap-4">
-          <p>© {new Date().getFullYear()} {language === 'bn' ? (siteSettings?.siteNameBn || t.siteTitle) : (siteSettings?.siteNameEn || t.siteTitle)}. {siteSettings?.copyrightText || 'All rights reserved.'}</p>
+          <p>{formattedCopyrightText}</p>
           <p className="flex flex-wrap items-center gap-x-1 gap-y-1">
             <span>{siteSettings?.developerPrefixText ?? 'Designed & Developed with Professional Standards for'}</span>
             {siteSettings?.developerWebsiteUrl ? (

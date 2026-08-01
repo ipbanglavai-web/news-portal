@@ -25,6 +25,33 @@ export const Navbar: React.FC<NavbarProps> = ({
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const t = translations[language];
 
+  const toBanglaNumeral = (num: number | string): string => {
+    const bnDigits = ['০', '১', '২', '৩', '৪', '৫', '৬', '৭', '৮', '৯'];
+    return String(num).replace(/\d/g, (d) => bnDigits[parseInt(d, 10)]);
+  };
+
+  const currentYearNum = new Date().getFullYear();
+  const currentYearBn = toBanglaNumeral(currentYearNum);
+  const currentYearEn = String(currentYearNum);
+
+  const currentYearStr = language === 'bn' ? currentYearBn : currentYearEn;
+  const currentSiteTitle = language === 'bn' ? (siteSettings?.siteNameBn || t.siteTitle) : (siteSettings?.siteNameEn || t.siteTitle);
+
+  const rawCopyright = language === 'bn'
+    ? (siteSettings?.copyrightTextBn || siteSettings?.copyrightText || 'সর্বস্বত্ব সংরক্ষিত।')
+    : (siteSettings?.copyrightTextEn || siteSettings?.copyrightText || 'All rights reserved.');
+
+  const processedCopyright = rawCopyright
+    .replace(/\{year\}/g, currentYearStr)
+    .replace(/\{siteName\}/g, currentSiteTitle);
+
+  const isFullFormat = /^[\s]*[©®]|কপিরাইট|Copyright/i.test(processedCopyright);
+  const formattedCopyrightText = isFullFormat
+    ? processedCopyright
+    : language === 'bn'
+      ? `© ${currentYearStr} ${currentSiteTitle}। ${processedCopyright}`
+      : `© ${currentYearStr} ${currentSiteTitle}. ${processedCopyright}`;
+
   const currentDateStr = new Date().toLocaleDateString(
     language === 'bn' ? 'bn-BD' : 'en-US',
     { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }
@@ -321,7 +348,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             </div>
             
             <div className="p-4 bg-gray-50 border-t border-gray-200 text-center text-xs text-gray-500">
-              © {new Date().getFullYear()} {t.siteTitle}. All rights reserved.
+              {formattedCopyrightText}
             </div>
           </div>
         </div>
